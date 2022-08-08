@@ -2,5 +2,4 @@
 
 A description of this package.
 
-Edited on mac
-
+Edited on Xcode.

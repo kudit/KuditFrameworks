@@ -1,5 +1,14 @@
 import Foundation
 
+
+public struct KuditFrameworks {
+	public private(set) var text = "Hello, World!"
+
+	public init() {
+	}
+}
+
+
 public enum DebugLevel: Comparable {
 	case ERROR
 	case WARNING
@@ -18,6 +27,7 @@ public func debug(_ message: Any, level: DebugLevel = .DEBUG, file: String = #fi
 }
 
 // Test Handlers
+@available(iOS 13.0, *)
 public class Test: CustomStringConvertible, ObservableObject {
 	public enum TestProgress: CustomStringConvertible {
 		case notStarted
@@ -73,12 +83,14 @@ public class Test: CustomStringConvertible, ObservableObject {
 		return "\(progress): \(title)\(errorString))"
 	}
 }
+@available(iOS 13.0.0, *)
 public extension Test {
 	static func dummyAsyncThrows() async throws {
 	}
 }
 
 // String simplification
+@available(iOS 13.0, *)
 public extension String {
 	var utf8data: Data {
 		return self.data(using: .utf8)!
@@ -133,6 +145,7 @@ extension PostData {
 		return queryString?.data(using: .utf8)
 	}
 }
+@available(iOS 15.0, *)
 struct PHP {
 	static var initTests = PHP.tests
 	// getting current unix timestamp
@@ -206,6 +219,7 @@ struct PHP {
 	}
 }
 
+@available(iOS 15.0, *)
 extension PHP { // Not sure why it compiles when in an extension but not in the main declaration.  Gives async error in the wrong place.
 	// Sleep extension for sleeping a thread in seconds
 	static func sleep(_ seconds: Double) async {
@@ -295,6 +309,7 @@ public class WebViewDelegateManager: NSObject, WKNavigationDelegate {
 		})
 	}
 }
+@available(iOS 13.0, *)
 public struct WebView: UIViewRepresentable {
 	var url: URL
 	var delegate: WebViewDelegate? = nil
@@ -315,6 +330,7 @@ public struct WebView: UIViewRepresentable {
 }
 
 // MARK: - Test UI
+@available(iOS 13.0, *)
 struct TestRow: View {
 	@ObservedObject var test: Test
 	
@@ -333,6 +349,7 @@ struct TestRow: View {
 	}
 }
 
+@available(iOS 15.0, *)
 struct TestsListView: View {
 	var tests: [Test]
 	var body: some View {
@@ -354,6 +371,7 @@ struct TestsListView: View {
  }
  }*/
 
+@available(iOS 15.0, *)
 struct Tests_Previews: PreviewProvider {
 	static var previews: some View {
 		TestsListView(tests: PHP.tests + String.tests)

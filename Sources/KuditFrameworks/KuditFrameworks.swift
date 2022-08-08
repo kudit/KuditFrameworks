@@ -27,6 +27,7 @@ public func debug(_ message: Any, level: DebugLevel = .DEBUG, file: String = #fi
 }
 
 // Test Handlers
+@available(macOS 10.15, *)
 @available(iOS 13.0, *)
 public class Test: CustomStringConvertible, ObservableObject {
 	public enum TestProgress: CustomStringConvertible {
@@ -83,6 +84,7 @@ public class Test: CustomStringConvertible, ObservableObject {
 		return "\(progress): \(title)\(errorString))"
 	}
 }
+@available(macOS 10.15, *)
 @available(iOS 13.0.0, *)
 public extension Test {
 	static func dummyAsyncThrows() async throws {
@@ -90,6 +92,7 @@ public extension Test {
 }
 
 // String simplification
+@available(macOS 10.15, *)
 @available(iOS 13.0, *)
 public extension String {
 	var utf8data: Data {
@@ -145,6 +148,7 @@ extension PostData {
 		return queryString?.data(using: .utf8)
 	}
 }
+@available(macOS 10.15, *)
 @available(iOS 15.0, *)
 struct PHP {
 	static var initTests = PHP.tests
@@ -219,6 +223,7 @@ struct PHP {
 	}
 }
 
+@available(macOS 10.15, *)
 @available(iOS 15.0, *)
 extension PHP { // Not sure why it compiles when in an extension but not in the main declaration.  Gives async error in the wrong place.
 	// Sleep extension for sleeping a thread in seconds
@@ -271,110 +276,6 @@ extension PHP { // Not sure why it compiles when in an extension but not in the 
 		 } else {
 		 throw NetworkError.urlParsing(urlString: urlString)
 		 }*/
-	}
-}
-
-import SwiftUI
-
-// MARK: Web View for SwiftUI
-import WebKit
-public protocol WebViewDelegate {
-	func save(manager: WebViewDelegateManager)
-	func pageFinishedLoading(webView: WKWebView, contents: String)
-}
-public class WebViewDelegateManager: NSObject, WKNavigationDelegate {
-	var webView: WKWebView
-	var delegate: WebViewDelegate
-	
-	init(webView: WKWebView, delegate: WebViewDelegate) {
-		self.webView = webView
-		self.delegate = delegate
-		super.init()
-		webView.navigationDelegate = self
-	}
-	
-	public func webView(_ webView: WKWebView,didFinish navigation: WKNavigation!) {
-		webView.evaluateJavaScript("document.documentElement.outerHTML.toString()",
-								   completionHandler: { (html: Any?, error: Error?) in
-			if let error = error {
-				debug("WEBVIEW ERROR: \(error)")
-				return
-			}
-			guard let html = html as? String else {
-				debug("WEBVIEW HTML UNKNOWN: \(String(describing:html))")
-				return
-			}
-			//debug("WEBVIEW LOADED: \(html)")
-			self.delegate.pageFinishedLoading(webView: webView, contents: html)
-		})
-	}
-}
-@available(iOS 13.0, *)
-public struct WebView: UIViewRepresentable {
-	var url: URL
-	var delegate: WebViewDelegate? = nil
-	var localDelegate: WebViewDelegateManager? = nil
-	
-	public func makeUIView(context: Context) -> WKWebView {
-		let webView = WKWebView()
-		if let delegate = delegate {
-			delegate.save(manager: WebViewDelegateManager(webView: webView, delegate: delegate))
-		}
-		return webView
-	}
-	
-	public func updateUIView(_ webView: WKWebView, context: Context) {
-		let request = URLRequest(url: url)
-		webView.load(request)
-	}
-}
-
-// MARK: - Test UI
-@available(iOS 13.0, *)
-struct TestRow: View {
-	@ObservedObject var test: Test
-	
-	var body: some View {
-		HStack(alignment: .top) {
-			Text(test.progress.description)
-			Text(test.title)
-			Spacer()
-			Button("▶️") {
-				test.run()
-			}
-		}
-		if let errorMessage = test.errorMessage {
-			Text(errorMessage)
-		}
-	}
-}
-
-@available(iOS 15.0, *)
-struct TestsListView: View {
-	var tests: [Test]
-	var body: some View {
-		List {
-			Text("Tests:")
-			ForEach(tests, id: \.title) { item in
-				TestRow(test: item)
-					.task {
-						item.run()
-					}
-			}
-		}
-	}
-}
-/* don't need separate preview view for row
- struct TestRow_Previews: PreviewProvider {
- static var previews: some View {
- TestRow(test: PHP.tests[0])
- }
- }*/
-
-@available(iOS 15.0, *)
-struct Tests_Previews: PreviewProvider {
-	static var previews: some View {
-		TestsListView(tests: PHP.tests + String.tests)
 	}
 }
 

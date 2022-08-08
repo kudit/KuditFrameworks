@@ -5,37 +5,38 @@
 // Do not edit it by hand because the contents will be replaced.
 
 import PackageDescription
+import AppleProductTypes
 
 let package = Package(
-    name: "KuditFrameworks",
-    platforms: [
-        .iOS("15.2")
-    ],
-    products: [
-        .iOSApplication(
-            name: "KuditFrameworksApp",
-            targets: ["AppModule"],
-            displayVersion: "0.0.1",
-            bundleVersion: "1",
-            appIcon: .placeholder(icon: .box),
-            accentColor: .presetColor(.teal),
-            supportedDeviceFamilies: [
-                .pad,
-                .phone
-            ],
-            supportedInterfaceOrientations: [
-                .portrait,
-                .landscapeRight,
-                .landscapeLeft,
-                .portraitUpsideDown(.when(deviceFamilies: [.pad]))
-            ],
-            appCategory: .developerTools
-        )
-    ],
-    targets: [
-        .executableTarget(
-            name: "AppModule",
-            path: "."
-        )
-    ]
+	name: "KuditFrameworks",
+	platforms: [
+		.iOS("15.2")
+	],
+	products: [
+		.iOSApplication(
+			name: "KuditFrameworksApp",
+			targets: ["AppModule"],
+			displayVersion: "1.0.1",
+			bundleVersion: "1",
+			appIcon: .placeholder(icon: .box),
+			accentColor: .presetColor(.teal),
+			supportedDeviceFamilies: [
+				.pad,
+				.phone
+			],
+			supportedInterfaceOrientations: [
+				.portrait,
+				.landscapeRight,
+				.landscapeLeft,
+				.portraitUpsideDown(.when(deviceFamilies: [.pad]))
+			],
+			appCategory: .developerTools
+		)
+	],
+	targets: [
+		.executableTarget(
+			name: "AppModule",
+			path: "."
+		)
+	]
 )

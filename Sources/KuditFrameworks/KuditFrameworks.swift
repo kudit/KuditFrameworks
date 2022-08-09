@@ -8,6 +8,8 @@ public struct KuditFrameworks {
 	}
 }
 
+// TODO: Move this to Core/Debug and Core/Tests
+
 
 public enum DebugLevel: Comparable {
 	case ERROR
@@ -91,46 +93,6 @@ public extension Test {
 	}
 }
 
-// String simplification
-@available(macOS 10.15, *)
-@available(iOS 13.0, *)
-public extension String {
-	var utf8data: Data {
-		return self.data(using: .utf8)!
-	}
-	
-	func extract(from startDelimiter: String?, to endDelimiter: String?) -> String? {
-		var results = self
-		if let startDelimiter = startDelimiter {
-			var parts = results.components(separatedBy: startDelimiter)
-			// take off first part
-			guard parts.count > 1 else {
-				return nil // startDelimeter not found
-			}
-			parts.removeFirst()
-			results = parts.joined(separator: startDelimiter)
-		}
-		if let endDelimiter = endDelimiter {
-			let parts = results.components(separatedBy: endDelimiter)
-			// take only first part
-			guard parts.count > 1 else {
-				return nil // endDelimeter not found
-			}
-			results = parts.first! // do this way to make sure the endDelimeter is actually looked for and if it's not found, we shouldn't return just the last half (only if endDelimeter is nil)
-		}
-		return results
-	}
-	static var tests: [Test] {
-		let testString = "A very long string with some <em>intérressant</em> properties!"
-		return [
-			Test("extractData()") {
-				let extraction = testString.extract(from: "<em>", to: "</em>") ?? "FAIL"
-				return (extraction == "intérressant" , extraction)
-			}
-		]
-	}
-}
-
 // PHP function convenience functions
 public typealias PostData = [String: Any]
 extension PostData {
@@ -148,8 +110,6 @@ extension PostData {
 		return queryString?.data(using: .utf8)
 	}
 }
-@available(macOS 10.15, *)
-@available(iOS 15.0, *)
 struct PHP {
 	static var initTests = PHP.tests
 	// getting current unix timestamp
@@ -223,8 +183,26 @@ struct PHP {
 	}
 }
 
-@available(macOS 10.15, *)
-@available(iOS 15.0, *)
+extension URLSession {
+	func legacyData(for request: URLRequest) async throws -> (Data, URLResponse) {
+		try await withCheckedThrowingContinuation { continuation in
+			guard let url = request.url else {
+				return continuation.resume(throwing: URLError(.badURL))
+			}
+			let task = self.dataTask(with: url) { data, response, error in
+				guard let data = data, let response = response else {
+					let error = error ?? URLError(.badServerResponse)
+					return continuation.resume(throwing: error)
+				}
+				
+				continuation.resume(returning: (data, response))
+			}
+			
+			task.resume()
+		}
+	}
+}
+
 extension PHP { // Not sure why it compiles when in an extension but not in the main declaration.  Gives async error in the wrong place.
 	// Sleep extension for sleeping a thread in seconds
 	static func sleep(_ seconds: Double) async {
@@ -260,8 +238,14 @@ extension PHP { // Not sure why it compiles when in an extension but not in the 
 		}
 		debug("FETCHING: \(request)")
 		
+		var data: Data
 		// create dataTask using the session object to send data to the server
-		let (data, _) = try await URLSession.shared.data(for: request)
+		if #available(iOS 15.0, *) {
+			(data, _) = try await URLSession.shared.data(for: request)
+		} else {
+			// Fallback on earlier versions
+			(data, _) = try await URLSession.shared.legacyData(for: request)
+		}
 		
 		//debug("DEBUG RESPONSE DATA: \(data)")
 		

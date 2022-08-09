@@ -1,3 +1,4 @@
+#if canImport(XCTest)
 import XCTest
 @testable import KuditFrameworks
 
@@ -9,3 +10,4 @@ final class KuditFrameworksTests: XCTestCase {
         XCTAssertEqual(KuditFrameworks().text, "Hello, World!")
     }
 }
+#endif

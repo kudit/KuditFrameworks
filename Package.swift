@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
 	name: "KuditFrameworks",
 	platforms: [
-		.iOS("15"),
+		.iOS("13"),
 		.macOS("12")
 	],
 	products: [
@@ -25,7 +25,10 @@ let package = Package(
 		.target(
 			name: "KuditFrameworks",
 			dependencies: [],
-			path: "Sources"),
+			path: "Sources",
+			resources: [
+			]
+		),
 		.testTarget(
 			name: "KuditFrameworksTests",
 			dependencies: ["KuditFrameworks"]),

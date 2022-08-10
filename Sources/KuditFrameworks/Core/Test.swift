@@ -21,10 +21,10 @@ public class Test: CustomStringConvertible, ObservableObject {
         }
     }
     public typealias TestClosure = () async throws -> (Bool, String)
-    var title: String
-    var task: TestClosure
-    @Published var progress: TestProgress = .notStarted
-    @Published var errorMessage: String? = nil
+    public var title: String
+    public var task: TestClosure
+    @Published public var progress: TestProgress = .notStarted
+    @Published public var errorMessage: String? = nil
     
     public init(_ title: String, _ task: @escaping TestClosure ) {
         self.title = title

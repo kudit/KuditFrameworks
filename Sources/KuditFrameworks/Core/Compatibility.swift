@@ -52,7 +52,7 @@ public struct PHP {
         }
     }
     
-    static var tests: [Test] {
+    public static var tests: [Test] {
         let testData: PostData = ["id": 13, "name": "Jack & \"Jill\"", "foo": false, "bar": "0.0"]
         return [
             Test("Checking time() function") {

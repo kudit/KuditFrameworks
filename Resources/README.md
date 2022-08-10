@@ -11,3 +11,4 @@ v1.0.4 8/10/2022 Fixed extract(from:to:) to return nil if start or end not found
 v1.0.5 8/10/2022 Fixed WebView internal permissions (hopefully for real this time?).  Added KuError.custom(String,DebugLevel). Moved data model and asset libraries to Resources to allow compilation and running on iPad.  Moved Compatibility, Debug, and Test frameworks into separate files.
 v1.0.6 8/10/2022 Fixed PHP.time() not being public.  Fixed recursive sleep and just eliminated PHP.sleep().  Made Test() init public.  Made TestUI public.
 v1.0.7 8/10/2022 Made additional fields for Tests public.
+v1.0.8 8/10/2022 Manually created initializers for SwiftUI views to prevent internal protection errors.

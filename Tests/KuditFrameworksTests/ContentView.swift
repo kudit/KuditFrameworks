@@ -1,10 +1,14 @@
 import SwiftUI
 
-struct ContentView: View {
+public struct ContentView: View {
+    
+    public init() {}
+    
+    
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     @State var time = -1
-    var body: some View {
+    public var body: some View {
         VStack {
             Image(systemName: "globe")
                 .imageScale(.large)

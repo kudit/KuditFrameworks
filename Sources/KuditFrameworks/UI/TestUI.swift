@@ -4,6 +4,11 @@ import SwiftUI
 public struct TestRow: View {
     @ObservedObject public var test: Test
     
+    // only necessary since in module and otherwise inaccessible outside package
+    public init(test: Test) {
+        self.test = test
+    }
+    
     public var body: some View {
         HStack(alignment: .top) {
             Text(test.progress.description)
@@ -21,6 +26,12 @@ public struct TestRow: View {
 
 public struct TestsListView: View {
     public var tests: [Test]
+    
+    // only necessary since in module and otherwise inaccessible outside package
+    public init(tests: [Test]) {
+        self.tests = tests
+    }
+    
     public var body: some View {
         List {
             Text("Tests:")

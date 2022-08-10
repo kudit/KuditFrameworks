@@ -20,18 +20,18 @@ public class Test: CustomStringConvertible, ObservableObject {
             }
         }
     }
-    typealias TestClosure = () async throws -> (Bool, String)
+    public typealias TestClosure = () async throws -> (Bool, String)
     var title: String
     var task: TestClosure
     @Published var progress: TestProgress = .notStarted
     @Published var errorMessage: String? = nil
     
-    init(_ title: String, _ task: @escaping TestClosure ) {
+    public init(_ title: String, _ task: @escaping TestClosure ) {
         self.title = title
         self.task = task
     }
     
-    func run() {
+    public func run() {
         self.progress = .running
         // make sure to run the "work" in a separate thread since we don't want any of this running on the main thread and potentially bogging things down
         Task {

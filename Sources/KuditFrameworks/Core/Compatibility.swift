@@ -23,11 +23,11 @@ public extension PostData {
 public struct PHP {
     static var initTests = PHP.tests
     // getting current unix timestamp
-    static func time() -> Int {
+    public static func time() -> Int {
         return Int(NSDate().timeIntervalSince1970)
     }
     
-    enum NetworkError: Error, CustomStringConvertible {
+    public enum NetworkError: Error, CustomStringConvertible {
         // Throw when unable to parse a URL
         case urlParsing(urlString: String)
         
@@ -64,7 +64,7 @@ public struct PHP {
             },
             Test("Checking sleep() function") {
                 let start = PHP.time()
-                await PHP.sleep(2)
+                await sleep(seconds: 2)
                 let end = PHP.time()
                 let delta = end - start // could be 2 or 3 if on an edge
                 return (delta <= 3, "\(start) + 2 != \(end)")
@@ -93,7 +93,7 @@ public struct PHP {
     }
 }
 
-public extension URLSession {
+extension URLSession {
     func legacyData(for request: URLRequest) async throws -> (Data, URLResponse) {
         try await withCheckedThrowingContinuation { continuation in
             guard let url = request.url else {
@@ -114,11 +114,6 @@ public extension URLSession {
 }
 
 public extension PHP { // Not sure why it compiles when in an extension but not in the main declaration.  Gives async error in the wrong place.
-    // Sleep extension for sleeping a thread in seconds
-    static func sleep(_ seconds: Double) async {
-        await sleep(seconds)
-    }
-    
     static func fetchURL(urlString: String, postData: PostData? = nil) async throws -> String {
         debug("Fetching URL [\(urlString)]...", level: .NOTICE)
         // create the url with URL

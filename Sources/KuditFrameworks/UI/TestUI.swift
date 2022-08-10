@@ -1,10 +1,10 @@
 import SwiftUI
 
 // MARK: - Test UI
-struct TestRow: View {
-    @ObservedObject var test: Test
+public struct TestRow: View {
+    @ObservedObject public var test: Test
     
-    var body: some View {
+    public var body: some View {
         HStack(alignment: .top) {
             Text(test.progress.description)
             Text(test.title)
@@ -19,24 +19,24 @@ struct TestRow: View {
     }
 }
 
-struct TestsListView: View {
-    var tests: [Test]
-    var body: some View {
+public struct TestsListView: View {
+    public var tests: [Test]
+    public var body: some View {
         List {
             Text("Tests:")
             ForEach(tests, id: \.title) { item in
-				if #available(iOS 15.0, *) {
-					TestRow(test: item)
-						.task {
-							item.run()
-						}
-				} else {
-					// Fallback on earlier versions
-					TestRow(test: item)
-						.onAppear {
-							item.run()
-						}
-				}
+                if #available(iOS 15.0, *) {
+                    TestRow(test: item)
+                        .task {
+                            item.run()
+                        }
+                } else {
+                    // Fallback on earlier versions
+                    TestRow(test: item)
+                        .onAppear {
+                            item.run()
+                        }
+                }
             }
         }
     }

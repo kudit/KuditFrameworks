@@ -23,8 +23,132 @@ let kKCVersion = 2
 
 import Foundation
 import CoreData
-#if canImport(MessageUI) && canImport(UIKit)
+#if canImport(UIKit)
 import UIKit
+#endif
+public class KuditConnect: NSObject {
+    private static let _shared = KuditConnect()
+    public static var supportEmail = "support@kudit.com"
+    
+#if canImport(UIKit)
+    public static var keyWindow: UIWindow?
+    static func link(window: UIWindow) {
+        keyWindow = window 
+    }
+#endif
+    
+    /// necessary for review links
+    private static let _appleID = Bundle.main.infoDictionary?["AppleID"]
+    /// necessary for share links, however with the Apple ID, we can construct the share link if not provided or overridden (and include our affiliate token).
+    public static var applicationShareURL = Bundle.main.infoDictionary?["ApplicationURL"] ?? "https://itunes.apple.com/us/app/\(Application.main.appIdentifier)/id\(String(describing: _appleID))?mt=8&amp;at=11l5GV&amp;ct=AppShare"
+    
+    var _faqData = [String: String]()
+    var _items = [MenuItem]()
+    
+    /// Place `KuditConnect.setup()` in `application(_:didFinishLaunchingWithOptions:)` to enable KuditConnect features and version tracking.
+    // TODO: add some sort of tracking/validation to make sure this is configured properly before using?
+    public static func setup() {
+        // make sure configured properly before even tracking so first run isn't violated if there's an issue
+        if _appleID == nil {
+            print("Please add a property in your Info.plist for the key \"AppleID\" so we can properly direct to review.")
+            exit(0)
+        }
+        
+        Application.track() // Loading from Kudit Connect is the preferred way
+        // Make sure the shared instance is up and initialized
+        _shared.loadFAQs()
+    }
+    private func loadFAQs() {
+        // make sure required dependancies are present?
+        /*
+         // TODO: load FAQ from Server (asynchronously if necessary otherwise pull from disk to be ready when needed).
+         _faqData = [KuditCoreDataManager managerWithModelName:@"KuditConnectFAQs" ubiquitous:NO reference:YES];
+         
+         _faqData = [KuditCoreDataManager managerWithModelName:@"KuditConnectFAQs" ubiquitous:NO reference:YES];
+         
+         NSString *bundleIdentifier = NSBundle.mainBundle.infoDictionary[@"CFBundleIdentifier"];
+         _kuditData = [[KuditData alloc] initWithDataAtURLString:[NSString stringWithFormat:@"%@/faq.php?identifier=%@&kcVersion=%d", kAPIURL, bundleIdentifier, kKCVersion] initialize:^(void (^finished)(void)) {
+         // initialize/replace database each time (we're ignoring the date limiting on the server)
+         // go ahead and delete all existing entities (will this be a problem if trying to look at FAQs and loaded context already?  Should happen pretty early and quick, right?
+         [_faqData deleteAndResetWithCallback:^() {
+         #warning use generated notification to refresh table view if up
+         finished();
+         }];
+         } addData:^(NSDictionary *data) {
+         NSArray *faqs = data[@"faqs"];
+         // already on background thread
+         NSManagedObjectContext *backgroundContext = [_faqData newBackgroundContext];
+         
+         for (NSDictionary *faqDictionary in faqs) {
+         KuditFAQ *faq = [NSEntityDescription insertNewObjectForEntityForName:@"FAQ" inManagedObjectContext:backgroundContext];
+         [faq loadFromDictionary:faqDictionary];
+         }
+         
+         [backgroundContext save];
+         [backgroundContext reset];
+         
+         dispatch_async( dispatch_get_main_queue(), ^{
+         @synchronized(self) { // make sure no threading issues and this doesn't happen twice/concurrently
+         if (!_faqsLoaded) { // ensures only run once
+         // make sure run on main thread
+         [self _checkAlerts];
+         _faqsLoaded = YES;
+         }
+         }
+         });
+         }];
+         
+         _kuditConnectItems
+         = @[[KuditConnectItem itemOfType:KuditConnectItemTypeAction
+         withLabel:@"Help & FAQs"
+         options:@{kKuditConnectItemOptionKeyWithoutDismissal:@YES,
+         kKuditConnectItemOptionKeyIconName:@"kuditConnectFAQs"}
+         items:nil
+         callback:^(KuditConnectItem *item) {
+         [self _showFAQs];
+         }],
+         [KuditConnectItem itemOfType:KuditConnectItemTypeAction // _contact does dismissal automatically
+         withLabel:@"Contact Support"
+         options:@{kKuditConnectItemOptionKeyWithoutDismissal:@YES,
+         kKuditConnectItemOptionKeyIconName:@"kuditConnectContact"}
+         items:nil
+         callback:^(KuditConnectItem *item) {
+         [self _contact];
+         }],
+         [KuditConnectItem itemOfType:KuditConnectItemTypeAction // handles dismissal
+         withLabel:@"Leave a Review"
+         options:@{kKuditConnectItemOptionKeyWithoutDismissal:@YES,
+         kKuditConnectItemOptionKeyIconName:@"kuditConnectReview"}
+         items:nil
+         callback:^(KuditConnectItem *item) {
+         [self _promptToReview];
+         }],
+         [KuditConnectItem itemOfType:KuditConnectItemTypeAction // handles dismissal
+         withLabel:@"Share App With Friends"
+         options:@{kKuditConnectItemOptionKeyWithoutDismissal:@YES,
+         kKuditConnectItemOptionKeyIconName:@"kuditConnectShare"}
+         items:nil
+         callback:^(KuditConnectItem *item) {
+         [self _share];
+         }],
+         [KuditConnectItem itemOfType:KuditConnectItemTypeAction // handles dismissal
+         withLabel:@"Send Us Kudos"
+         options:@{kKuditConnectItemOptionKeyWithoutDismissal:@YES,
+         kKuditConnectItemOptionKeyIconName:@"kuditConnectKudos"}
+         items:nil
+         callback:^(KuditConnectItem *item) {
+         [self _kudos];
+         }]];
+         
+         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+         self.modalPresentationStyle = UIModalPresentationCurrentContext;
+         }
+         */
+        
+    }
+}
+// TODO: Re-work all this to use SwiftUI instead of UIViews
+#if os(iOS) && !targetEnvironment(macCatalyst)
 import MessageUI // not supported in watchOS
 extension KuditConnect: MFMailComposeViewControllerDelegate {}
     
@@ -75,7 +199,7 @@ public class KuditParticleView: UIView {
     }
 }
 
-extension UIViewController {
+public extension UIViewController {
     var actualPresentingViewController: UIViewController? {
         // get the presenting controller by navigating down the stack from the window
         let window = self.view.window
@@ -88,49 +212,16 @@ extension UIViewController {
         return presentingController
     }
 }
-#endif
 
 
-public class KuditConnect: NSObject {
-    private static let _shared = KuditConnect()
-    public static var supportEmail = "support@kudit.com"
-    
-#if canImport(UIKit)
-    public static var keyWindow: UIWindow?
-    static func link(window: UIWindow) {
-        keyWindow = window 
-    }
-#endif
-    
-    /// necessary for review links
-    private static let _appleID = Bundle.main.infoDictionary?["AppleID"]
-    /// necessary for share links, however with the Apple ID, we can construct the share link if not provided or overridden (and include our affiliate token).
-    public static var applicationShareURL = Bundle.main.infoDictionary?["ApplicationURL"] ?? "https://itunes.apple.com/us/app/\(Application.main.appIdentifier)/id\(String(describing: _appleID))?mt=8&amp;at=11l5GV&amp;ct=AppShare"
-    
-    var _faqData = [String: String]()
-    var _items = [MenuItem]()
-    
-    /// Place `KuditConnect.setup()` in `application(_:didFinishLaunchingWithOptions:)` to enable KuditConnect features and version tracking.
-    // TODO: add some sort of tracking/validation to make sure this is configured properly before using?
-    public static func setup() {
-        // make sure configured properly before even tracking so first run isn't violated if there's an issue
-        if _appleID == nil {
-            print("Please add a property in your Info.plist for the key \"AppleID\" so we can properly direct to review.")
-            exit(0)
-        }
-
-        Application.track() // Loading from Kudit Connect is the preferred way
-        // Make sure the shared instance is up and initialized
-        _shared.loadFAQs()
-    }
-    
-    public static var menuGroup: MenuGroup {
+public extension KuditConnect {
+    static var menuGroup: MenuGroup {
         let group = MenuGroup(title: "Connect", userInfo: [MIDetailKey: Application.main.version], items: [
             MenuLabel(title: "Kudit Connect"),
 // Remove for now            faqGroup
             ])
-#if canImport(UIKit)
-//        let shareButton = MenuButton(title: "Share App with Friends", userInfo: [MIIconKey: "kuditConnectShare", MITextAlignmentKey: NSTextAlignment.natural]) {
+        
+        //        let shareButton = MenuButton(title: "Share App with Friends", userInfo: [MIIconKey: "kuditConnectShare", MITextAlignmentKey: NSTextAlignment.natural]) {
 //            _ in
 //            // TODO: show share sheet.  Rip from existing code.
 //            // TODO: add in checks above to make sure the necessary values have been set with instructions in the console for setting these values.
@@ -156,7 +247,6 @@ public class KuditConnect: NSObject {
             },
 //            shareButton
         ]
-#endif
         group.items += [
             MenuButton(title: "Send us Kudos", userInfo: [MIIconKey: "kuditConnectKudos", MITextAlignmentKey: MITextAlignment.natural]) {
                 _ in
@@ -169,10 +259,9 @@ public class KuditConnect: NSObject {
     }
 
 
-#if canImport(UIKit)
-    public static var screenshots = [UIImage]()
+    static var screenshots = [UIImage]()
     
-    public static func present(_ controller: UIViewController) {
+    static func present(_ controller: UIViewController) {
         controller.actualPresentingViewController?.present(controller, animated: true)
     }
     
@@ -208,14 +297,14 @@ public class KuditConnect: NSObject {
     }
      */
     
-    public static func alert(title: String, message: String) {
+    static func alert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Okay", style: .cancel))
         present(alert)
     }
 
     // MARK: - Email/Contact
-    public static func email() {
+    static func email() {
         guard MFMailComposeViewController.canSendMail() else {
             alert(title: "Can't Send Mail", message: "You have no mail accounts set up or are not able to send mail with this device.  Please configure your accounts to make sure we're able to respond to your concerns.")
             return
@@ -249,27 +338,27 @@ public class KuditConnect: NSObject {
 
         present(mailComposerVC)
     }
-    @objc(mailComposeController:didFinishWithResult:error:) public func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+    /*. Was causing all sorts of compile errors...probably shouldn't be using any objc stuff at this point 2022
+    @objc(mailComposeController:didFinishWithResult:error:) func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         // Check the result or perform other tasks.
         // TODO: If cancelled, perhaps prompt to look at the FAQ or remind that this is availabe and just simply write the problem or comment.  Button to email and button to FAQ and button to dismiss.
     
         // Dismiss the mail compose view controller.
         controller.actualPresentingViewController?.dismiss(animated: true, completion: nil)
-    }
-    #endif
+    }*/
 
     /// return supportEmail with application name inserted before at sign.
     private static var appSupportEmail: String {
         return supportEmail.replacingOccurrences(of: "@", with: "+\(Application.main.appIdentifier)@")
     }
     /// customization point for the beginning of the email.
-    public static var supportEmailQuestion = "Enter feedback, questions, or comments: "
+    static var supportEmailQuestion = "Enter feedback, questions, or comments: "
     /// customization point for adding additional info.  Be sure to end any content with \n or leave it blank.
-    public static var supportEmailAdditional = ""
+    static var supportEmailAdditional = ""
     /// customization point for attaching additional images to the email.
-    public static var supportAdditionalImages = [KuImage]()
+    static var supportAdditionalImages = [KuImage]()
     
-    public static var supportInfo: String {
+    static var supportInfo: String {
         return "\(Application.main)\n" + supportEmailAdditional + Hardware.currentDevice.description
     }
     
@@ -283,10 +372,9 @@ public class KuditConnect: NSObject {
     }
     
     // MARK: - Review Management
-    public static let reviewURL = "itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=\(String(describing: _appleID))"
+    static let reviewURL = "itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=\(String(describing: _appleID))"
         
-#if canImport(UIKit)
-    public static func launchReview() {
+    static func launchReview() {
         UIApplication.shared.open(URL(string: reviewURL)!) {
             success in
             // completion
@@ -296,7 +384,7 @@ public class KuditConnect: NSObject {
             }
         }
     }
-    public static func encourageGoodReviews() {
+    static func encourageGoodReviews() {
         let alert = UIAlertController(title: "Review", message: "If you're having problems, please contact us for support.  We cannot respond to reviews so if there is any reason you would not give us 5 stars, please contact us so we can address your issues!", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         alert.addAction(UIAlertAction(title: "Contact", style: .default) {
@@ -310,15 +398,14 @@ public class KuditConnect: NSObject {
         })
         present(alert)
     }
-#endif
-    
+
     // MARK: - App Sharing
-    public static func share() {
+    static func share() {
         print(applicationShareURL)
     }
     
     // MARK: - Kudos
-    public static func sendKudos() {
+    static func sendKudos() {
         // do the actual Kudos sending
         let bundleIdentifier = (Bundle.main.bundleIdentifier ?? "com.kudit.unknown").urlEncoded
         let version = Application.main.version.urlEncoded
@@ -352,8 +439,7 @@ public class KuditConnect: NSObject {
         let title = "Thank You!"
 
         // TODO: add in a response mechanism where alerts can be shown or returned from a function so that the menu renderer appropriately displays the alert or text
-#if canImport(UIKit)
-        // TODO: WWDC: figure out how to make this above the darkening layer but below the alert box
+// TODO: WWDC: figure out how to make this above the darkening layer but below the alert box
         // show the particle effect for "fun"
         //TODO: works when invoked from presented view controller but not from main VC
         guard let window = KuditConnect.keyWindow else {
@@ -382,7 +468,6 @@ public class KuditConnect: NSObject {
             launchReview()
         })
         present(alert)
-#endif
     }
 
     // MARK: - FAQs
@@ -397,94 +482,6 @@ public class KuditConnect: NSObject {
                   items: items)
     }
     
-    private func loadFAQs() {
-        // make sure required dependancies are present?
-        /*
-        // TODO: load FAQ from Server (asynchronously if necessary otherwise pull from disk to be ready when needed).
-        _faqData = [KuditCoreDataManager managerWithModelName:@"KuditConnectFAQs" ubiquitous:NO reference:YES];
-
-        _faqData = [KuditCoreDataManager managerWithModelName:@"KuditConnectFAQs" ubiquitous:NO reference:YES];
-        
-        NSString *bundleIdentifier = NSBundle.mainBundle.infoDictionary[@"CFBundleIdentifier"];
-        _kuditData = [[KuditData alloc] initWithDataAtURLString:[NSString stringWithFormat:@"%@/faq.php?identifier=%@&kcVersion=%d", kAPIURL, bundleIdentifier, kKCVersion] initialize:^(void (^finished)(void)) {
-        // initialize/replace database each time (we're ignoring the date limiting on the server)
-        // go ahead and delete all existing entities (will this be a problem if trying to look at FAQs and loaded context already?  Should happen pretty early and quick, right?
-        [_faqData deleteAndResetWithCallback:^() {
-        #warning use generated notification to refresh table view if up
-        finished();
-        }];
-        } addData:^(NSDictionary *data) {
-        NSArray *faqs = data[@"faqs"];
-        // already on background thread
-        NSManagedObjectContext *backgroundContext = [_faqData newBackgroundContext];
-        
-        for (NSDictionary *faqDictionary in faqs) {
-        KuditFAQ *faq = [NSEntityDescription insertNewObjectForEntityForName:@"FAQ" inManagedObjectContext:backgroundContext];
-        [faq loadFromDictionary:faqDictionary];
-        }
-        
-        [backgroundContext save];
-        [backgroundContext reset];
-        
-        dispatch_async( dispatch_get_main_queue(), ^{
-        @synchronized(self) { // make sure no threading issues and this doesn't happen twice/concurrently
-        if (!_faqsLoaded) { // ensures only run once
-        // make sure run on main thread
-        [self _checkAlerts];
-        _faqsLoaded = YES;
-        }
-        }
-        });
-        }];
-        
-        _kuditConnectItems
-        = @[[KuditConnectItem itemOfType:KuditConnectItemTypeAction
-        withLabel:@"Help & FAQs"
-        options:@{kKuditConnectItemOptionKeyWithoutDismissal:@YES,
-        kKuditConnectItemOptionKeyIconName:@"kuditConnectFAQs"}
-        items:nil
-        callback:^(KuditConnectItem *item) {
-        [self _showFAQs];
-        }],
-        [KuditConnectItem itemOfType:KuditConnectItemTypeAction // _contact does dismissal automatically
-        withLabel:@"Contact Support"
-        options:@{kKuditConnectItemOptionKeyWithoutDismissal:@YES,
-        kKuditConnectItemOptionKeyIconName:@"kuditConnectContact"}
-        items:nil
-        callback:^(KuditConnectItem *item) {
-        [self _contact];
-        }],
-        [KuditConnectItem itemOfType:KuditConnectItemTypeAction // handles dismissal
-        withLabel:@"Leave a Review"
-        options:@{kKuditConnectItemOptionKeyWithoutDismissal:@YES,
-        kKuditConnectItemOptionKeyIconName:@"kuditConnectReview"}
-        items:nil
-        callback:^(KuditConnectItem *item) {
-        [self _promptToReview];
-        }],
-        [KuditConnectItem itemOfType:KuditConnectItemTypeAction // handles dismissal
-        withLabel:@"Share App With Friends"
-        options:@{kKuditConnectItemOptionKeyWithoutDismissal:@YES,
-        kKuditConnectItemOptionKeyIconName:@"kuditConnectShare"}
-        items:nil
-        callback:^(KuditConnectItem *item) {
-        [self _share];
-        }],
-        [KuditConnectItem itemOfType:KuditConnectItemTypeAction // handles dismissal
-        withLabel:@"Send Us Kudos"
-        options:@{kKuditConnectItemOptionKeyWithoutDismissal:@YES,
-        kKuditConnectItemOptionKeyIconName:@"kuditConnectKudos"}
-        items:nil
-        callback:^(KuditConnectItem *item) {
-        [self _kudos];
-        }]];
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            self.modalPresentationStyle = UIModalPresentationCurrentContext;
-        }
-    */
-    
-    }
 }
 //    public static let staticValue = "STATIC VALUE"
 //
@@ -542,3 +539,4 @@ public class KuditConnect: NSObject {
 // The items should be a protocol and add the protocol to simple things like strings
 // add(item: AnyObject) { item in // Stuff to do when triggered }
 // typealias KCAction = (KCItem,
+#endif

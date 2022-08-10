@@ -9,5 +9,12 @@ final class KuditFrameworksTests: XCTestCase {
         // results.
         XCTAssertEqual(KuditFrameworks().text, "Hello, World!")
     }
+    func testSleep() throws {
+        let then = time()
+        await sleep(5)
+        let now = time()
+        
+        XCTAssertEqual(now - then, 5)
+    }
 }
 #endif

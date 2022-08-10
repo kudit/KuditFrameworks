@@ -1,12 +1,19 @@
 import SwiftUI
 
 struct ContentView: View {
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    
+    @State var time = -1
     var body: some View {
         VStack {
             Image(systemName: "globe")
                 .imageScale(.large)
                 .foregroundColor(.accentColor)
-            Text("Hello, world!")
+            Text("Hello, Kudit world!")
+            Text("Unix time: \(time)").onReceive(timer, perform: { _ in
+                //debug("updating \(time)")
+                time = PHP.time()
+            })
         }
     }
 }

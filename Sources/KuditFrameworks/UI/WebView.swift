@@ -44,9 +44,9 @@ public class WebViewDelegateManager: NSObject, WKNavigationDelegate {
 #if canImport(UIKit)
 typealias ViewRepresentable = UIViewRepresentable
 public struct WebView: ViewRepresentable {
-    var url: URL
-    var delegate: WebViewDelegate? = nil
-    var localDelegate: WebViewDelegateManager? = nil
+    public var url: URL
+    public var delegate: WebViewDelegate? = nil
+    public var localDelegate: WebViewDelegateManager? = nil
     
     public func makeUIView(context: Context) -> WKWebView {
         let webView = WKWebView()

@@ -17,13 +17,15 @@ public extension UIViewController {
     }
 }
 
+
 public extension MenuGroup {
     var navigationController: UINavigationController {
         let navigationController = UINavigationController()
         let menuController = MenuTableViewController(self)
         navigationController.pushViewController(menuController, animated: false)
-        menuController.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: KuditConnect.keyWindow?.rootViewController, action: #selector(UIViewController.simplyDismiss))
+        menuController.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: menuController.view.window?.rootViewController, action: #selector(UIViewController.simplyDismiss))
         return navigationController
+        // KuditConnect.keyWindow?
     }
 }
 

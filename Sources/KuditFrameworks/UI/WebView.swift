@@ -18,7 +18,7 @@ public class WebViewDelegateManager: NSObject, WKNavigationDelegate {
     var webView: WKWebView
     var delegate: WebViewDelegate
     
-    init(webView: WKWebView, delegate: WebViewDelegate) {
+    public init(webView: WKWebView, delegate: WebViewDelegate) {
         self.webView = webView
         self.delegate = delegate
         super.init()

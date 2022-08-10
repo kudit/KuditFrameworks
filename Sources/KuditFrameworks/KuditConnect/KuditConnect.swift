@@ -29,57 +29,78 @@ import MessageUI // not supported in watchOS
 extension KuditConnect: MFMailComposeViewControllerDelegate {}
     
 // for Kudos particles
-    // MARK: - particle effects
-    // http://www.raywenderlich.com/6063/uikit-particle-systems-in-ios-5-tutorial
-    public class KuditParticleView: UIView {
-        var particleEmitter:CAEmitterLayer!
-        //2 configure the UIView to have an emitter layer
-        override public class var layerClass : AnyClass {
-            return CAEmitterLayer.self
+// MARK: - particle effects
+// http://www.raywenderlich.com/6063/uikit-particle-systems-in-ios-5-tutorial
+public class KuditParticleView: UIView {
+    var particleEmitter:CAEmitterLayer!
+    //2 configure the UIView to have an emitter layer
+    override public class var layerClass : AnyClass {
+        return CAEmitterLayer.self
+    }
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        particleEmitter = (self.layer as! CAEmitterLayer)
+        particleEmitter.renderMode = .oldestLast // Replaced line below to fix impossible coersion.  Hopefully correct!
+        //particleEmitter.renderMode = kCAEmitterLayerVolume as CAEmitterLayerRenderMode
+        let emitter = CAEmitterCell()
+        emitter.birthRate = 30
+        emitter.lifetime = 5.0
+        if let image = KuImage.named("kuditConnectKudosSprite") {
+            print("Image loaded: \(image)")
+            emitter.contents = image.cgImage
+        } else {
+            print("Could not load any image to use as the emitter contents!")
         }
-        public override init(frame: CGRect) {
-            super.init(frame: frame)
-            particleEmitter = (self.layer as! CAEmitterLayer)
-            particleEmitter.renderMode = .oldestLast // Replaced line below to fix impossible coersion.  Hopefully correct!
-            //particleEmitter.renderMode = kCAEmitterLayerVolume as CAEmitterLayerRenderMode
-            let emitter = CAEmitterCell()
-            emitter.birthRate = 30
-            emitter.lifetime = 5.0
-            if let image = KuImage.named("kuditConnectKudosSprite") {
-                print("Image loaded: \(image)")
-                emitter.contents = image.cgImage
-            } else {
-                print("Could not load any image to use as the emitter contents!")
-            }
-            emitter.color = UIColor.yellow.cgColor
-            emitter.velocity = 230
-            emitter.velocityRange = 150
-            //emitter.emissionLatitude = CGFloat(M_PI)
-            //emitter.emissionLongitude = CGFloat(M_PI_2)
-            emitter.emissionRange = .pi
-            emitter.scale = 0.2
-            emitter.scaleSpeed = 0.7
-            //emitter.spin = 2.2
-            emitter.alphaSpeed = -0.2
-            emitter.yAcceleration = 250
-            emitter.name = "particle"
-            particleEmitter.emitterCells = [emitter]
+        emitter.color = UIColor.yellow.cgColor
+        emitter.velocity = 230
+        emitter.velocityRange = 150
+        //emitter.emissionLatitude = CGFloat(M_PI)
+        //emitter.emissionLongitude = CGFloat(M_PI_2)
+        emitter.emissionRange = .pi
+        emitter.scale = 0.2
+        emitter.scaleSpeed = 0.7
+        //emitter.spin = 2.2
+        emitter.alphaSpeed = -0.2
+        emitter.yAcceleration = 250
+        emitter.name = "particle"
+        particleEmitter.emitterCells = [emitter]
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    public func stop() {
+        particleEmitter.setValue(0.0, forKeyPath: "emitterCells.particle.birthRate")
+        // TODO: have way of clearing out the view (removing it from superview) when everything's finished dying (just delay based on lifetime and removefromsuperview?)
+    }
+}
+
+extension UIViewController {
+    var actualPresentingViewController: UIViewController? {
+        // get the presenting controller by navigating down the stack from the window
+        let window = self.view.window
+        
+        var presentingController = window?.rootViewController
+        while let pc = presentingController?.presentedViewController {
+            presentingController = pc
         }
         
-        required public init?(coder aDecoder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
-        public func stop() {
-            particleEmitter.setValue(0.0, forKeyPath: "emitterCells.particle.birthRate")
-            // TODO: have way of clearing out the view (removing it from superview) when everything's finished dying (just delay based on lifetime and removefromsuperview?)
-        }
+        return presentingController
     }
+}
 #endif
 
 
 public class KuditConnect: NSObject {
     private static let _shared = KuditConnect()
     public static var supportEmail = "support@kudit.com"
+    
+#if canImport(UIKit)
+    public static var keyWindow: UIWindow?
+    static func link(window: UIWindow) {
+        keyWindow = window 
+    }
+#endif
     
     /// necessary for review links
     private static let _appleID = Bundle.main.infoDictionary?["AppleID"]
@@ -149,29 +170,13 @@ public class KuditConnect: NSObject {
 
 
 #if canImport(UIKit)
-    //@available(*, deprecated, message: "keyWindow should be re-evaluated?")
-    public static var keyWindow: UIWindow? {
-        return UIApplication.shared.windows.first { $0.isKeyWindow }
-    }
-    
-    //@available(*, deprecated, message: "keyWindow")
-    public static var presentingController: UIViewController = keyWindow!.rootViewController!
-    
     public static var screenshots = [UIImage]()
     
-    /// get the actual presenting controller in case other things on top of the stack
-    private static var actualPresentingController: UIViewController {
-        var pc = presentingController
-        while let presentedController = pc.presentedViewController {
-            pc = presentedController
-        }
-        return pc
-    }
-    
     public static func present(_ controller: UIViewController) {
-        actualPresentingController.present(controller, animated: true)
+        controller.actualPresentingViewController?.present(controller, animated: true)
     }
     
+    /*
     // determine the UI to use to present the menu group automatically for the different UI styles.  Make this simple enough that this can easily be replicated for custom UI presenters (pass in renderer?)
     public static func present(withItems additionalItems: [MenuItem] = [], from: AnyObject? = nil) {
         // take and store screenshots
@@ -201,6 +206,7 @@ public class KuditConnect: NSObject {
             ppc.barButtonItem = bbi
         }
     }
+     */
     
     public static func alert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -248,7 +254,7 @@ public class KuditConnect: NSObject {
         // TODO: If cancelled, perhaps prompt to look at the FAQ or remind that this is availabe and just simply write the problem or comment.  Button to email and button to FAQ and button to dismiss.
     
         // Dismiss the mail compose view controller.
-        KuditConnect.actualPresentingController.dismiss(animated: true, completion: nil)
+        controller.actualPresentingViewController?.dismiss(animated: true, completion: nil)
     }
     #endif
 
@@ -346,34 +352,37 @@ public class KuditConnect: NSObject {
         let title = "Thank You!"
 
         // TODO: add in a response mechanism where alerts can be shown or returned from a function so that the menu renderer appropriately displays the alert or text
-        #if os(iOS) || os(tvOS)
-            // TODO: WWDC: figure out how to make this above the darkening layer but below the alert box
-            // show the particle effect for "fun"
-            //TODO: works when invoked from presented view controller but not from main VC
-            let window = UIApplication.shared.windows.first!
-            // TODO: do we need to check orientation and flip here anymore?
-            let width = window.frame.size.width
-//            let height = window.frame.size.height
-            let kpv = KuditParticleView(frame: CGRect(x: width/2, y: 0, width: 0, height: 0))
-            window.addSubview(kpv)
-            
-            let dismissKPV = {
-                kpv.stop()
-                //kpv.removeFromSuperview() // TODO: delay until all smileys are gone
-            }
-            
-            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "No Thanks", style: .cancel) {
-                _ in
-                dismissKPV()
-            })
-            alert.addAction(UIAlertAction(title: "Review", style: .default) {
-                _ in
-                dismissKPV()
-                launchReview()
-            })
-            present(alert)
-        #endif
+#if canImport(UIKit)
+        // TODO: WWDC: figure out how to make this above the darkening layer but below the alert box
+        // show the particle effect for "fun"
+        //TODO: works when invoked from presented view controller but not from main VC
+        guard let window = KuditConnect.keyWindow else {
+            debug("Could not present window.  Thank you for your kudos!")
+            return
+        }
+        // TODO: do we need to check orientation and flip here anymore?
+        let width = window.frame.size.width
+        //            let height = window.frame.size.height
+        let kpv = KuditParticleView(frame: CGRect(x: width/2, y: 0, width: 0, height: 0))
+        window.addSubview(kpv)
+        
+        let dismissKPV = {
+            kpv.stop()
+            //kpv.removeFromSuperview() // TODO: delay until all smileys are gone
+        }
+        
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "No Thanks", style: .cancel) {
+            _ in
+            dismissKPV()
+        })
+        alert.addAction(UIAlertAction(title: "Review", style: .default) {
+            _ in
+            dismissKPV()
+            launchReview()
+        })
+        present(alert)
+#endif
     }
 
     // MARK: - FAQs

@@ -433,23 +433,29 @@ public extension String {
     
     /// Parses out a substring from the first occurrence of `start` to the next occurrence of `end`.
     /// If `start` or `end` are `nil`, will parse from the beginning of the `String` or to the end of the `String`.
-    /// If the `String` doesn't contain the start, this will return an empty string.
+    /// If the `String` doesn't contain the start or end (whichever is provided), this will return nil.
     /// - Parameter from: start the extraction after the first occurrence of this string or from the beginning of the `String` if this is `nil`
     /// - Parameter to: end the extraction at the first occurrence of this string after `from` or at the end of the `String` if this is `nil`
-    ///  - Return: the extracted string or the original string if both start and end are not found
+    ///  - Return: the extracted string or nil if either start or end are not found
     // TODO: rename extracting?
-    func extract(from start: String?, to end: String?) -> String {
+    func extract(from start: String?, to end: String?) -> String? {
         // copy this string for use
         var substr = self
-        if start != nil {
+        if let start = start {
+            guard self.contains(start) else {
+                return nil
+            }
             // get everything after the start tag
-            var parts = substr.components(separatedBy: start!)
+            var parts = substr.components(separatedBy: start)
             parts.removeFirst()
-            substr = parts.joined(separator: start!) // probably only 1 item, but just in case...
+            substr = parts.joined(separator: start) // probably only 1 item, but just in case...
         }
-        if end != nil {
+        if let end = end {
+            guard self.contains(end) else {
+                return nil
+            }
             // get everything before the end tag
-            let parts = substr.components(separatedBy: end!)
+            let parts = substr.components(separatedBy: end)
             substr = parts[0]
         }
         return substr
@@ -493,8 +499,16 @@ public extension String {
         return [
             Test("extractData()") {
                 let extraction = testString.extract(from: "<em>", to: "</em>") // should never fail
-                return (extraction == "intérressant" , extraction)
-            }
+                return (extraction == "intérressant" , String(describing:extraction))
+            },
+            Test("extractData() nil case start") {
+                let extraction = testString.extract(from: "<strong>", to: "</em>")
+                return (extraction == nil , String(describing:extraction))
+            },
+            Test("extractData() nil case end") {
+                let extraction = testString.extract(from: "<em>", to: "</strong>")
+                return (extraction == nil , String(describing:extraction))
+            },
         ]
     }
 }

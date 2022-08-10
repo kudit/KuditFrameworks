@@ -140,7 +140,7 @@ public extension PHP { // Not sure why it compiles when in an extension but not 
         
         var data: Data
         // create dataTask using the session object to send data to the server
-        if #available(iOS 15.0, *) {
+        if #available(iOS 15.0, watchOS 8.0, tvOS 15.0, *) {
             (data, _) = try await URLSession.shared.data(for: request)
         } else {
             // Fallback on earlier versions

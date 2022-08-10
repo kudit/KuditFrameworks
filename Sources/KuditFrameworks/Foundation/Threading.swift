@@ -10,6 +10,7 @@ import Foundation
 
 // would have made this a static function on task but extending it apparently has issues??
 // Sleep extension for sleeping a thread in seconds
+@available(watchOS 6.0.0, *)
 public func sleep(seconds: Double) async {
     let duration = UInt64(seconds * 1_000_000_000)
     do {

@@ -17,7 +17,7 @@ public let MITextGroupValueKey = "textGroupValue"
 /// used to align buttons
 public let MITextAlignmentKey = "alignment"
 
-#if canImport(UIKit)
+#if canImport(UIKit) && !os(watchOS) && !os(tvOS)
 import UIKit
     public typealias MIConfigurationHandler = ((UITextField) -> Void)
     /// Use to add a configuration handler to text fields to configure the text field.  Should be of type MIConfigurationHandler.

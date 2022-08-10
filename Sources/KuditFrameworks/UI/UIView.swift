@@ -6,7 +6,7 @@
 //  Copyright © 2016 Kudit. All rights reserved.
 //
 
-#if canImport(UIKit)
+#if canImport(UIKit) && !os(watchOS) && !os(tvOS)
 import UIKit
 
 extension UIView {

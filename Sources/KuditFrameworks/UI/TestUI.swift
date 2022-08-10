@@ -36,7 +36,7 @@ public struct TestsListView: View {
         List {
             Text("Tests:")
             ForEach(tests, id: \.title) { item in
-                if #available(iOS 15.0, *) {
+                if #available(iOS 15.0, watchOS 8.0, tvOS 15.0, *) {
                     TestRow(test: item)
                         .task {
                             item.run()

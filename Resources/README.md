@@ -12,3 +12,4 @@ v1.0.5 8/10/2022 Fixed WebView internal permissions (hopefully for real this tim
 v1.0.6 8/10/2022 Fixed PHP.time() not being public.  Fixed recursive sleep and just eliminated PHP.sleep().  Made Test() init public.  Made TestUI public.
 v1.0.7 8/10/2022 Made additional fields for Tests public.
 v1.0.8 8/10/2022 Manually created initializers for SwiftUI views to prevent internal protection errors.
+v1.0.9 8/10/2022 Fixed tests to run in Xcode.  Added watchOS and tvOS support.

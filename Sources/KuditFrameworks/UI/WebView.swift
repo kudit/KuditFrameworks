@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+#if canImport(WebKit)
 import WebKit
 
 // MARK: Web View for SwiftUI
@@ -41,7 +42,9 @@ public class WebViewDelegateManager: NSObject, WKNavigationDelegate {
         })
     }
 }
-#if canImport(UIKit)
+#endif
+
+#if canImport(UIKit) && canImport(WebKit)
 typealias ViewRepresentable = UIViewRepresentable
 public struct WebView: ViewRepresentable {
     public var url: URL
@@ -61,6 +64,6 @@ public struct WebView: ViewRepresentable {
         webView.load(request)
     }
 }
-#elseif os(macOS)
+#elseif os(macOS) && canImport(WebKit)
 typealias ViewRepresentable = NSViewRepresentable
 #endif

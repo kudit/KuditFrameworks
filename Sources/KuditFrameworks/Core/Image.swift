@@ -15,7 +15,11 @@ public extension UIImage {
     /// helper since we can't conditionally check for watchOS below
     // TODO: remove now that watchOS supports UIImage?
     private static func _namedImage(_ name: String) -> UIImage? {
+#if os(watchOS)
+        return UIImage(named: name, in: Bundle(for: KuditConnect.self), with: nil)
+#else
         return UIImage(named: name, in: Bundle(for: KuditConnect.self), compatibleWith: nil)
+#endif
     }
     
     /// like UIImage(named:) but also checks KuditFrameworks bundle after checking app resources.

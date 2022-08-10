@@ -9,10 +9,10 @@ final class KuditFrameworksTests: XCTestCase {
         // results.
         XCTAssertEqual(KuditFrameworks().text, "Hello, World!")
     }
-    func testSleep() throws {
-        let then = time()
-        await sleep(5)
-        let now = time()
+    func testSleep() async throws {
+        let then = PHP.time()
+        await sleep(seconds: 5)
+        let now = PHP.time()
         
         XCTAssertEqual(now - then, 5)
     }

@@ -30,7 +30,7 @@ public class KuditConnect: NSObject {
     private static let _shared = KuditConnect()
     public static var supportEmail = "support@kudit.com"
     
-#if canImport(UIKit)
+#if canImport(UIKit) && !os(watchOS) && !os(tvOS)
     public static var keyWindow: UIWindow?
     static func link(window: UIWindow) {
         keyWindow = window 

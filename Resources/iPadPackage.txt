@@ -8,39 +8,39 @@ import PackageDescription
 import AppleProductTypes
 
 let package = Package(
-	name: "KuditFrameworksApp",
-	platforms: [
-		.iOS("15.2")
-	],
-	products: [
-		.iOSApplication(
-			name: "KuditFrameworksApp",
-			targets: ["AppModule"],
-			displayVersion: "1.0.5",
-			bundleVersion: "1",
-			appIcon: .placeholder(icon: .box),
-			accentColor: .presetColor(.teal),
-			supportedDeviceFamilies: [
-				.pad,
-				.phone
-			],
-			supportedInterfaceOrientations: [
-				.portrait,
-				.landscapeRight,
-				.landscapeLeft,
-				.portraitUpsideDown(.when(deviceFamilies: [.pad]))
-			],
-			appCategory: .developerTools
-		)
-	],
-	targets: [
-		.executableTarget(
-			name: "AppModule",
-			path: ".",
-			exclude: ["Sources/KuditFrameworks/KuditConnect/KuditConnectFAQs.xcdatamodeld"],
-			resources: [
-				.process("Resources")
-			]
-		)
-	]
+    name: "KuditFrameworksApp",
+    platforms: [
+        .iOS("15.2")
+    ],
+    products: [
+        .iOSApplication(
+            name: "KuditFrameworksApp",
+            targets: ["AppModule"],
+            displayVersion: "1.0.7",
+            bundleVersion: "1",
+            appIcon: .placeholder(icon: .box),
+            accentColor: .presetColor(.teal),
+            supportedDeviceFamilies: [
+                .pad,
+                .phone
+            ],
+            supportedInterfaceOrientations: [
+                .portrait,
+                .landscapeRight,
+                .landscapeLeft,
+                .portraitUpsideDown(.when(deviceFamilies: [.pad]))
+            ],
+            appCategory: .developerTools
+        )
+    ],
+    targets: [
+        .executableTarget(
+            name: "AppModule",
+            path: ".",
+            exclude: ["Sources/KuditFrameworks/KuditConnect/KuditConnectFAQs.xcdatamodeld"],
+            resources: [
+                .process("Resources")
+            ]
+        )
+    ]
 )

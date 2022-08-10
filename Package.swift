@@ -6,8 +6,10 @@ import PackageDescription
 let package = Package(
 	name: "KuditFrameworks",
 	platforms: [
-		.iOS("13"),
-		.macOS("12")
+        .iOS(.v13),
+        .tvOS(.v13),
+        .macOS(.v12),
+        .watchOS(.v6),
 	],
 	products: [
 		// Products define the executables and libraries a package produces, and make them visible to other packages.

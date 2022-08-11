@@ -1,5 +1,7 @@
 import SwiftUI
+#if canImport(KuditFrameworks) // since this is needed in XCode but is unavailable in Playgrounds
 import KuditFrameworks
+#endif
 
 public struct ContentView: View {
     

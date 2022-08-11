@@ -7,6 +7,9 @@
 //
 
 import Foundation
+#if canImport(KuditFrameworks)
+import KuditFrameworks
+#endif
 
 #if canImport(UIKit)
 import UIKit
@@ -16,9 +19,9 @@ public extension UIImage {
     // TODO: remove now that watchOS supports UIImage?
     private static func _namedImage(_ name: String) -> UIImage? {
 #if os(watchOS)
-        return UIImage(named: name, in: Bundle(for: KuditConnect.self), with: nil)
+        return UIImage(named: name, in: Bundle(for: Test.self), with: nil)
 #else
-        return UIImage(named: name, in: Bundle(for: KuditConnect.self), compatibleWith: nil)
+        return UIImage(named: name, in: Bundle(for: Test.self), compatibleWith: nil)
 #endif
     }
     
@@ -40,7 +43,7 @@ public extension UIImage {
 import AppKit
 public typealias KuImage = NSImage
 public extension NSImage {
-	static func named(_ name: String) -> KuImage? {
+    static func named(_ name: String) -> KuImage? {
         if let image = NSImage(named: name) {
             return image
         } else {
@@ -91,7 +94,7 @@ public extension KuImage {
         }
     }
 #else
-	var typeExtension: String {
+    var typeExtension: String {
         return "img"
     }
 #endif

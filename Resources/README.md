@@ -14,3 +14,6 @@ v1.0.7 8/10/2022 Made additional fields for Tests public.
 v1.0.8 8/10/2022 Manually created initializers for SwiftUI views to prevent internal protection errors.
 v1.0.9 8/10/2022 Fixed tests to run in Xcode.  Added watchOS and tvOS support.
 v1.0.10 8/11/2022 Removed a bunch of KuditConnect and non-critical code since those should be completely re-thought and added in a modern way and there is too much legacy code.
+v1.0.11 8/11/2022 Removed unnecessary KuditFrameworks import from Image.swift.
+
+

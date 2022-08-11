@@ -7,9 +7,6 @@
 //
 
 import Foundation
-#if canImport(KuditFrameworks)
-import KuditFrameworks
-#endif
 
 #if canImport(UIKit)
 import UIKit

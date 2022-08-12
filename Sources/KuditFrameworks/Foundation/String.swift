@@ -59,7 +59,7 @@ public extension String {
         return !self.isEmpty
     }
     /// Returns `true` iff the `String` contains one of the `strings` by case-sensitive, non-literal search.
-    func contains(_ strings: [String]) -> Bool {
+    func containsAny(_ strings: [String]) -> Bool {
         for string in strings {
             if self.contains(string) {
                 return true
@@ -158,11 +158,11 @@ public extension String {
         var returnString = self[self.startIndex...self.endIndex]
         while returnString.hasPrefix(trimString) {
             //returnString = returnString.substring(from: returnString.characters.index(returnString.startIndex, offsetBy: trimString.length))
-            let index = returnString.index(returnString.startIndex, offsetBy: trimString.count) 
+            let index = returnString.index(returnString.startIndex, offsetBy: trimString.count)
             returnString = returnString.suffix(from: index)
         }
         while returnString.hasSuffix(trimString) {
-            let index = returnString.index(returnString.endIndex, offsetBy: -trimString.count) 
+            let index = returnString.index(returnString.endIndex, offsetBy: -trimString.count)
             returnString = returnString.prefix(through: index)
             //returnString = returnString.substring(to: returnString.characters.index(returnString.endIndex, offsetBy: -trimString.length))
         }

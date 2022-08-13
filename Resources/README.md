@@ -16,5 +16,5 @@ v1.0.9 8/10/2022 Fixed tests to run in Xcode.  Added watchOS and tvOS support.
 v1.0.10 8/11/2022 Removed a bunch of KuditConnect and non-critical code since those should be completely re-thought and added in a modern way and there is too much legacy code.
 v1.0.11 8/11/2022 Removed unnecessary KuditFrameworks import from Image.swift.
 v1.0.12 8/12/2022 changed String.contains() to String.containsAny() to be more clear.  Modified KuError to include public initializer and automatic Debug print.
-
+v1.0.13 8/12/2022 Added File and Date and URL comparable code.  Need to migrate NSDate to Date.  
 

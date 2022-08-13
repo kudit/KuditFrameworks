@@ -13,6 +13,7 @@ import Darwin
 import Glibc
 #endif
 
+// TODO: CONVERT all this to swift versions
 public extension Date {
     @nonobjc static let MySQLTimestampFormat = "yyyy-MM-dd HH:mm:ss"
     

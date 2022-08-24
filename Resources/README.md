@@ -17,4 +17,4 @@ v1.0.10 8/11/2022 Removed a bunch of KuditConnect and non-critical code since th
 v1.0.11 8/11/2022 Removed unnecessary KuditFrameworks import from Image.swift.
 v1.0.12 8/12/2022 changed String.contains() to String.containsAny() to be more clear.  Modified KuError to include public initializer and automatic Debug print.
 v1.0.13 8/12/2022 Added File and Date and URL comparable code.  Need to migrate NSDate to Date.  
-
+v1.0.14 8/24/2022 Added RingedText, ShareSheet, and Graphics code from old Swift Frameworks.

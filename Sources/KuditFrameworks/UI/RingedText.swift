@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension Text {
+public extension Text {
     func ringed() -> some View {
         GeometryReader { g in
             ZStack {
@@ -32,8 +32,8 @@ extension Text {
     }
 }
 
-struct RingedText_Previews: PreviewProvider {
-    static var previews: some View {
+public struct RingedText_Previews: PreviewProvider {
+    public static var previews: some View {
         VStack {
             Text("123")
                 .ringed()

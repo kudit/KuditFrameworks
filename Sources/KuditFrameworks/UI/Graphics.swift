@@ -8,13 +8,13 @@
 import Foundation
 import CoreGraphics
 
-extension CGRect {
+public extension CGRect {
     var center: CGPoint { return CGPoint(x: midX, y: midY) }
 }
 
 import SwiftUI
 
-extension CGRect {
+public extension CGRect {
     /// Take point from a 0-1 scale in percent to the actual coordinate system specified by the rect
     func adjust(_ unitPoint: UnitPoint) -> CGPoint {
         adjust(x: unitPoint.x, y: unitPoint.y)

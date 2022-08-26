@@ -19,4 +19,4 @@ v1.0.12 8/12/2022 changed String.contains() to String.containsAny() to be more c
 v1.0.13 8/12/2022 Added File and Date and URL comparable code.  Need to migrate NSDate to Date.  
 v1.0.14 8/24/2022 Added RingedText, ShareSheet, and Graphics code from old Swift Frameworks.
 v1.0.15 8/25/2022 Checked added frameworks to make sure everything is marked public so usable by ouside code.
-
+v1.0.16 8/25/2022 Made let properties on ShareSheet struct public vars hopefully to silence private init warning. 

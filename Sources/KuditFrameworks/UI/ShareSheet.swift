@@ -10,10 +10,10 @@ import SwiftUI
 public struct ShareSheet: UIViewControllerRepresentable {
     public typealias ShareSheetCallback = (_ activityType: UIActivity.ActivityType?, _ completed: Bool, _ returnedItems: [Any]?, _ error: Error?) -> Void
     
-    public let activityItems: [Any]
-    public let applicationActivities: [UIActivity]? = nil
-    public let excludedActivityTypes: [UIActivity.ActivityType]? = nil
-    public let callback: ShareSheetCallback? = nil
+    public var activityItems: [Any]
+    public var applicationActivities: [UIActivity]? = nil
+    public var excludedActivityTypes: [UIActivity.ActivityType]? = nil
+    public var callback: ShareSheetCallback? = nil
     
     public func makeUIViewController(context: Context) -> UIActivityViewController {
         let controller = UIActivityViewController(

@@ -131,6 +131,7 @@ public extension String {
         }
         return year > 1760 && year < 3000
     }
+    
     /// an array of the characters of the `String` as strings
     // Objective-C was [string characters] which returned character strings.
     // Swift strings have a .characters method which returns an array of characters.
@@ -281,6 +282,24 @@ public extension String {
     }
 
     // MARK: - Transformed
+    /// version of string with first letter of each sentence capitalized
+    var sentenceCapitalized: String {
+        let sentences = self.components(separatedBy: ".")
+        var fixed = [String]()
+        for sentence in sentences {
+            var words = sentence.components(separatedBy: " ")
+            for index in words.indices {
+                // check for spaces or blank words
+                if words[index].trimmed != "" {
+                    words[index] = words[index].capitalized
+                    break // only do first word
+                }
+            }
+            fixed.append(words.joined(separator: " "))
+        }
+        return fixed.joined(separator: ".")
+    }
+    
     /// normalized version of string for comparisons and database lookups.  If normalization fails or results in an empty string, original string is returned.
     var normalized: String? {
         // expand ligatures and other joined characters and flatten to simple ascii (æ => ae, etc.) by converting to ascii data and back
@@ -497,6 +516,10 @@ public extension String {
     static var tests: [Test] {
         let testString = "A very long string with some <em>intérressant</em> properties!"
         return [
+            Test("sentenceCapitalized") {
+                let capitalized = "hello world. goodbye world.".sentenceCapitalized
+                return (capitalized == "Hello world. Goodbye world.", String(describing:capitalized))
+            },
             Test("extractData()") {
                 let extraction = testString.extract(from: "<em>", to: "</em>") // should never fail
                 return (extraction == "intérressant" , String(describing:extraction))

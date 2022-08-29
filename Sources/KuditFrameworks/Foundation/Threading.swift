@@ -19,6 +19,20 @@ public func sleep(seconds: Double) async {
         debug("Sleep function was interrupted")
     }
 }
+internal let testSleep1: TestClosure = {
+	let then = PHP.time()
+	await sleep(seconds: 5)
+	let now = PHP.time()
+	return (now - then == 5, "now: \(now), then: \(then) (expecting 5 sec difference)")
+}
+internal let testSleep2: TestClosure = {
+	let start = PHP.time()
+	await sleep(seconds: 2)
+	let end = PHP.time()
+	let delta = end - start // could be 2 or 3 if on an edge
+	return (delta <= 3, "\(start) + 2 != \(end)")
+}
+
 
 // TODO: make sure all this is replace with new async-await code.
 

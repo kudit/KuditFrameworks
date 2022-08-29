@@ -1,5 +1,12 @@
 import Foundation
 
+public typealias TestTuple = (Bool, String)
+public typealias TestClosure = () async throws -> TestTuple
+
+protocol Testable {
+	static var tests: [Test] { get }
+}
+
 // Test Handlers
 public class Test: CustomStringConvertible, ObservableObject {
     public enum TestProgress: CustomStringConvertible {
@@ -20,7 +27,6 @@ public class Test: CustomStringConvertible, ObservableObject {
             }
         }
     }
-    public typealias TestClosure = () async throws -> (Bool, String)
     public var title: String
     public var task: TestClosure
     @Published public var progress: TestProgress = .notStarted
@@ -53,7 +59,7 @@ public class Test: CustomStringConvertible, ObservableObject {
     
     public var description: String {
         let errorString = (errorMessage != nil ? "\n\t\(errorMessage!)" : "")
-        return "\(progress): \(title)\(errorString))"
+        return "\(progress): \(title)\(errorString)"
     }
 }
 public extension Test {

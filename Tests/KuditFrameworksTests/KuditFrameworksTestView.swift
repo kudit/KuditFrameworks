@@ -3,7 +3,7 @@ import SwiftUI
 import KuditFrameworks
 #endif
 
-public struct ContentView: View {
+public struct KuditFrameworksTestView: View {
     
     public init() {}
     

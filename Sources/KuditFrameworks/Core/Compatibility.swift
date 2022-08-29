@@ -21,11 +21,17 @@ public extension PostData {
     }
 }
 public struct PHP {
-    static var initTests = PHP.tests
     // getting current unix timestamp
     public static func time() -> Int {
         return Int(NSDate().timeIntervalSince1970)
     }
+	internal static let testTime: TestClosure = {
+		//debug("Interval: \(NSDate().timeIntervalSince1970)")
+		//debug("Time(): \(PHP.time())")
+		let interval = Int(NSDate().timeIntervalSince1970)
+		let time = PHP.time()
+		return (interval == time, "\(interval) != \(time)")
+	}
     
     public enum NetworkError: Error, CustomStringConvertible {
         // Throw when unable to parse a URL
@@ -50,46 +56,6 @@ public struct PHP {
                 return "nil Data received from the server"
             }
         }
-    }
-    
-    public static var tests: [Test] {
-        let testData: PostData = ["id": 13, "name": "Jack & \"Jill\"", "foo": false, "bar": "0.0"]
-        return [
-            Test("Checking time() function") {
-                //debug("Interval: \(NSDate().timeIntervalSince1970)")
-                //debug("Time(): \(PHP.time())")
-                let interval = Int(NSDate().timeIntervalSince1970)
-                let time = PHP.time()
-                return (interval == time, "\(interval) != \(time)")
-            },
-            Test("Checking sleep() function") {
-                let start = PHP.time()
-                await sleep(seconds: 2)
-                let end = PHP.time()
-                let delta = end - start // could be 2 or 3 if on an edge
-                return (delta <= 3, "\(start) + 2 != \(end)")
-            },
-            Test("Post Data query encoding") {
-                let testData = testData as PostData
-                //debug(testData.queryString ?? "Unable to generate query string")
-                let query = testData.queryString ?? "Unable to generate query string"
-                let expected = "name=Jack%20%26%20%22Jill%22"
-                return (query.contains(expected), "\(query) does not contain \(expected)")
-            },
-            Test("fetchURL Gwinnett check") {
-                let results = try await fetchURL(urlString: "https://www.GwinnettCounty.com")
-                return (results.contains("Gwinnett"), results)
-            },
-            Test("fetchURL GET check") {
-                let query = testData.queryString ?? "ERROR"
-                let results = try await fetchURL(urlString: "https://plickle.com/pd.php?\(query)")
-                return (results.contains("[name] => Jack & \"Jill\""), results)
-            },
-            Test("fetchURL POST check") {
-                let results = try await fetchURL(urlString: "https://plickle.com/pd.php", postData:testData)
-                return (results.contains("'name' => 'Jack & \\\"Jill\\\"',"), results)
-            }
-        ]
     }
 }
 
@@ -161,5 +127,36 @@ public extension PHP { // Not sure why it compiles when in an extension but not 
          throw NetworkError.urlParsing(urlString: urlString)
          }*/
     }
+	internal static let TEST_DATA: PostData = ["id": 13, "name": "Jack & \"Jill\"", "foo": false, "bar": "0.0"]
+	internal static let testPostDataQueryEncoding: TestClosure = {
+		//debug(testData.queryString ?? "Unable to generate query string")
+		let query = TEST_DATA.queryString ?? "Unable to generate query string"
+		let expected = "name=Jack%20%26%20%22Jill%22"
+		return (query.contains(expected), "\(query) does not contain \(expected)")
+	}
+	internal static let testFetchGwinnettCheck: TestClosure = {
+		let results = try await fetchURL(urlString: "https://www.GwinnettCounty.com")
+		return (results.contains("Gwinnett"), results)
+	}
+	internal static let testFetchGETCheck: TestClosure = {
+		let query = TEST_DATA.queryString ?? "ERROR"
+		let results = try await fetchURL(urlString: "https://plickle.com/pd.php?\(query)")
+		return (results.contains("[name] => Jack & \"Jill\""), results)
+	}
+	internal static let testFetchPOSTCheck: TestClosure = {
+		let results = try await fetchURL(urlString: "https://plickle.com/pd.php", postData:TEST_DATA)
+		return (results.contains("'name' => 'Jack & \\\"Jill\\\"',"), results)
+	}
 }
 
+extension PHP: Testable {
+	public static var tests: [Test] = [
+		Test("sleep 5", testSleep1),
+		Test("sleep 2", testSleep2),
+		Test("time", testTime),
+		Test("POST data query encoding", testPostDataQueryEncoding),
+		Test("fetchURL Gwinnett check", testFetchGwinnettCheck),
+		Test("fetchURL GET check", testFetchGETCheck),
+		Test("fetchURL POST check", testFetchPOSTCheck),
+	]
+}

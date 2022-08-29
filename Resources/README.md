@@ -22,3 +22,5 @@ v1.0.15 8/25/2022 Checked added frameworks to make sure everything is marked pub
 v1.0.16 8/25/2022 Made let properties on ShareSheet struct public vars hopefully to silence private init warning. 
 v1.0.17 8/26/2022 Added public init to ShareSheet.  Added Coding framework. 
 v1.0.18 8/26/2022 Added String.sentenceCapitalization.
+v1.0.19 8/29/2022 Re-worked testing framework to be more robust and to allow code coverage tests in Xcode.
+

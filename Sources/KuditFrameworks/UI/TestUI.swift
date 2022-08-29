@@ -61,6 +61,6 @@ public struct TestsListView: View {
 
 struct Tests_Previews: PreviewProvider {
     static var previews: some View {
-        TestsListView(tests: PHP.tests + String.tests)
+        TestsListView(tests: CharacterSet.tests + String.tests + PHP.tests)
     }
 }

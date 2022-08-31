@@ -151,12 +151,12 @@ public extension PHP { // Not sure why it compiles when in an extension but not 
 
 extension PHP: Testable {
 	public static var tests: [Test] = [
-		Test("sleep 5", testSleep1),
-		Test("sleep 2", testSleep2),
 		Test("time", testTime),
 		Test("POST data query encoding", testPostDataQueryEncoding),
 		Test("fetchURL Gwinnett check", testFetchGwinnettCheck),
 		Test("fetchURL GET check", testFetchGETCheck),
 		Test("fetchURL POST check", testFetchPOSTCheck),
+		Test("sleep 3", testSleep1),
+		Test("sleep 2", testSleep2),
 	]
 }

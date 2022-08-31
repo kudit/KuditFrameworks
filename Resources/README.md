@@ -25,3 +25,4 @@ v1.0.18 8/26/2022 Added String.sentenceCapitalization.
 v1.0.19 8/29/2022 Re-worked testing framework to be more robust and to allow code coverage tests in Xcode.
 v1.0.20 8/30/2022 Removed shuffle and random since built-in as part of native Array functions.
 v1.0.21 8/31/2022 Moved folders for KuditFrameworks into Sources folder since we already know this is for KuditFrameworks and removes unnecessary nesting.
+v1.0.22 8/31/2022 Rearranged test order and shorted sleep test.

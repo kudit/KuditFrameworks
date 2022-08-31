@@ -21,9 +21,10 @@ public func sleep(seconds: Double) async {
 }
 internal let testSleep1: TestClosure = {
 	let then = PHP.time()
-	await sleep(seconds: 5)
+	let seconds = 3
+	await sleep(seconds: Double(seconds))
 	let now = PHP.time()
-	return (now - then == 5, "now: \(now), then: \(then) (expecting 5 sec difference)")
+	return (now - then == seconds, "now: \(now), then: \(then) (expecting \(seconds) sec difference)")
 }
 internal let testSleep2: TestClosure = {
 	let start = PHP.time()

@@ -18,27 +18,15 @@ public extension Collection {
 		}
 	}
 	/// Returns a randomly selected item from the collection.
+	@available(*, deprecated, message: "Use native randomElement() method")
 	var randomItem: Iterator.Element {
 		get {
-			let array = Array(self) // copy
-			let randomIndex = Int.random(max: Int(array.count))
-			return array[randomIndex]
+			return self.randomElement()!
 		}
 	}
 }
 
-public extension Array {
-	/// Randomly rearranges the elements of self using the Fisher-Yates shuffle.
-	mutating func shuffle() {
-		guard count > 1 else { return } // shuffling an array with less than 2 items does nothing
-		
-		for i in 0..<count {
-			let j = Int.random(max: count - i) + i
-			guard i != j else { continue }
-			self.swapAt(i, j) //swap(&self[i], &self[j])
-		}
-	}
-}
+/// shuffle is native now
 
 public extension Array where Element: Hashable {
 	/// Returns the collection with duplicate values in `self` removed.

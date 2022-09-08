@@ -9,3 +9,9 @@ struct KuditFrameworksApp: App {
         }
     }
 }
+
+struct KuditFrameworksApp_Previews: PreviewProvider {
+	static var previews: some View {
+		KuditFrameworksTestView()
+	}
+}

@@ -26,3 +26,4 @@ v1.0.19 8/29/2022 Re-worked testing framework to be more robust and to allow cod
 v1.0.20 8/30/2022 Removed shuffle and random since built-in as part of native Array functions.
 v1.0.21 8/31/2022 Moved folders for KuditFrameworks into Sources folder since we already know this is for KuditFrameworks and removes unnecessary nesting.
 v1.0.22 8/31/2022 Rearranged test order and shorted sleep test.
+v1.0.23 9/8/2022 Added KuditLogo to framework from Tracker (not perfected yet).  Added preview to KuditFrameworksApp.  Fixed UIActivity missing from Mac (non-catalyst) build.

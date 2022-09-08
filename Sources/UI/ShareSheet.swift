@@ -5,6 +5,7 @@
 //  Created by Ben Ku on 10/21/21.
 //
 // https://developer.apple.com/forums/thread/123951
+#if canImport(UIActivity)
 import SwiftUI
 
 public struct ShareSheet: UIViewControllerRepresentable {
@@ -73,3 +74,4 @@ struct ShareSheet_Previews: PreviewProvider {
         ShareSheetPreviewView()
     }
 }
+#endif

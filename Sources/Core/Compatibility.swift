@@ -1,7 +1,7 @@
 import Foundation
 
 /// MARK: ++ operator for compatibility functions
-postfix func ++(x: inout Int) {
+public postfix func ++(x: inout Int) {
     x += 1
 }
 internal let testPlusPlus: TestClosure = {

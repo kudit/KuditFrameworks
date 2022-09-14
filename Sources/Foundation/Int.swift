@@ -65,6 +65,7 @@ public extension Int {
     }
 }
 
+#if canImport(SwiftUI)
 import SwiftUI
 struct MyView_Previews: PreviewProvider {
     static var previews: some View {
@@ -75,4 +76,5 @@ struct MyView_Previews: PreviewProvider {
         }
     }
 }
+#endif
 

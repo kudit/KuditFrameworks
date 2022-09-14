@@ -11,7 +11,9 @@ import SwiftUI
 // Inspired by https://cocoacasts.com/from-hex-to-uicolor-and-back-in-swift
 // Make Color codable. This includes support for transparency.
 // See https://www.digitalocean.com/community/tutorials/css-hex-code-colors-alpha-values
-extension Color: Codable {
+@available(iOS 14.0, *)
+extension Color: Codable {} // protocol conformance hopefully public
+public extension Color {
     init(hex: String) {
         let rgba = hex.toRGBA()
         
@@ -22,14 +24,14 @@ extension Color: Codable {
                   opacity: Double(rgba.alpha))
     }
     
-    public init(from decoder: Decoder) throws {
+    init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let hex = try container.decode(String.self)
         
         self.init(hex: hex)
     }
     
-    public func encode(to encoder: Encoder) throws {
+    func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(toHex)
     }
@@ -68,7 +70,7 @@ extension Color: Codable {
     }
 }
 
-extension String {
+public extension String {
     func toRGBA() -> (r: CGFloat, g: CGFloat, b: CGFloat, alpha: CGFloat) {
         var hexSanitized = self.trimmingCharacters(in: .whitespacesAndNewlines)
         hexSanitized = hexSanitized.replacingOccurrences(of: "#", with: "")

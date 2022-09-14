@@ -31,3 +31,12 @@ v1.0.24 9/8/2022 Removed conditions from ShareSheet as it prevents access on iOS
 v1.0.25 9/8/2022 Tweaked KuditLogo with some previews that have examples of how it might be used.
 v1.0.26 9/14/2022 Added additional documentation to KuditFrameworks Threading.  Renamed KuError to CustomError.  Added ++ operator.  Added Date.pretty formatter. Added Image(data:Data) import extensions.  Added padding(size:) extension.  Added Color: Codable extensions.  Added Int.ordinal function.  Included deprecated message for KuError.  Added PlusPlus test.  Fixed Playgrounds test with #if canImport(PreviewProvider) to #if canImport(SwiftUI).  Fixed/Added App Icon.
 v1.0.27 9/14/2022 Fixed permissions on methods.  Fixed package versioning and synced package.txt files.
+v2.0.28 9/14/2022 Added signing capa
+
+
++TODO: add DeviceKit as dependency and remove Hardware and Hardware Map
+
+dependencies: [
+.package(url: "https://github.com/devicekit/DeviceKit.git", from: "4.0.0"),
+/// ...
+]

@@ -24,6 +24,7 @@ public extension Date {
         return printFormatter.string(from: self)
     }
     
+    @available(iOS 15.0, *)
     var pretty: String {
         self.formatted(date: .abbreviated, time: .shortened)
     }

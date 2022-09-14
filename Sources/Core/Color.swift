@@ -13,6 +13,7 @@ import SwiftUI
 // See https://www.digitalocean.com/community/tutorials/css-hex-code-colors-alpha-values
 @available(iOS 14.0, *)
 extension Color: Codable {} // protocol conformance hopefully public
+@available(iOS 14.0, *)
 public extension Color {
     init(hex: String) {
         let rgba = hex.toRGBA()
@@ -71,6 +72,7 @@ public extension Color {
 }
 
 public extension String {
+    // Convert a #FFFFFF Hexadecimal color string to RGBA values between 0 and 1 for use in creating colors.
     func toRGBA() -> (r: CGFloat, g: CGFloat, b: CGFloat, alpha: CGFloat) {
         var hexSanitized = self.trimmingCharacters(in: .whitespacesAndNewlines)
         hexSanitized = hexSanitized.replacingOccurrences(of: "#", with: "")

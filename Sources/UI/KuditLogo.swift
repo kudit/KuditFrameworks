@@ -82,6 +82,8 @@ struct KuditLogo: View {
     }
 }
 
+#if canImport(SwiftUI)
+@available(iOS 14.0, *)
 struct KuditLogo_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
@@ -123,3 +125,4 @@ struct KuditLogo_Previews: PreviewProvider {
         //.previewLayout(.fixed(width: 500, height: 500   ))
     }
 }
+#endif

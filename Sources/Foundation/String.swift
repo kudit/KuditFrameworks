@@ -18,9 +18,9 @@ import Foundation
 //#endif
 
 extension CharacterSet: Testable {
-	static var tests = [
-		Test("character strings", testCharacterStrings),
-	]
+    static var tests = [
+        Test("character strings", testCharacterStrings),
+    ]
 }
 public extension CharacterSet {
     /// Returns the character set as an array of strings. (ONLY ASCII Characters!)
@@ -29,10 +29,10 @@ public extension CharacterSet {
         let filtered = unichars.filter(contains)
         return filtered.map { String($0) }
     }
-	internal static let testCharacterStrings: TestClosure = {
-		let array = "hello".characterStrings
-		return (array == ["h","e","l","l","o"], String(describing:array))
-	}
+    internal static let testCharacterStrings: TestClosure = {
+        let array = "hello".characterStrings
+        return (array == ["h","e","l","l","o"], String(describing:array))
+    }
 
     /// Returns a character set containing all numeric digits.
     static var numerics: CharacterSet {
@@ -311,10 +311,10 @@ public extension String {
         }
         return fixed.joined(separator: ".")
     }
-	internal static let testSentenceCapitalized: TestClosure = {
-		let capitalized = "hello world. goodbye world.".sentenceCapitalized
-		return (capitalized == "Hello world. Goodbye world.", String(describing:capitalized))
-	}
+    internal static let testSentenceCapitalized: TestClosure = {
+        let capitalized = "hello world. goodbye world.".sentenceCapitalized
+        return (capitalized == "Hello world. Goodbye world.", String(describing:capitalized))
+    }
 
     /// normalized version of string for comparisons and database lookups.  If normalization fails or results in an empty string, original string is returned.
     var normalized: String? {
@@ -465,10 +465,10 @@ public extension String {
     func substring(with range: NSRange) -> String { // TODO: figure out how to replace this...
         return (self as NSString).substring(with: range)
     }
-	internal static let testSubstring: TestClosure = {
-		let extraction = TEST_STRING.substring(with: NSRange(7...12))
-		return (extraction == "string" , String(describing:extraction))
-	}
+    internal static let testSubstring: TestClosure = {
+        let extraction = TEST_STRING.substring(with: NSRange(7...12))
+        return (extraction == "string" , String(describing:extraction))
+    }
 
     /// Parses out a substring from the first occurrence of `start` to the next occurrence of `end`.
     /// If `start` or `end` are `nil`, will parse from the beginning of the `String` or to the end of the `String`.
@@ -499,31 +499,31 @@ public extension String {
         }
         return substr
     }
-	internal static let TEST_STRING = "A long string with some <em>intérressant</em> properties!"
-	internal static let testExtractTags: TestClosure = {
-		let extraction = TEST_STRING.extract(from: "<em>", to: "</em>") // should never fail
-		return (extraction == "intérressant" , String(describing:extraction))
-	}
-	internal static let testExtractNilStart: TestClosure = {
-		let extraction = TEST_STRING.extract(from: nil, to: "string")
-		return (extraction == "A long " , String(describing:extraction))
-	}
-	internal static let testExtractNilEnd: TestClosure = {
-		let extraction = TEST_STRING.extract(from: "</em>", to: nil)
-		return (extraction == " properties!" , String(describing:extraction))
-	}
-	internal static let testExtractMissingStart: TestClosure = {
-		let extraction = TEST_STRING.extract(from: "<strong>", to: "</em>")
-		return (extraction == nil , String(describing:extraction))
-	}
-	internal static let testExtractMissingEnd: TestClosure = {
-		let extraction = TEST_STRING.extract(from: "<em>", to: "</strong>")
-		return (extraction == nil , String(describing:extraction))
-	}
+    internal static let TEST_STRING = "A long string with some <em>intérressant</em> properties!"
+    internal static let testExtractTags: TestClosure = {
+        let extraction = TEST_STRING.extract(from: "<em>", to: "</em>") // should never fail
+        return (extraction == "intérressant" , String(describing:extraction))
+    }
+    internal static let testExtractNilStart: TestClosure = {
+        let extraction = TEST_STRING.extract(from: nil, to: "string")
+        return (extraction == "A long " , String(describing:extraction))
+    }
+    internal static let testExtractNilEnd: TestClosure = {
+        let extraction = TEST_STRING.extract(from: "</em>", to: nil)
+        return (extraction == " properties!" , String(describing:extraction))
+    }
+    internal static let testExtractMissingStart: TestClosure = {
+        let extraction = TEST_STRING.extract(from: "<strong>", to: "</em>")
+        return (extraction == nil , String(describing:extraction))
+    }
+    internal static let testExtractMissingEnd: TestClosure = {
+        let extraction = TEST_STRING.extract(from: "<em>", to: "</strong>")
+        return (extraction == nil , String(describing:extraction))
+    }
 
-	
-	
-	
+    
+    
+    
     /// Deletes a section of text from the first occurrence of `start` to the next occurrence of `end` (inclusive).
     /// - Warning: string must contain `start` and `end` in order to work as expected.
     @available(*, deprecated, message: "There may be better ways to do this not in the standard library") // TODO: see where used and adapt.  If keep, change to deleting(from: to:) no throws (just don't do anything)
@@ -555,16 +555,16 @@ public extension String {
             return nil
         }
     }
-	
-	static var tests = [
-		Test("sentence capitalized", testSentenceCapitalized),
-		Test("substring", testSubstring),
-		Test("extract tags", testExtractTags),
-		Test("extract nil start", testExtractNilStart),
-		Test("extract nil end", testExtractNilEnd),
-		Test("extract missing start", testExtractMissingStart),
-		Test("extract missing end", testExtractMissingEnd),
-	]
+    
+    static var tests = [
+        Test("sentence capitalized", testSentenceCapitalized),
+        Test("substring", testSubstring),
+        Test("extract tags", testExtractTags),
+        Test("extract nil start", testExtractNilStart),
+        Test("extract nil end", testExtractNilEnd),
+        Test("extract missing start", testExtractMissingStart),
+        Test("extract missing end", testExtractMissingEnd),
+    ]
 }
 
 
@@ -595,10 +595,11 @@ public extension NSSecureCoding {
     }
 }
 
-#if canImport(PreviewProvider)
- struct String_Previews: PreviewProvider {
-	static var previews: some View {
-		TestsListView(tests: String.tests)
-	}
+#if canImport(SwiftUI)
+import SwiftUI
+struct String_Previews: PreviewProvider {
+    static var previews: some View {
+        TestsListView(tests: String.tests)
+    }
 }
 #endif

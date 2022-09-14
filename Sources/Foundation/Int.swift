@@ -25,3 +25,54 @@ public extension Int {
         #endif
     }
 }
+
+// Is the above now built-in to swift?  Can we remove?
+
+// MARK: - Ordinal display
+public extension Int {
+    var ordinal: String {
+        get {
+            var suffix = "th"
+            switch self % 10 {
+            case 1:
+                suffix = "st"
+            case 2:
+                suffix = "nd"
+            case 3:
+                suffix = "rd"
+            default: ()
+            }
+            if 10 < (self % 100) && (self % 100) < 20 {
+                suffix = "th"
+            }
+            return String(self) + suffix
+        }
+        /*
+         0 => th
+         1 => st
+         2 => nd
+         3 => rd
+         4 => th
+         5 => th
+         6 => th
+         7 => th
+         8 => th
+         9 => th
+         11 => th
+         12 => th
+         13 => th
+         */
+    }
+}
+
+import SwiftUI
+struct MyView_Previews: PreviewProvider {
+    static var previews: some View {
+        List {
+            ForEach(1..<25, id: \.self) { i in
+                Text("\(i) -> \(i.ordinal)")
+            }
+        }
+    }
+}
+

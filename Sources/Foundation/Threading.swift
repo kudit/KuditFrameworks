@@ -20,23 +20,22 @@ public func sleep(seconds: Double) async {
     }
 }
 internal let testSleep1: TestClosure = {
-	let then = PHP.time()
-	let seconds = 3
-	await sleep(seconds: Double(seconds))
-	let now = PHP.time()
-	return (now - then == seconds, "now: \(now), then: \(then) (expecting \(seconds) sec difference)")
+    let then = PHP.time()
+    let seconds = 3
+    await sleep(seconds: Double(seconds))
+    let now = PHP.time()
+    return (now - then == seconds, "now: \(now), then: \(then) (expecting \(seconds) sec difference)")
 }
 internal let testSleep2: TestClosure = {
-	let start = PHP.time()
-	await sleep(seconds: 2)
-	let end = PHP.time()
-	let delta = end - start // could be 2 or 3 if on an edge
-	return (delta <= 3, "\(start) + 2 != \(end)")
+    let start = PHP.time()
+    await sleep(seconds: 2)
+    let end = PHP.time()
+    let delta = end - start // could be 2 or 3 if on an edge
+    return (delta <= 3, "\(start) + 2 != \(end)")
 }
 
 
 // TODO: make sure all this is replace with new async-await code.
-
 /// Support locking to make sure multiple threads aren't trying to operate simultaneously.
 /// Requires a reference-type object.
 public func synchronized(_ lock: AnyObject, closure: () -> Void) {
@@ -48,6 +47,7 @@ public func synchronized(_ lock: AnyObject, closure: () -> Void) {
 }
 
 /// run code on a background thread
+// Use Task { } instead to do background tasks.  Use await/async on a function that calls this.
 //@available(*, deprecated: 1.0, message: "Is this worth saving the code or not?")
 public func background(_ closure: @escaping () -> Void) {
     // run this block code on a background thread - todo; remove when moving to swift 3?
@@ -58,6 +58,11 @@ public func background(_ closure: @escaping () -> Void) {
 }
 
 /// run code on the main thread
+/* can use:
+ await MainActor.run {
+ // UI CODE HERE
+ }
+ */
 //@available(*, deprecated: 1.0, message: "Is this worth saving the code or not?")
 public func main(_ closure: @escaping () -> Void) {
     // DispatchQueue.main.async {} - todo; remove when moving to swift 3?

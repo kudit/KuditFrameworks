@@ -1,9 +1,18 @@
 import Foundation
 
+/// MARK: ++ operator for compatibility functions
+postfix func ++(x: inout Int) {
+    x += 1
+}
+internal let testPlusPlus: TestClosure = {
+    var value = 3
+    value++
+    let expected = 4
+    return (value == expected, "\(value)++ does not equal \(expected)")
+}
+
+// MARK: PHP function convenience functions
 // for fetchURL() and sleep() functions
-
-
-// PHP function convenience functions
 public typealias PostData = [String: Any]
 public extension PostData {
     var queryString: String? {
@@ -25,13 +34,13 @@ public struct PHP {
     public static func time() -> Int {
         return Int(NSDate().timeIntervalSince1970)
     }
-	internal static let testTime: TestClosure = {
-		//debug("Interval: \(NSDate().timeIntervalSince1970)")
-		//debug("Time(): \(PHP.time())")
-		let interval = Int(NSDate().timeIntervalSince1970)
-		let time = PHP.time()
-		return (interval == time, "\(interval) != \(time)")
-	}
+    internal static let testTime: TestClosure = {
+        //debug("Interval: \(NSDate().timeIntervalSince1970)")
+        //debug("Time(): \(PHP.time())")
+        let interval = Int(NSDate().timeIntervalSince1970)
+        let time = PHP.time()
+        return (interval == time, "\(interval) != \(time)")
+    }
     
     public enum NetworkError: Error, CustomStringConvertible {
         // Throw when unable to parse a URL
@@ -127,36 +136,46 @@ public extension PHP { // Not sure why it compiles when in an extension but not 
          throw NetworkError.urlParsing(urlString: urlString)
          }*/
     }
-	internal static let TEST_DATA: PostData = ["id": 13, "name": "Jack & \"Jill\"", "foo": false, "bar": "0.0"]
-	internal static let testPostDataQueryEncoding: TestClosure = {
-		//debug(testData.queryString ?? "Unable to generate query string")
-		let query = TEST_DATA.queryString ?? "Unable to generate query string"
-		let expected = "name=Jack%20%26%20%22Jill%22"
-		return (query.contains(expected), "\(query) does not contain \(expected)")
-	}
-	internal static let testFetchGwinnettCheck: TestClosure = {
-		let results = try await fetchURL(urlString: "https://www.GwinnettCounty.com")
-		return (results.contains("Gwinnett"), results)
-	}
-	internal static let testFetchGETCheck: TestClosure = {
-		let query = TEST_DATA.queryString ?? "ERROR"
-		let results = try await fetchURL(urlString: "https://plickle.com/pd.php?\(query)")
-		return (results.contains("[name] => Jack & \"Jill\""), results)
-	}
-	internal static let testFetchPOSTCheck: TestClosure = {
-		let results = try await fetchURL(urlString: "https://plickle.com/pd.php", postData:TEST_DATA)
-		return (results.contains("'name' => 'Jack & \\\"Jill\\\"',"), results)
-	}
+    internal static let TEST_DATA: PostData = ["id": 13, "name": "Jack & \"Jill\"", "foo": false, "bar": "0.0"]
+    internal static let testPostDataQueryEncoding: TestClosure = {
+        //debug(testData.queryString ?? "Unable to generate query string")
+        let query = TEST_DATA.queryString ?? "Unable to generate query string"
+        let expected = "name=Jack%20%26%20%22Jill%22"
+        return (query.contains(expected), "\(query) does not contain \(expected)")
+    }
+    internal static let testFetchGwinnettCheck: TestClosure = {
+        let results = try await fetchURL(urlString: "https://www.GwinnettCounty.com")
+        return (results.contains("Gwinnett"), results)
+    }
+    internal static let testFetchGETCheck: TestClosure = {
+        let query = TEST_DATA.queryString ?? "ERROR"
+        let results = try await fetchURL(urlString: "https://plickle.com/pd.php?\(query)")
+        return (results.contains("[name] => Jack & \"Jill\""), results)
+    }
+    internal static let testFetchPOSTCheck: TestClosure = {
+        let results = try await fetchURL(urlString: "https://plickle.com/pd.php", postData:TEST_DATA)
+        return (results.contains("'name' => 'Jack & \\\"Jill\\\"',"), results)
+    }
 }
 
 extension PHP: Testable {
-	public static var tests: [Test] = [
-		Test("time", testTime),
-		Test("POST data query encoding", testPostDataQueryEncoding),
-		Test("fetchURL Gwinnett check", testFetchGwinnettCheck),
-		Test("fetchURL GET check", testFetchGETCheck),
-		Test("fetchURL POST check", testFetchPOSTCheck),
-		Test("sleep 3", testSleep1),
-		Test("sleep 2", testSleep2),
-	]
+    public static var tests: [Test] = [
+        Test("plusplus", testPlusPlus),
+        Test("time", testTime),
+        Test("POST data query encoding", testPostDataQueryEncoding),
+        Test("fetchURL Gwinnett check", testFetchGwinnettCheck),
+        Test("fetchURL GET check", testFetchGETCheck),
+        Test("fetchURL POST check", testFetchPOSTCheck),
+        Test("sleep 3", testSleep1),
+        Test("sleep 2", testSleep2),
+    ]
 }
+
+#if canImport(SwiftUI)
+import SwiftUI
+struct Compatibility_Previews: PreviewProvider {
+    static var previews: some View {
+        TestsListView(tests: PHP.tests)
+    }
+}
+#endif

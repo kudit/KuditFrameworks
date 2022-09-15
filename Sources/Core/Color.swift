@@ -143,7 +143,7 @@ public extension KuColor {
 }
 #endif
 
-
+@available(iOS 15.0, *)
 public extension KuColor {
     // MARK: - Get RGB Colors
     /// returns the RGBA values of the color if it can be determined and black-clear if not.

@@ -8,6 +8,7 @@
 
 // http://arstechnica.com/apple/2009/02/iphone-development-accessing-uicolor-components/
 
+@available(iOS 15.0, *)
 public protocol KuColor {
     init(red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat)
     init(hue: CGFloat, saturation: CGFloat, brightness: CGFloat, alpha: CGFloat)
@@ -23,6 +24,7 @@ extension UIColor: KuColor {}
 
 #if canImport(SwiftUI)
 import SwiftUI
+@available(iOS 15.0, *)
 extension Color: KuColor {
     public init(red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
         self.init(red: red, green: green, blue: blue)
@@ -121,6 +123,7 @@ extension Color: KuColor {
     }
 }
 #elseif !canImport(UIKit) // Add in functions to make sure they're available on KuColor protocol
+@available(iOS 15.0, *)
 public extension KuColor {
     // functions to get around native implementation change with no return
     public func getRed(_ red: UnsafeMutablePointer<CGFloat>?, green: UnsafeMutablePointer<CGFloat>?, blue: UnsafeMutablePointer<CGFloat>?, alpha: UnsafeMutablePointer<CGFloat>?) -> Bool {
@@ -545,6 +548,7 @@ public extension KuColor {
 #if canImport(SwiftUI)
 import SwiftUI
 let DEFAULT_CONTENT = EmptyView()
+@available(iOS 15.0, *)
 struct Swatch: View {
     var color: Color
     var logo: Bool = false
@@ -569,12 +573,14 @@ struct Swatch: View {
             }
     }
 }
+@available(iOS 15.0, *)
 struct SwatchTest: View {
     var color: Color
     var body: some View {
         Swatch(color: color, logo: false)
     }
 }
+@available(iOS 15.0, *)
 struct Color_Previews: PreviewProvider {
     static var previews: some View {
         VStack {

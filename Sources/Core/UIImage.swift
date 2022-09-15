@@ -5,7 +5,7 @@
 //  Created by Ben Ku on 2/8/16.
 //  Copyright © 2016 Kudit. All rights reserved.
 //
-
+/*** TODO: figure out where this is used and what for and if it's necessary add back in
 #if canImport(UIKit)
 import UIKit
 import CoreMedia // not available in watchOS
@@ -293,3 +293,4 @@ public extension UIImage {
     }
 }
 #endif
+*/

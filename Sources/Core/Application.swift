@@ -7,6 +7,7 @@
 //
 
 import Foundation
+// TODO: add functions for sorting versions?  Major, Minor, Something?  Make enum or other struct that can be converted to/from String?
 
 public class Application: CustomStringConvertible {
     public static let KuditFrameworksBundle = Bundle(identifier: "com.kudit.KuditFrameworks")

@@ -4,7 +4,7 @@ public typealias TestTuple = (Bool, String)
 public typealias TestClosure = () async throws -> TestTuple
 
 protocol Testable {
-	static var tests: [Test] { get }
+    static var tests: [Test] { get }
 }
 
 // Test Handlers
@@ -66,3 +66,12 @@ public extension Test {
     static func dummyAsyncThrows() async throws {
     }
 }
+
+#if canImport(SwiftUI)
+import SwiftUI
+struct Test_Previews: PreviewProvider {
+    static var previews: some View {
+        TestsListView(tests: PHP.tests)
+    }
+}
+#endif

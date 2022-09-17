@@ -190,6 +190,7 @@ public extension KuColor {
         //_ = getWhite(&hsb.brightness, alpha: nil)
         
         // attempt to convert from RGBA
+        // based off of https://gist.github.com/FredrikSjoberg/cdea97af68c6bdb0a89e3aba57a966ce
         let rgba = rgbaComponents
         let r = rgba.red
         let g = rgba.green
@@ -232,15 +233,13 @@ public extension KuColor {
     }
 
     // MARK: - Parsing and Rendering
-    /*
-     init?(data: Data) {
-        if let color = try? NSKeyedUnarchiver.unarchivedObject(ofClass: NativeColorType.self, from: data) {
-            //if let color = NSKeyedUnarchiver.unarchiveObject(with: data) as? Color {
-            self.init(red: color.redComponent, green: color.greenComponent, blue: color.blueComponent, alpha: color.alphaComponent)
-        } else {
-            return nil
-        }
-    }*/ // Re-implement if necessary, but probably use the Codable protocol versions
+    /**
+     KF: Creates a Color from the given string in #HEX format, named CSS string, or rgba() format.
+     
+     - Parameter string: The string to be converted.
+     
+     - Returns: A new color or`nil` if we cannot parse the string.
+     */
     init?(string: String) {
         var source = string.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         if source.contains("#") {
@@ -577,7 +576,7 @@ struct Swatch: View {
 struct SwatchTest: View {
     var color: Color
     var body: some View {
-        Swatch(color: color, logo: false)
+        Swatch(color: color, logo: true)
     }
 }
 @available(iOS 15.0, *)

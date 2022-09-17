@@ -1,3 +1,32 @@
+// Kudit Codable conformance (simplified) based off of 
+//https://gist.github.com/ConfusedVorlon/276bd7ac6c41a99ea0514a34ee9afc3d?permalink_comment_id=4096859#gistcomment-4096859
+
+import SwiftUI
+
+@available(iOS 15.0, *)
+extension Color: Codable {} // protocol conformance hopefully public
+@available(iOS 15.0, *)
+public extension Color {
+    init(from decoder: Decoder) throws {
+        let string = try String(from: decoder)
+        let color = Color(string: string)
+        if nil == color {
+            throw CustomError("Unable to decode Color string: \(string)")
+        }
+        self.init(string: string)!
+    }
+    func encode(to encoder: Encoder) throws {
+        try hexString.encode(to: encoder)
+    }
+}
+
+
+
+
+
+
+
+/* Old version that doesn't work with most SwiftUI named colors due to them not being backed.
 //
 //  Color+Codable.swift
 //  FirestoreCodableSamples
@@ -103,3 +132,4 @@ public extension String {
         return (r, g, b, a)
     }
 }
+ */

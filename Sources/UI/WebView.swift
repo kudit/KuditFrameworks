@@ -26,15 +26,15 @@ public class WebViewDelegateManager: NSObject, WKNavigationDelegate {
         webView.navigationDelegate = self
     }
     
-    public func webView(_ webView: WKWebView,didFinish navigation: WKNavigation!) {
+    public func webView(_ webView: WKWebView,didFinish navigation: WKNavigation!, file: String = #file, function: String = #function, line: Int = #line, column: Int = #column) {
         webView.evaluateJavaScript("document.documentElement.outerHTML.toString()",
                                    completionHandler: { (html: Any?, error: Error?) in
             if let error = error {
-                debug("WEBVIEW ERROR: \(error)")
+                debug("WEBVIEW ERROR: \(error)", level: .DEBUG, file: file, function: function, line: line, column: column)
                 return
             }
             guard let html = html as? String else {
-                debug("WEBVIEW HTML UNKNOWN: \(String(describing:html))")
+                debug("WEBVIEW HTML UNKNOWN: \(String(describing:html))", level: .DEBUG, file: file, function: function, line: line, column: column)
                 return
             }
             //debug("WEBVIEW LOADED: \(html)")

@@ -89,8 +89,8 @@ extension URLSession {
 }
 
 public extension PHP { // Not sure why it compiles when in an extension but not in the main declaration.  Gives async error in the wrong place.
-    static func fetchURL(urlString: String, postData: PostData? = nil) async throws -> String {
-        debug("Fetching URL [\(urlString)]...", level: .NOTICE)
+    static func fetchURL(urlString: String, postData: PostData? = nil, file: String = #file, function: String = #function, line: Int = #line, column: Int = #column) async throws -> String {
+        debug("Fetching URL [\(urlString)]...", level: .NOTICE, file: file, function: function, line: line, column: column)
         // create the url with URL
         guard let url = URL(string: urlString) else {
             throw NetworkError.urlParsing(urlString: urlString)
@@ -111,7 +111,7 @@ public extension PHP { // Not sure why it compiles when in an extension but not 
         } else {
             request.httpMethod = "GET" //set http method as GET
         }
-        debug("FETCHING: \(request)")
+        debug("FETCHING: \(request)", level: .DEBUG, file: file, function: function, line: line, column: column)
         
         var data: Data
         // create dataTask using the session object to send data to the server

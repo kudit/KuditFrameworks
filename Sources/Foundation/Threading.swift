@@ -11,12 +11,12 @@ import Foundation
 // would have made this a static function on task but extending it apparently has issues??
 // Sleep extension for sleeping a thread in seconds
 @available(watchOS 6.0.0, *)
-public func sleep(seconds: Double) async {
+public func sleep(seconds: Double, file: String = #file, function: String = #function, line: Int = #line, column: Int = #column) async {
     let duration = UInt64(seconds * 1_000_000_000)
     do {
         try await Task.sleep(nanoseconds: duration)
     } catch {
-        debug("Sleep function was interrupted")
+        debug("Sleep function was interrupted", level: .DEBUG, file: file, function: function, line: line, column: column)
     }
 }
 internal let testSleep1: TestClosure = {

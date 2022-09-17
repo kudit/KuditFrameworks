@@ -92,7 +92,7 @@ public class Hardware: CustomStringConvertible {
             case .charging:
                 self = .charging(level)
             @unknown default:
-                debug("Unkonwn battery state level!: \(state)", level: .ERROR)
+                debug("Unknown battery state level!: \(state)", level: .ERROR, file: file, function: function, line: line, column: column)
                 self = .unknown
             }
         }

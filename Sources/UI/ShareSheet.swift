@@ -5,7 +5,10 @@
 //  Created by Ben Ku on 10/21/21.
 //
 // https://developer.apple.com/forums/thread/123951
+
+#if canImport(UIKit)
 import SwiftUI
+import UIKit
 
 public struct ShareSheet: UIViewControllerRepresentable {
     public typealias ShareSheetCallback = (_ activityType: UIActivity.ActivityType?, _ completed: Bool, _ returnedItems: [Any]?, _ error: Error?) -> Void
@@ -73,3 +76,6 @@ struct ShareSheet_Previews: PreviewProvider {
         ShareSheetPreviewView()
     }
 }
+
+#endif
+

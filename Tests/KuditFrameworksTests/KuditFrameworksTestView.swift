@@ -11,7 +11,6 @@ public struct KuditFrameworksTestView: View {
         //debug("Bar")
     }
     
-    
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     @State var time = -1

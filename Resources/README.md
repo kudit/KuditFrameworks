@@ -2,6 +2,7 @@
 
 Additional components, simpler, and convenience code for Kudit projects.
 
+v1.0.36 9/21/2022 Changed DebugLevel.currentLevel to a var instead of let so that it can be changed by apps.
 v1.0.35 9/16/2022 Added debugging line info to call site of CustomError to get better reporting of when the error was thrown. Added Codable support to Color.  Added Color documentation and documentation template to Debug.
 v1.0.34 9/15/2022 Added credit for the RGB to HSV code.
 v1.0.33 9/15/2022 Missed one of the @available(iOS 15.0, *)

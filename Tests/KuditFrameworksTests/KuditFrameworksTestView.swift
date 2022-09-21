@@ -5,8 +5,12 @@ import KuditFrameworks
 
 public struct KuditFrameworksTestView: View {
     
-    public init() {}
-    
+    public init() {
+        //debug("FOO")
+        //DebugLevel.currentLevel = .ERROR
+        //debug("Bar")
+    }
+
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     

@@ -38,8 +38,9 @@ public enum DebugLevel: Comparable {
     case WARNING
     case NOTICE
     case DEBUG
-    static let currentLevel = DebugLevel.DEBUG
+    static var currentLevel = DebugLevel.DEBUG
 }
+//DebugLevel.currentLevel = .ERROR
 /**
  Ku: Debug helper for printing info to screen including file and line info of call site.  Also can provide a log level for use in loggers or for globally turning on/off logging. (Modify DebugLevel.currentLevel to set level to output.  When launching app, probably can set this to DebugLevel.OFF
  

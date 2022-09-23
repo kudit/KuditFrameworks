@@ -38,7 +38,7 @@ public enum DebugLevel: Comparable {
     case WARNING
     case NOTICE
     case DEBUG
-    static var currentLevel = DebugLevel.DEBUG
+    public static var currentLevel = DebugLevel.DEBUG
 }
 //DebugLevel.currentLevel = .ERROR
 /**

@@ -11,6 +11,17 @@ internal let testPlusPlus: TestClosure = {
     return (value == expected, "\(value)++ does not equal \(expected)")
 }
 
+/// MARK: -- operator for compatibility functions
+public postfix func --(x: inout Int) {
+    x -= 1
+}
+internal let testMinusMinus: TestClosure = {
+    var value = 3
+    value--
+    let expected = 2
+    return (value == expected, "\(value)-- does not equal \(expected)")
+}
+
 // MARK: PHP function convenience functions
 // for fetchURL() and sleep() functions
 public typealias PostData = [String: Any]
@@ -161,6 +172,7 @@ public extension PHP { // Not sure why it compiles when in an extension but not 
 extension PHP: Testable {
     public static var tests: [Test] = [
         Test("plusplus", testPlusPlus),
+        Test("minusminus", testMinusMinus),
         Test("time", testTime),
         Test("POST data query encoding", testPostDataQueryEncoding),
         Test("fetchURL Gwinnett check", testFetchGwinnettCheck),

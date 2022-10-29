@@ -2,6 +2,7 @@
 
 Additional components, simpler, and convenience code for Kudit projects.
 
+v1.0.40 10/24/2022 Added Bundle extension for app information.
 v1.0.39 9/30/2022 Added -- operator.
 v1.0.38 9/22/2022 Made DebugLevel.currentLevel explicitly public to allow setting.
 v1.0.37 9/21/2022 Changed DebugLevel.currentLevel to a var instead of let so that it can be changed by apps.

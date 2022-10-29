@@ -123,3 +123,21 @@ public class Application: CustomStringConvertible {
     /// Vendor ID (may not be used anywhere since not very helpful)
 //    public var vendorID = UIDevice.current.identifierForVendor.UUIDString
 }
+
+
+
+public extension Bundle {
+    static let kuditFrameworks = Bundle(identifier: "com.kudit.KuditFrameworks")
+    
+    var appName: String { getInfo("CFBundleName")  }
+    var displayName: String {getInfo("CFBundleDisplayName")}
+    var language: String {getInfo("CFBundleDevelopmentRegion")}
+    var identifier: String {getInfo("CFBundleIdentifier")}
+    var copyright: String {getInfo("NSHumanReadableCopyright").replacingOccurrences(of: "\\\\n", with: "\n") }
+    
+    var appBuild: String { getInfo("CFBundleVersion") }
+    var appVersionLong: String { getInfo("CFBundleShortVersionString") }
+    //public var appVersionShort: String { getInfo("CFBundleShortVersion") }
+    
+    fileprivate func getInfo(_ str: String) -> String { infoDictionary?[str] as? String ?? "⚠️" }
+}

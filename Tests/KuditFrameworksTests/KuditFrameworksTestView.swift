@@ -6,9 +6,10 @@ import KuditFrameworks
 public struct KuditFrameworksTestView: View {
     
     public init() {
-        //debug("FOO")
+        //debug("Test View Init")
         //DebugLevel.currentLevel = .ERROR
         //debug("Bar")
+        Application.track()
     }
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
@@ -24,6 +25,8 @@ public struct KuditFrameworksTestView: View {
                 //debug("updating \(time)")
                 time = PHP.time()
             })
+            Text("Version: v\(Bundle.main.appVersionLong)")
+            Text("Kudit Frameworks: v\(Bundle.kuditFrameworks?.appVersionLong ?? "!")")
         }
     }
 }

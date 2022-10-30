@@ -25,8 +25,9 @@ public struct KuditFrameworksTestView: View {
                 //debug("updating \(time)")
                 time = PHP.time()
             })
-            Text("Version: v\(Bundle.main.appVersionLong)")
-            Text("Kudit Frameworks: v\(Bundle.kuditFrameworks?.appVersionLong ?? "!")")
+            Text("Application Description: \(Application.main.description)")
+            Text("Version: v\(Bundle.main.version)")
+            Text("Kudit Frameworks: v\(Bundle.kuditFrameworks?.version ?? "!")")
         }
     }
 }

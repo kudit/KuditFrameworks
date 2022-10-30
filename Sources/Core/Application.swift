@@ -8,10 +8,12 @@
 
 import Foundation
 // TODO: add functions for sorting versions?  Major, Minor, Something?  Make enum or other struct that can be converted to/from String?
-
+// TODO: deprecate as much of this as we can.
 public class Application: CustomStringConvertible {
-    public static let KuditFrameworksBundle = Bundle(identifier: "com.kudit.KuditFrameworks")
-    public static let KuditFrameworksVersion = (KuditFrameworksBundle?.infoDictionary?["CFBundleShortVersionString"] as? String ?? "KuditFrameworks not loaded as bundle.") + " (" + (KuditFrameworksBundle?.infoDictionary?["CFBundleVersion"] as? String ?? "?.?") + ")"
+//    public static let KuditFrameworksBundle = Bundle(identifier: "com.kudit.KuditFrameworks")
+// use Bundle.kuditFrameworks instead
+//    public static let KuditFrameworksVersion = (KuditFrameworksBundle?.infoDictionary?["CFBundleShortVersionString"] as? String ?? "KuditFrameworks not loaded as bundle.") + " (" + (KuditFrameworksBundle?.infoDictionary?["CFBundleVersion"] as? String ?? "?.?") + ")"
+    // use Bundle.kuditFrameworks.version instead
 
     /// Place `Application.track()` in `application(_:didFinishLaunchingWithOptions:)` to enable version tracking.
     public static func track() {
@@ -54,20 +56,20 @@ public class Application: CustomStringConvertible {
         versionsRun.appendUnique(version)
         UserDefaults.standard.set(versionsRun, forKey: "kuditVersions")
         UserDefaults.standard.removeObject(forKey: "last_run_version")
-        // UserDefaults.synchronize // don't track in case launch issue
+        // UserDefaults.synchronize // don't save in case launch issue where it will crash on launch
     }
     
     public var description: String {
         let initial = versionsRun.first!
-        var description = "\(name) (\(version))"
+        var description = "\(name) (v\(version))"
         if isFirstRun {
             description += " **First Run!**"
         }
         if initial != version {
             description += "\nPreviously run: \(versionsRun.filter{ $0 != version }.joined(separator: ", "))"
         }
-        if Application.KuditFrameworksBundle != nil {
-            description += "\nKudit Framework Version: \(Application.KuditFrameworksVersion)"
+        if let kf = Bundle.kuditFrameworks {
+            description += "\nKudit Framework Version: \(kf.version)"
         }
         description += "\niCloud Status: \(iCloudIsEnabled ? "enabled" : "unavailable")"
         return description
@@ -125,18 +127,19 @@ public class Application: CustomStringConvertible {
 }
 
 
-
+// get current version:
+// Bundle.main.version
 public extension Bundle {
     static let kuditFrameworks = Bundle(identifier: "com.kudit.KuditFrameworks")
     
-    var appName: String { getInfo("CFBundleName")  }
+    var name: String { getInfo("CFBundleName")  }
     var displayName: String {getInfo("CFBundleDisplayName")}
     var language: String {getInfo("CFBundleDevelopmentRegion")}
     var identifier: String {getInfo("CFBundleIdentifier")}
     var copyright: String {getInfo("NSHumanReadableCopyright").replacingOccurrences(of: "\\\\n", with: "\n") }
     
-    var appBuild: String { getInfo("CFBundleVersion") }
-    var appVersionLong: String { getInfo("CFBundleShortVersionString") }
+    var build: String { getInfo("CFBundleVersion") }
+    var version: String { getInfo("CFBundleShortVersionString") }
     //public var appVersionShort: String { getInfo("CFBundleShortVersion") }
     
     fileprivate func getInfo(_ str: String) -> String { infoDictionary?[str] as? String ?? "⚠️" }

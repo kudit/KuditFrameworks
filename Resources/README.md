@@ -2,6 +2,7 @@
 
 Additional components, simpler, and convenience code for Kudit projects.
 
+v1.0.42 6/13/2023 Restored UIImage functions for Viewer and made WebData JSON class initializers public for Viewer.
 v1.0.41 10/29/2022 Tweaked Bundle information to be simpler.  Re-worked testing code.
 v1.0.40 10/24/2022 Added Bundle extension for app information.
 v1.0.39 9/30/2022 Added -- operator.

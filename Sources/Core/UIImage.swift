@@ -5,15 +5,15 @@
 //  Created by Ben Ku on 2/8/16.
 //  Copyright © 2016 Kudit. All rights reserved.
 //
-/*** TODO: figure out where this is used and what for and if it's necessary add back in
+/*** TODO: figure out where this is used and what for and if it's necessary add back in - currently used in Viewer */
 #if canImport(UIKit)
 import UIKit
 import CoreMedia // not available in watchOS
 import Accelerate // not available in watchOS
 
-extension CGSize {
+public extension CGSize {
     /// return the size scaled down to fit inside the `availableSpace` bounds.
-    func fitToSize(_ availableSpace: CGSize) -> CGSize {
+	public func fitToSize(_ availableSpace: CGSize) -> CGSize {
         // calculate rect
         let aspectRatio = self.width / self.height
         if availableSpace.width / aspectRatio <= availableSpace.height {
@@ -293,4 +293,3 @@ public extension UIImage {
     }
 }
 #endif
-*/

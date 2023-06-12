@@ -91,7 +91,7 @@ public enum JSON : DataConvertible {
     }
     
     /// Create a JSON enum from NSData
-    init?(data: Data) {
+    public init?(data: Data) {
         guard let results = JSON.convertFromData(data) else {
             return nil
         }
@@ -99,7 +99,7 @@ public enum JSON : DataConvertible {
     }
 
     /// Create a JSON enum from NSURL
-    init?(url: URL) {
+	public init?(url: URL) {
         guard let jsonData = try? Data(contentsOf: url) else {
             return nil
         }
@@ -107,7 +107,7 @@ public enum JSON : DataConvertible {
     }
 
     /// Create a JSON enum from a URLString
-    init?(urlString: String) {
+	public init?(urlString: String) {
         guard let url = URL(string: urlString) else {
             return nil
         }

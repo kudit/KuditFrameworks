@@ -5,8 +5,9 @@
 //  Created by Ben Ku on 10/11/16.
 //  Copyright © 2016 Kudit. All rights reserved.
 //
+// TODO: perhaps remove from code since not available in visionOS?
 
-#if canImport(UIKit) && !os(watchOS) && !os(tvOS)
+#if canImport(UIScreen)
 import UIKit
 
 extension UIView {

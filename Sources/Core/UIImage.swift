@@ -13,7 +13,7 @@ import Accelerate // not available in watchOS
 
 public extension CGSize {
     /// return the size scaled down to fit inside the `availableSpace` bounds.
-	public func fitToSize(_ availableSpace: CGSize) -> CGSize {
+    func fitToSize(_ availableSpace: CGSize) -> CGSize {
         // calculate rect
         let aspectRatio = self.width / self.height
         if availableSpace.width / aspectRatio <= availableSpace.height {

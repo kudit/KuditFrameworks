@@ -26,7 +26,7 @@ public typealias KuError = CustomError
 // Formerly KuError but this seems more applicable and memorable
 public enum CustomError: Error {
     case custom(String)
-    public init(_ message: String, level: DebugLevel = .DEBUG, file: String = #file, function: String = #function, line: Int = #line, column: Int = #column) {
+    public init(_ message: String, level: DebugLevel = DebugLevel.defaultLevel, file: String = #file, function: String = #function, line: Int = #line, column: Int = #column) {
         debug(message, level: level, file: file, function: function, line: line, column: column)
         self = .custom(message)
     }
@@ -39,6 +39,7 @@ public enum DebugLevel: Comparable {
     case NOTICE
     case DEBUG
     public static var currentLevel = DebugLevel.DEBUG
+    public static var defaultLevel = DebugLevel.ERROR
 }
 //DebugLevel.currentLevel = .ERROR
 /**
@@ -51,7 +52,7 @@ public enum DebugLevel: Comparable {
  - Parameter line: For bubbling down the #line number from a call site.
  - Parameter column: For bubbling down the #column number from a call site. (Not used currently but here for completeness).
  */
-public func debug(_ message: Any, level: DebugLevel = .DEBUG, file: String = #file, function: String = #function, line: Int = #line, column: Int = #column) {
+public func debug(_ message: Any, level: DebugLevel = DebugLevel.defaultLevel, file: String = #file, function: String = #function, line: Int = #line, column: Int = #column) {
     guard level <= DebugLevel.currentLevel else {
         return
     }

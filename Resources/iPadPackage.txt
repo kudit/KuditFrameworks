@@ -16,7 +16,8 @@ let package = Package(
         .iOSApplication(
             name: "KuditFrameworksApp",
             targets: ["AppModule"],
-            displayVersion: "1.0.27",
+            teamIdentifier: "3QPV894C33",
+            displayVersion: "1.0.45",
             bundleVersion: "1",
             appIcon: .asset("AppIcon"),
             accentColor: .presetColor(.teal),

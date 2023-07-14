@@ -40,6 +40,22 @@ public enum DebugLevel: Comparable {
     case DEBUG
     public static var currentLevel = DebugLevel.DEBUG
     public static var defaultLevel = DebugLevel.ERROR
+	/// setting this to false will make debug( act exactly like print(
+	public static var includeContext = true
+    var symbol: String {
+        switch self {
+		case .OFF:
+			return ""
+		case .ERROR:
+			return "•"
+		case .WARNING:
+			return "!"
+		case .NOTICE:
+			return ">"
+		case .DEBUG:
+			return ":"
+		}
+    }
 }
 //DebugLevel.currentLevel = .ERROR
 /**
@@ -59,5 +75,9 @@ public func debug(_ message: Any, level: DebugLevel = DebugLevel.defaultLevel, f
     let simplerFile = URL(fileURLWithPath: file).lastPathComponent
     let simplerFunction = function.replacingOccurrences(of: "__preview__", with: "_p_")
     let threadInfo = Thread.isMainThread ? "" : "^"
-    print("\(simplerFile)(\(line)) : \(simplerFunction)\(threadInfo)\n\(message)")
+	if DebugLevel.includeContext {
+		print("\(simplerFile)(\(line)) : \(simplerFunction)\(threadInfo)\n\(level.symbol) \(message)")
+	} else {
+		print(message)
+	}
 }

@@ -38,7 +38,7 @@ public extension [RecognizedText] {
 //                    debug("Candidates: \(observation.topCandidates(8))", level: .DEBUG)
                     // Find the top observation.
                     guard let candidate = observation.topCandidates(1).first else {
-                        debug("No candidate", level: .DEBUG)
+                        debug("No candidate", level: .NOTICE)
                         continue
                     }
                     
@@ -99,7 +99,7 @@ public extension [RecognizedText] {
             tA.bounds.origin.y < tB.bounds.origin.y
         }
         let delta = vertical.last!.bounds.origin.y / 10 // or should we just do 10 px?
-        debug("Delta set to \(delta)", level: .ERROR)
+        debug("Delta set to \(delta)", level: .DEBUG)
         var yLevel = vertical.first!.bounds.origin.y // guaranteed since guard above
         var lineItems = [RecognizedText]()
         // go through line by line and find similar +10, then order horizontally
@@ -167,9 +167,9 @@ class RecognizedImageModel: ObservableObject {
                 return
             }
             recognizedTexts = await [RecognizedText].parse(cgImage: cgImage)
-            debug("RAW: \(recognizedTexts.short)••••", level: .ERROR)
+            debug("RAW: \(recognizedTexts.short)••••", level: .DEBUG)
             let sorted = recognizedTexts.lineOrder()
-            debug("SORTED: \(sorted.short)", level: .ERROR)
+            debug("SORTED: \(sorted.short)", level: .DEBUG)
         }
     }
 }

@@ -2,6 +2,7 @@
 
 Additional components, simpler, and convenience code for Kudit projects.
 
+v1.0.48 8/28/2023 Fixed debug statements.
 v1.0.47 8/28/2023 Re-worked code to be in the proper places with proper public accessibility.  Tweaked download code to throw errors instead of returning optional.
 v1.0.46 8/28/2023 Added ImageTextRecognizer code for use in TwoHunts, and Family Feud scraping code (possibly could be used for Deckmaster or other tools in the future).
 v1.0.45 7/14/2023 Added additional debug formatting for easier reading in large amounts of debug statements.  Added ability to remove debug output context info.

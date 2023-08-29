@@ -94,12 +94,13 @@ public extension [RecognizedText] {
         
         var ordered = [RecognizedText]()
 
+        // wiggle room should be 2/3 of the smallest height box
+        let delta = self.min { $0.bounds.height < $1.bounds.height }!.bounds.height * 2 / 3
+        debug("Delta set to \(delta)", level: .DEBUG)
         // order vertical
         let vertical = self.sorted { tA, tB in
             tA.bounds.origin.y < tB.bounds.origin.y
         }
-        let delta = vertical.last!.bounds.origin.y / 10 // or should we just do 10 px?
-        debug("Delta set to \(delta)", level: .DEBUG)
         var yLevel = vertical.first!.bounds.origin.y // guaranteed since guard above
         var lineItems = [RecognizedText]()
         // go through line by line and find similar +10, then order horizontally
@@ -196,9 +197,11 @@ public struct RecognizedImageView: View {
 
 struct ImageRecognizer_Previews: PreviewProvider {
 //    static let testURL = "https://fbfeudguide.com/wp-content/uploads/2023/08/Screenshot-2023-08-23-at-11.18.22-AM-768x456.png"
-        static let testURL = "https://fbfeudguide.com/wp-content/uploads/2023/08/Screenshot-2023-08-22-at-2.24.17-PM-768x458.png"
+// static let testURL = "https://fbfeudguide.com/wp-content/uploads/2023/08/Screenshot-2023-08-22-at-2.24.17-PM-768x458.png"
+  //  static let testURL = "https://facebookfamilyfeudcheats.files.wordpress.com/2010/07/picture-14.png"
+    static let testURL = "https://facebookfamilyfeudcheats.files.wordpress.com/2010/06/picture-4.png"
     static var previews: some View {
-        let _ = { DebugLevel.currentLevel = .NOTICE }()
+        let _ = { DebugLevel.currentLevel = .DEBUG }()
         VStack {
             Text("Test Image")
             RecognizedImageView(model: RecognizedImageModel(urlString: testURL))

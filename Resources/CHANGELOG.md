@@ -2,6 +2,7 @@
 
 Additional components, simpler, and convenience code for Kudit projects.
 
+v1.0.46 8/28/2023 Added ImageTextRecognizer code for use in TwoHunts, and Family Feud scraping code (possibly could be used for Deckmaster or other tools in the future).
 v1.0.45 7/14/2023 Added additional debug formatting for easier reading in large amounts of debug statements.  Added ability to remove debug output context info.
 v1.0.44 7/13/2023 Added default debug level and changed default to .ERROR so that we can set DebugLevel.currentLevel = .ERROR and only get actual errors or debug items that have the default assignement (to force us to include the proper level but allow quick adding of debug code while developing which will show up).
 v1.0.43 7/10/2023 Removed snapshot since causes build issues in visionOS.  Added CaseIterable++ function for enums.

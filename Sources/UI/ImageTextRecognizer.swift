@@ -9,15 +9,15 @@
 import Foundation
 import Vision
 
-struct RecognizedText: Identifiable {
-    var text: String
-    var bounds: CGRect
-    var confidence: VNConfidence
-    var id = UUID()
+public struct RecognizedText: Identifiable {
+    public var text: String
+    public var bounds: CGRect
+    public var confidence: VNConfidence
+    public var id = UUID()
 }
 
 // var recognizedBlocks = await ImageTextRecognizer.parseItem(image)
-extension [RecognizedText] {
+public extension [RecognizedText] {
     static func parse(cgImage: CGImage) async -> [RecognizedText] {
         // Create a new image-request handler.
         let requestHandler = VNImageRequestHandler(cgImage: cgImage)
@@ -127,7 +127,7 @@ extension [RecognizedText] {
 // iOS, tvOS, and watchOS – use UIImage
 import UIKit
 import CoreGraphics
-extension Data {
+public extension Data {
     func asCGImage() -> CGImage? {
         guard let image = UIImage(data: self), let cgImage = image.cgImage else {
             debug("Unable to create CGImage from data.", level: .WARNING)
@@ -139,7 +139,7 @@ extension Data {
 #elseif canImport(AppKit)
 // macOS - use NSImage
 import AppKit
-extension Data {
+public extension Data {
     func asCGImage() -> CGImage? {
         guard let image = NSImage(data: self), let cgImage = image.cgImage(forProposedRect: nil, context: nil, hints: nil) else {
             debug("Unable to create CGImage from data.", level: .WARNING)
@@ -152,27 +152,6 @@ extension Data {
 // all other platforms - Can't convert to CGImage
 #endif
 
-extension URL {
-    func download() async -> Data? {
-        do {
-            let (fileURL, response) = try await URLSession.shared.download(from: self)
-            
-            debug("URL Download response: \(response)", level: .DEBUG)
-            
-            // load data from local file URL
-            guard let data = try? Data(contentsOf: fileURL) else {
-                debug("Unable to load File URL data \(fileURL)", level: .ERROR)
-                return nil
-            }
-            
-            return data
-        } catch {
-            debug("Unable to download URL data \(self): \(error)", level: .ERROR)
-            return nil
-        }
-    }
-}
-
 import SwiftUI
 class RecognizedImageModel: ObservableObject {
     let urlString: String
@@ -182,7 +161,7 @@ class RecognizedImageModel: ObservableObject {
         self.urlString = urlString
         Task {
             guard let imageURL = URL(string: urlString),
-                  let data = await imageURL.download(),
+                  let data = try? await imageURL.download(),
                   let cgImage = data.asCGImage() else {
                 debug("Unable to scan image. \(urlString)", level: .ERROR)
                 return
@@ -194,9 +173,9 @@ class RecognizedImageModel: ObservableObject {
         }
     }
 }
-struct RecognizedImageView: View {
+public struct RecognizedImageView: View {
     @StateObject var model: RecognizedImageModel
-    var body: some View {
+    public var body: some View {
         ZStack(alignment: .topLeading) {
             AsyncImage(url: URL(string: model.urlString))
             ForEach(model.recognizedTexts) { recognizedText in

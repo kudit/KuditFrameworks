@@ -22,7 +22,21 @@ public extension URL {
 }
 
 extension URL: Comparable {
-	public static func < (lhs: URL, rhs: URL) -> Bool {
-		return lhs.path < rhs.path
-	}
+    public static func < (lhs: URL, rhs: URL) -> Bool {
+        return lhs.path < rhs.path
+    }
+}
+
+public extension URL {
+    /// download data asynchronously and return the data or nil if there is a failure
+    func download() async throws -> Data {
+        let (fileURL, response) = try await URLSession.shared.download(from: self)
+            
+        debug("URL Download response: \(response)", level: .DEBUG)
+            
+        // load data from local file URL
+        let data = try Data(contentsOf: fileURL)
+            
+        return data
+    }
 }

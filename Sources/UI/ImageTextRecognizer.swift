@@ -95,7 +95,9 @@ public extension [RecognizedText] {
         var ordered = [RecognizedText]()
 
         // wiggle room should be 2/3 of the smallest height box
-        let delta = self.min { $0.bounds.height < $1.bounds.height }!.bounds.height * 2 / 3
+        let heights = self.map { $0.bounds.height }.filter { $0 > 5 } // filter out items that are 0 height or less than 5 height so we have a minimum of 3px wiggle room when all is said and done.
+        debug("Box Heights: \(heights)", level: .DEBUG)
+        let delta = (heights.min() ?? 5) * 2 / 3 // further shrink in case all blocks are exactly height away
         debug("Delta set to \(delta)", level: .DEBUG)
         // order vertical
         let vertical = self.sorted { tA, tB in
@@ -178,7 +180,7 @@ public struct RecognizedImageView: View {
     @StateObject var model: RecognizedImageModel
     public var body: some View {
         ZStack(alignment: .topLeading) {
-            AsyncImage(url: URL(string: model.urlString))
+            AsyncImage(url: URL(string: model.urlString)?.secured)
             ForEach(model.recognizedTexts) { recognizedText in
                 Rectangle()
                     .fill(.red.opacity(0.1))
@@ -199,9 +201,11 @@ struct ImageRecognizer_Previews: PreviewProvider {
 //    static let testURL = "https://fbfeudguide.com/wp-content/uploads/2023/08/Screenshot-2023-08-23-at-11.18.22-AM-768x456.png"
 // static let testURL = "https://fbfeudguide.com/wp-content/uploads/2023/08/Screenshot-2023-08-22-at-2.24.17-PM-768x458.png"
   //  static let testURL = "https://facebookfamilyfeudcheats.files.wordpress.com/2010/07/picture-14.png"
-    static let testURL = "https://facebookfamilyfeudcheats.files.wordpress.com/2010/06/picture-4.png"
+//    static let testURL = "https://facebookfamilyfeudcheats.files.wordpress.com/2010/06/picture-4.png"
+//    static let testURL = "http://facebookfamilyfeudcheats.files.wordpress.com/2010/06/picture-3.png"
+    static let testURL = "http://facebookfamilyfeudcheats.files.wordpress.com/2010/06/picture-12.png"
     static var previews: some View {
-        let _ = { DebugLevel.currentLevel = .DEBUG }()
+        let _ = { DebugLevel.currentLevel = .WARNING }()
         VStack {
             Text("Test Image")
             RecognizedImageView(model: RecognizedImageModel(urlString: testURL))

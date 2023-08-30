@@ -13,7 +13,14 @@ public struct RecognizedText: Identifiable {
     public var text: String
     public var bounds: CGRect
     public var confidence: VNConfidence
+    public var line: Int? // hint for grouping lines when ordered
     public var id = UUID()
+    /// creates a copy of this setting the line value
+    func lined(line: Int?) -> RecognizedText {
+        var lined = self
+        lined.line = line
+        return lined
+    }
 }
 
 // var recognizedBlocks = await ImageTextRecognizer.parseItem(image)
@@ -106,13 +113,15 @@ public extension [RecognizedText] {
         var yLevel = vertical.first!.bounds.origin.y // guaranteed since guard above
         var lineItems = [RecognizedText]()
         // go through line by line and find similar +10, then order horizontally
+        var line = 1
         for item in vertical {
             if item.bounds.origin.y < yLevel + delta {
-                lineItems.append(item)
+                lineItems.append(item.lined(line: line))
             } else {
                 ordered += lineItems.orderHorizontal()
                 // start next line
-                lineItems = [item]
+                line++
+                lineItems = [item.lined(line: line)]
                 yLevel = item.bounds.origin.y
             }
         }
@@ -121,8 +130,15 @@ public extension [RecognizedText] {
     }
     
     var short: String {
-        let strings = self.map { $0.text }
-        return strings.joined(separator: "\n")
+//        let strings = self.map { $0.text }
+        // show on lines
+        var output = ""
+        var currentLine: Int?
+        for item in self {
+            output += (item.line == currentLine ? "," : "\n") + item.text
+            currentLine = item.line
+        }
+        return output
     }
 }
 

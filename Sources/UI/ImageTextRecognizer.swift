@@ -172,6 +172,7 @@ public extension Data {
 #endif
 
 import SwiftUI
+@available(iOS 15, macCatalyst 15.0, *)
 class RecognizedImageModel: ObservableObject {
     let urlString: String
     @Published var recognizedTexts = [RecognizedText]()
@@ -192,6 +193,7 @@ class RecognizedImageModel: ObservableObject {
         }
     }
 }
+@available(iOS 15, macCatalyst 15.0, *)
 public struct RecognizedImageView: View {
     @StateObject var model: RecognizedImageModel
     public var body: some View {
@@ -213,6 +215,7 @@ public struct RecognizedImageView: View {
     }
 }
 
+@available(iOS 15, macCatalyst 15.0, *)
 struct ImageRecognizer_Previews: PreviewProvider {
 //    static let testURL = "https://fbfeudguide.com/wp-content/uploads/2023/08/Screenshot-2023-08-23-at-11.18.22-AM-768x456.png"
 // static let testURL = "https://fbfeudguide.com/wp-content/uploads/2023/08/Screenshot-2023-08-22-at-2.24.17-PM-768x458.png"

@@ -43,6 +43,7 @@ public extension URL {
         return secureURL
     }
     /// download data asynchronously and return the data or nil if there is a failure
+    @available(iOS 15, macCatalyst 15.0, *)
     func download() async throws -> Data {
         do {
             let (fileURL, response) = try await URLSession.shared.download(from: self)

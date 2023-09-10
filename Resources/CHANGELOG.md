@@ -2,6 +2,7 @@
 
 Additional components, simpler, and convenience code for Kudit projects.
 
+v1.0.52 9/10/2023 Added availability checks for URL downloading and image recognizer code.
 v1.0.51 8/30/2023 Added ability to include line information when batching and ordering recognized text.
 v1.0.50 8/29/2023 Added securing of URL to ensure that images are using HTTPS particularly when downloading.  Fixed line ordering for case where a height might return as 0 so that we always have a minimum non-zero height.
 v1.0.49 8/29/2023 Re-worked so that the delta for height is based off of the smallest text block rather than off of the image size for large images and to better match alignment.

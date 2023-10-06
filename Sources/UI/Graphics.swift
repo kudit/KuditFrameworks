@@ -8,6 +8,19 @@
 import Foundation
 import CoreGraphics
 
+
+extension CGPoint {
+	var short: String {
+		return "\(self.x),\(self.y)"
+	}
+}
+
+extension CGSize: CustomStringConvertible {
+	public var description: String {
+		return "\(self.width)×\(self.height)"
+	}
+}
+
 public extension CGRect {
     var center: CGPoint { return CGPoint(x: midX, y: midY) }
 }

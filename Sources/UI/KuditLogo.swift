@@ -5,8 +5,6 @@
 //  Created by Ben Ku on 10/29/20.
 //
 
-import SwiftUI
-
 /*extension Path {
     mutating func addCircle(center: CGPoint, radius: CGFloat, filled: Bool = false) {
         if (filled) {
@@ -19,9 +17,9 @@ import SwiftUI
     }
 }*/
 
-struct KuditLogoShape: Shape {
-    var ballsOnly = false
-    struct Ball {
+public struct KuditLogoShape: Shape {
+    public var ballsOnly = false
+    private struct Ball {
         var x: CGFloat
         var y: CGFloat
         var radius: CGFloat
@@ -35,14 +33,14 @@ struct KuditLogoShape: Shape {
         }
     }
 
-    let balls = [
+    private let balls = [
         Ball(x: 0.69, y: 0.30, radius: 0.06), // NE
         Ball(x: 0.37, y: 0.75, radius: 0.13), // SW
         Ball(x: 0.32, y: 0.22, radius: 0.07), // NW
         Ball(x: 0.8, y: 0.54, radius: 0.1) // E
     ]
 
-    func path(in rect: CGRect) -> Path {
+	public func path(in rect: CGRect) -> Path {
         //let size = min(rect.size.width, rect.size.height)
         //let radius = size / 2
         
@@ -69,9 +67,11 @@ struct KuditLogoShape: Shape {
     }
 }
 
-struct KuditLogo: View {
-    var weight: CGFloat = 1
-    var body: some View {
+#if canImport(SwiftUI)
+import SwiftUI
+public struct KuditLogo: View {
+    public var weight: CGFloat = 1
+	public var body: some View {
         ZStack {
             KuditLogoShape()
                 .stroke(lineWidth: weight)
@@ -82,8 +82,7 @@ struct KuditLogo: View {
     }
 }
 
-#if canImport(SwiftUI)
-@available(iOS 14.0, *)
+//@available(iOS 14.0, *)
 struct KuditLogo_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {

@@ -1,12 +1,12 @@
 #if canImport(XCTest)
-import XCTest
 @testable import KuditFrameworks
+import XCTest
 
 extension Testable {
 	static func runTests() async throws {
 		for test in Self.tests {
 			let (result, debugString) = try await test.task()
-			XCTAssert(result, debugString)
+			XCTAssert(result, debugString) // TODO: Include line number of original test call!
 			print(test)
 		}
 	}
@@ -20,7 +20,11 @@ final class KuditFrameworksTests: XCTestCase {
 	func testString() async throws {
 		try await String.runTests()
 	}
-	
+
+	func testDate() async throws {
+		try await Date.runTests()
+	}
+
 	func testPHP() async throws {
 		try await PHP.runTests()
 	}

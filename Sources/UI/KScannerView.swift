@@ -261,3 +261,4 @@ class KScannerView: UIView, AVCapturePhotoCaptureDelegate {
     }*/
 }
 #endif
+// LightningBolt file was used for enabling light for scanning.  TODO: if used, replace with SFSymbol "bolt.fill" and "bolt.slash.fill"

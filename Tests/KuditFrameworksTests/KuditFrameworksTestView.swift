@@ -16,18 +16,24 @@ public struct KuditFrameworksTestView: View {
     
     @State var time = -1
     public var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, Kudit world!")
-            Text("Unix time: \(time)").onReceive(timer, perform: { _ in
-                //debug("updating \(time)")
-                time = PHP.time()
-            })
-            Text("Application Description: \(Application.main.description)")
-            Text("Version: v\(Bundle.main.version)")
-            Text("Kudit Frameworks: v\(Bundle.kuditFrameworks?.version ?? "!")")
+        NavigationView {
+            VStack {
+                Image(systemName: "globe")
+                    .imageScale(.large)
+                    .foregroundColor(.accentColor)
+                Text("Hello, Kudit world!")
+                Text("Unix time: \(time)").onReceive(timer, perform: { _ in
+                    //debug("updating \(time)")
+                    time = PHP.time()
+                })
+                Text("Application Description: \(Application.main.description)")
+                Text("Version: v\(Bundle.main.version)")
+                Text("Kudit Frameworks: v\(Bundle.kuditFrameworks?.version ?? "!")")
+            }
+            .navigationTitle("Kudit Frameworks")
+			.toolbar {
+				KuditConnectMenu()
+            }
         }
     }
 }

@@ -222,7 +222,14 @@ struct ImageRecognizer_Previews: PreviewProvider {
   //  static let testURL = "https://facebookfamilyfeudcheats.files.wordpress.com/2010/07/picture-14.png"
 //    static let testURL = "https://facebookfamilyfeudcheats.files.wordpress.com/2010/06/picture-4.png"
 //    static let testURL = "http://facebookfamilyfeudcheats.files.wordpress.com/2010/06/picture-3.png"
-    static let testURL = "http://facebookfamilyfeudcheats.files.wordpress.com/2010/06/picture-12.png"
+//    static let testURL = "http://facebookfamilyfeudcheats.files.wordpress.com/2010/06/picture-12.png"
+ //   static let testURL = "http://facebookfamilyfeudcheats.files.wordpress.com/2010/06/picture-41.png"
+  //  static let testURL = "http://facebookfamilyfeudcheats.files.wordpress.com/2010/06/picture-6.png"
+//    static let testURL = "https://facebookfamilyfeudcheats.files.wordpress.com/2010/07/picture-102.png"
+//    static let testURL = "https://facebookfamilyfeudcheats.files.wordpress.com/2010/07/2010-07-09-21-24-01_kapolei_hawaii_us.jpeg"
+ //   static let testURL = "https://facebookfamilyfeudcheats.files.wordpress.com/2010/07/picture-327.png"
+//    static let testURL = "https://facebookfamilyfeudcheats.files.wordpress.com/2010/09/bounce.jpg"
+    static let testURL = "https://facebookfamilyfeudcheats.files.wordpress.com/2010/11/birds.png"
     static var previews: some View {
         let _ = { DebugLevel.currentLevel = .WARNING }()
         VStack {

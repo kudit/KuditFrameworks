@@ -2,6 +2,7 @@
 
 Additional components, simpler, and convenience code for Kudit projects.
 
+v4.0.0 10/5/2023 Requires iOS 15 as a base requirement to remove compatibility warnings. Added OffsetObservingScrollView (code only since doesn't appear to be used).  Added in additional code developed for Shout It: Possible breaking change: changed KuColor save format to rgba() format String so that we can include alpha value and increased color ranges.  Generally should still be backwards compatible since this should be able to be converted from String.  Added .contrastingColor and .luminence values to KuColor and added better documentation for redComponent values.  Added device rotation monitoring .onRotate() view modifier.  Added KuditConnect (including KudosView requiring EffectsLibrary and DeviceKit).  Added DictionaryCoding.  Removed JSONOptional since current JSON encoder should be fine.  Updated format of size to W×H.  Removed Hardware and HardwareMap files since we now have DeviceKit.  Re-worked KuColor protocols so that they gain conformance to Codable and have better encoding/decoding methods.  Cleaned up Application class to have less redundancy by using Bundle extensions.  Added parameter encoding.  Added some test code for Date.
 v1.0.52 9/10/2023 Added availability checks for URL downloading and image recognizer code.
 v1.0.51 8/30/2023 Added ability to include line information when batching and ordering recognized text.
 v1.0.50 8/29/2023 Added securing of URL to ensure that images are using HTTPS particularly when downloading.  Fixed line ordering for case where a height might return as 0 so that we always have a minimum non-zero height.
@@ -54,3 +55,9 @@ v1.0.4 8/10/2022 Fixed extract(from:to:) to return nil if start or end not found
 v1.0.3 8/9/2022 adding in KuditFrameworks shared libraries and adapting to new Swift and iOS models.  Will not be backwards compatible but should work in Swift Playgrounds.  Still has a lot of legacy code that probably isn't needed and will need to be pruned.  Fixed all compile warnings.
 v1.0.2 8/8/2022 fixing compile
 v1.0.1 8/8/2022 initial commit
+
+v3 was the iOS 13 compatible version (listed as v1.0.x above)
+v2 was the original SwiftUI port
+v1 Realistically was the original Objective-C Kudit Frameworks
+
+// TODO: Go through and add more tests for better code coverage!

@@ -8,14 +8,14 @@
 
 import Foundation
 // TODO: add functions for sorting versions?  Major, Minor, Something?  Make enum or other struct that can be converted to/from String?
-// TODO: deprecate as much of this as we can.
+// TODO: See if we can deprecate this if there are better swifty equivalents.  Doesn't seem to be currently.  Used in KuditConnect.
 public class Application: CustomStringConvertible {
 //    public static let KuditFrameworksBundle = Bundle(identifier: "com.kudit.KuditFrameworks")
 // use Bundle.kuditFrameworks instead
 //    public static let KuditFrameworksVersion = (KuditFrameworksBundle?.infoDictionary?["CFBundleShortVersionString"] as? String ?? "KuditFrameworks not loaded as bundle.") + " (" + (KuditFrameworksBundle?.infoDictionary?["CFBundleVersion"] as? String ?? "?.?") + ")"
     // use Bundle.kuditFrameworks.version instead
 
-    /// Place `Application.track()` in `application(_:didFinishLaunchingWithOptions:)` to enable version tracking.
+    /// Place `Application.track()` in `application(_:didFinishLaunchingWithOptions:)` or @main struct init() function to enable version tracking.
     public static func track() {
         print("Kudit Application Tracking:\n\(Application.main)")
     }
@@ -40,10 +40,10 @@ public class Application: CustomStringConvertible {
     // MARK: - Application information
     public static let main = Application()
     /// Human readable display name for the application.
-    public let name = Bundle.main.infoDictionary?["CFBundleName"] as? String ?? "Unknown Application Name"
+    public let name = Bundle.main.name
 
     /// Name that appears on the Home Screen
-    public let appName = Bundle.main.infoDictionary?["CFBundleExecutable"] as? String ?? "Unknown"
+	public let appName = Bundle.main.appName
 
     /// The last . component of Bundle.main.bundleIdentifier
     public let appIdentifier = Bundle.main.bundleIdentifier?.components(separatedBy: ".").last ?? "unknown"
@@ -77,11 +77,12 @@ public class Application: CustomStringConvertible {
     
     // MARK: - Version information
     // NOTE: in Objective C, the key was kCFBundleVersionKey, but that returns the build number in Swift.
-    // TODO: this gets the FRAMEWORK version, not the current APP version.  Use Bundle.main. for app version, but need to do something different for XCTests since there is no main bundle in that case
     /// Current app version string (not including build)
-    public let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "?.?"
-    /// Current framework version string (not including build)
-    public let frameworkVersion = Bundle(for: Application.self).infoDictionary!["CFBundleShortVersionString"] as! String
+    public let version = Bundle.main.version
+
+	// TODO: this gets the APP version, not the current APP version.  Use Bundle.main. for app version, but need to do something different for XCTests since there is no main bundle in that case
+/// Current framework version string (not including build)
+    public let frameworkVersion = Bundle(for: Application.self).version
     
     /// `true`  if this is the first time the app has been run, `false` otherwise
     // NOTE: should only be mutable by the reset function above.
@@ -132,15 +133,31 @@ public class Application: CustomStringConvertible {
 public extension Bundle {
     static let kuditFrameworks = Bundle(identifier: "com.kudit.KuditFrameworks")
     
-    var name: String { getInfo("CFBundleName")  }
-    var displayName: String {getInfo("CFBundleDisplayName")}
-    var language: String {getInfo("CFBundleDevelopmentRegion")}
-    var identifier: String {getInfo("CFBundleIdentifier")}
-    var copyright: String {getInfo("NSHumanReadableCopyright").replacingOccurrences(of: "\\\\n", with: "\n") }
+	/// A user-visible short name for the bundle.
+    var name: String { getInfo("CFBundleName") ?? "Unknown App Name" }
+	
+	/// The user-visible name for the bundle, used by Siri and visible on the iOS Home screen.
+    var displayName: String { getInfo("CFBundleDisplayName") ?? "⚠️" }
+	
+	/// The name of the bundle’s executable file.
+	var appName: String { getInfo("CFBundleExecutable") ?? "⚠️" }
+	
+	/// The default language and region for the bundle, as a language ID.
+    var language: String { getInfo("CFBundleDevelopmentRegion") ?? "en" }
+	
+	/** A unique identifier for a bundle.
+	 A bundle ID uniquely identifies a single app throughout the system. The bundle ID string must contain only alphanumeric characters (A–Z, a–z, and 0–9), hyphens (-), and periods (.). Typically, you use a reverse-DNS format for bundle ID strings. Bundle IDs are case-insensitive.
+**/
+    var identifier: String { getInfo("CFBundleIdentifier") ?? "unknown.bundle.identifier"}
+
+	/// A human-readable copyright notice for the bundle.
+    var copyright: String { getInfo("NSHumanReadableCopyright")?.replacingOccurrences(of: "\\\\n", with: "\n") ?? "©⚠️" }
     
-    var build: String { getInfo("CFBundleVersion") }
-    var version: String { getInfo("CFBundleShortVersionString") }
+	/// The version of the build that identifies an iteration of the bundle. (1-3 period separated integer notation.  only integers and periods supported).  In Swift, this may return the build number.
+    var build: String { getInfo("CFBundleVersion") ?? "⚠️"}
+	/// The version of the build that identifies an iteration of the bundle. (1-3 period separated integer notation.  only integers and periods supported)
+    var version: String { getInfo("CFBundleShortVersionString") ?? "⚠️.⚠️"}
     //public var appVersionShort: String { getInfo("CFBundleShortVersion") }
     
-    fileprivate func getInfo(_ str: String) -> String { infoDictionary?[str] as? String ?? "⚠️" }
+    fileprivate func getInfo(_ str: String) -> String? { infoDictionary?[str] as? String }
 }

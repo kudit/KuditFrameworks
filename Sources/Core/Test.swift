@@ -1,8 +1,10 @@
 import Foundation
 
+// TODO: Retool as macros for easier test writing and allow tests to fail inline where the code fails.
 public typealias TestTuple = (Bool, String)
 public typealias TestClosure = () async throws -> TestTuple
 
+// don't make this public to avoid compiling test stuff into framework
 protocol Testable {
     static var tests: [Test] { get }
 }

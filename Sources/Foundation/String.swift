@@ -16,6 +16,11 @@ import Foundation
 //#elseif canImport(AppKit)
 //import AppKit
 //#endif
+public extension UInt64 {
+	var byteString: String {
+		ByteCountFormatter().string(fromByteCount: Int64(self))
+	}
+}
 
 extension CharacterSet: Testable {
     static var tests = [

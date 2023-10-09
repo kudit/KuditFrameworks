@@ -192,7 +192,8 @@ public class KuditConnect: ObservableObject {
     
     func apiURLString(_ api: String, info: String = "") -> String {
         var identifier = Application.main.appIdentifier
-        if identifier == "KuditFramework" {
+        // when running in preview, identifier may be: swift-playgrounds-dev-previews.swift-playgrounds-app.hdqfptjlmwifrrakcettacbhdkhn.501.KuditFramework
+        if identifier.components(separatedBy: ".").last == "KuditFramework" {
             identifier = "com.unknown.unknown" // for testing
         }
         let version = Application.main.version
@@ -281,6 +282,7 @@ public class KuditConnect: ObservableObject {
   Application: \(Application.main.name)
   Version: \(Application.main.version)
   Previously run versions: \(Application.main.versionsRun.joined(separator: ", "))
+  Identifier: \(Application.main.appIdentifier)
   iCloud: \(Application.main.iCloudIsEnabled ? "Enabled" : "Disabled")
   Device: \(Device.current.description)
   Screen Ratio: \(Device.current.screenRatio)

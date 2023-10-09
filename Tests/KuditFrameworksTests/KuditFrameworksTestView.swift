@@ -18,21 +18,18 @@ public struct KuditFrameworksTestView: View {
     public var body: some View {
         NavigationView {
             VStack {
-                Image(systemName: "globe")
-                    .imageScale(.large)
-                    .foregroundColor(.accentColor)
+                KuditLogo()
+                    .frame(size: 44)
                 Text("Hello, Kudit world!")
                 Text("Unix time: \(time)").onReceive(timer, perform: { _ in
                     //debug("updating \(time)")
                     time = PHP.time()
                 })
-                Text("Application Description: \(Application.main.description)")
-                Text("Version: v\(Bundle.main.version)")
-                Text("Kudit Frameworks: v\(Bundle.kuditFrameworks?.version ?? "!")")
+                Text(KuditConnect.shared.appInformation)
             }
             .navigationTitle("Kudit Frameworks")
-			.toolbar {
-				KuditConnectMenu()
+            .toolbar {
+                KuditConnectMenu()
             }
         }
     }

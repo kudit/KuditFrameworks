@@ -43,10 +43,10 @@ public class Application: CustomStringConvertible {
     public let name = Bundle.main.name
 
     /// Name that appears on the Home Screen
-	public let appName = Bundle.main.appName
+    public let appName = Bundle.main.appName
 
-    /// The last . component of Bundle.main.bundleIdentifier
-    public let appIdentifier = Bundle.main.bundleIdentifier?.components(separatedBy: ".").last ?? "unknown"
+    /// The fully qualified reverse dot notation from Bundle.main.bundleIdentifier like com.kudit.frameworks
+    public let appIdentifier = Bundle.main.bundleIdentifier ?? "com.unknown.unknown"
 
     private init() {
         if isFirstRun { // make sure to call before tracking or this won't ever be false
@@ -80,7 +80,7 @@ public class Application: CustomStringConvertible {
     /// Current app version string (not including build)
     public let version = Bundle.main.version
 
-	// TODO: this gets the APP version, not the current APP version.  Use Bundle.main. for app version, but need to do something different for XCTests since there is no main bundle in that case
+    // TODO: this gets the APP version, not the current APP version.  Use Bundle.main. for app version, but need to do something different for XCTests since there is no main bundle in that case
 /// Current framework version string (not including build)
     public let frameworkVersion = Bundle(for: Application.self).version
     
@@ -133,29 +133,29 @@ public class Application: CustomStringConvertible {
 public extension Bundle {
     static let kuditFrameworks = Bundle(identifier: "com.kudit.KuditFrameworks")
     
-	/// A user-visible short name for the bundle.
+    /// A user-visible short name for the bundle.
     var name: String { getInfo("CFBundleName") ?? "Unknown App Name" }
-	
-	/// The user-visible name for the bundle, used by Siri and visible on the iOS Home screen.
+    
+    /// The user-visible name for the bundle, used by Siri and visible on the iOS Home screen.
     var displayName: String { getInfo("CFBundleDisplayName") ?? "⚠️" }
-	
-	/// The name of the bundle’s executable file.
-	var appName: String { getInfo("CFBundleExecutable") ?? "⚠️" }
-	
-	/// The default language and region for the bundle, as a language ID.
+    
+    /// The name of the bundle’s executable file.
+    var appName: String { getInfo("CFBundleExecutable") ?? "⚠️" }
+    
+    /// The default language and region for the bundle, as a language ID.
     var language: String { getInfo("CFBundleDevelopmentRegion") ?? "en" }
-	
-	/** A unique identifier for a bundle.
-	 A bundle ID uniquely identifies a single app throughout the system. The bundle ID string must contain only alphanumeric characters (A–Z, a–z, and 0–9), hyphens (-), and periods (.). Typically, you use a reverse-DNS format for bundle ID strings. Bundle IDs are case-insensitive.
+    
+    /** A unique identifier for a bundle.
+     A bundle ID uniquely identifies a single app throughout the system. The bundle ID string must contain only alphanumeric characters (A–Z, a–z, and 0–9), hyphens (-), and periods (.). Typically, you use a reverse-DNS format for bundle ID strings. Bundle IDs are case-insensitive.
 **/
     var identifier: String { getInfo("CFBundleIdentifier") ?? "unknown.bundle.identifier"}
 
-	/// A human-readable copyright notice for the bundle.
+    /// A human-readable copyright notice for the bundle.
     var copyright: String { getInfo("NSHumanReadableCopyright")?.replacingOccurrences(of: "\\\\n", with: "\n") ?? "©⚠️" }
     
-	/// The version of the build that identifies an iteration of the bundle. (1-3 period separated integer notation.  only integers and periods supported).  In Swift, this may return the build number.
+    /// The version of the build that identifies an iteration of the bundle. (1-3 period separated integer notation.  only integers and periods supported).  In Swift, this may return the build number.
     var build: String { getInfo("CFBundleVersion") ?? "⚠️"}
-	/// The version of the build that identifies an iteration of the bundle. (1-3 period separated integer notation.  only integers and periods supported)
+    /// The version of the build that identifies an iteration of the bundle. (1-3 period separated integer notation.  only integers and periods supported)
     var version: String { getInfo("CFBundleShortVersionString") ?? "⚠️.⚠️"}
     //public var appVersionShort: String { getInfo("CFBundleShortVersion") }
     

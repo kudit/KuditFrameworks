@@ -40,7 +40,7 @@ public struct KuditLogoShape: Shape {
         Ball(x: 0.8, y: 0.54, radius: 0.1) // E
     ]
 
-	public func path(in rect: CGRect) -> Path {
+    public func path(in rect: CGRect) -> Path {
         //let size = min(rect.size.width, rect.size.height)
         //let radius = size / 2
         
@@ -71,13 +71,14 @@ public struct KuditLogoShape: Shape {
 import SwiftUI
 public struct KuditLogo: View {
     public var weight: CGFloat = 1
-	public var body: some View {
+    public var color: Color = .accentColor
+    public var body: some View {
         ZStack {
             KuditLogoShape()
                 .stroke(lineWidth: weight)
-                .fill(Color.accentColor)
+                .fill(color)
             KuditLogoShape(ballsOnly: true)
-                .fill(Color.accentColor)
+                .fill(color)
         }
     }
 }
@@ -96,7 +97,8 @@ struct KuditLogo_Previews: PreviewProvider {
                     //.stroke(lineWidth: 7)
                     KuditLogo(weight: 4)
                         .accentColor(.black)
-                    
+                    KuditLogo(weight: 1, color: .accentColor)
+                        .frame(size: 44)
                 }
                 
             }.environment(\.defaultMinListRowHeight, 200)

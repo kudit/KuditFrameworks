@@ -17,9 +17,9 @@ import Foundation
 //import AppKit
 //#endif
 public extension UInt64 {
-	var byteString: String {
-		ByteCountFormatter().string(fromByteCount: Int64(self))
-	}
+    var byteString: String {
+        ByteCountFormatter().string(fromByteCount: Int64(self))
+    }
 }
 
 extension CharacterSet: Testable {
@@ -69,6 +69,15 @@ public extension String {
         return self.count
     }
      */
+    /// Return whether this value should evalute to true whether it's a positive integer, "true", "t", "yes", "y", or "on" regardless of capitalization.
+    var asBool: Bool {
+        let lower = self.lowercased()
+        let int = Int(self) ?? 0
+        if int > 0 || lower == "true" || lower == "yes" || lower == "y" || lower == "t" || lower == "on" {
+            return true
+        }
+        return false
+    }
     /// `true` iff `self` contains characters.
     ///
     /// Equivalent to `!self.isEmpty`

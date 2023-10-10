@@ -263,6 +263,7 @@ public class KuditConnect: ObservableObject {
             let wrapper = try KCWrapper(fromJSON: string)
             main {
                 self.faqs = wrapper.faqs
+                debug("Kudit Connect FAQs updated (found \(self.faqs.count))")
             }
         } catch {
             debug("Kudit Connect: Unable to load FAQs from server: \(String(describing: error))", level: .ERROR)

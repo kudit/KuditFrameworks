@@ -117,14 +117,14 @@ struct KuditConnectFAQ: View {
 struct KuditConnectFAQs: View {
     @Environment(\.dismiss) var dismiss
     var selectedFAQ: String? // TODO: allow setting this to automatically navigate to the selected FAQ
-    var faqs: [KuditFAQ]
+    @ObservedObject var connect: KuditConnect
     var body: some View {
         NavigationView {
             List {
-                let categories = faqs.categories 
+                let categories = connect.faqs.categories 
                 ForEach(categories, id: \.self) { category in
                     Section(category) {
-                        ForEach(faqs.filter { $0.category == category }) { faq in
+                        ForEach(connect.faqs.filter { $0.category == category }) { faq in
                             NavigationLink {
                                 KuditConnectFAQ(faq: faq)                            
                             } label: {
@@ -134,6 +134,9 @@ struct KuditConnectFAQs: View {
                     }
                 }
                 // TODO: add in section to contact support
+            }
+            .refreshable {
+                await KuditConnect.shared.loadFromServer()
             }
             .navigationTitle("FAQs")
             .toolbar {
@@ -193,14 +196,15 @@ public class KuditConnect: ObservableObject {
     func apiURLString(_ api: String, info: String = "") -> String {
         var identifier = Application.main.appIdentifier
         // when running in preview, identifier may be: swift-playgrounds-dev-previews.swift-playgrounds-app.hdqfptjlmwifrrakcettacbhdkhn.501.KuditFramework
-        if identifier.components(separatedBy: ".").last == "KuditFramework" {
+        let lastComponent = identifier.components(separatedBy: ".").last
+        if lastComponent == "KuditFramework" || lastComponent == "KuditFrameworksApp" {
             identifier = "com.unknown.unknown" // for testing
         }
         let version = Application.main.version
         let urlString = "\(Self.kuditAPIURL)/\(api).php?identifier=\(identifier.urlEncoded)&version=\(version.urlEncoded)\(info)&kcVersion=\(Self.kuditConnectVersion)"
         debug("Kudit Connect: API URL: \(urlString)", level: .NOTICE)
         return urlString
-}
+    }
     
     enum KuditAPIError: Error {
         /// Throw when the URL is malformed
@@ -261,10 +265,8 @@ public class KuditConnect: ObservableObject {
         do {
             let string = try await loadDataFromAPI("faqs")
             let wrapper = try KCWrapper(fromJSON: string)
-            main {
-                self.faqs = wrapper.faqs
-                debug("Kudit Connect FAQs updated (found \(self.faqs.count))")
-            }
+            self.faqs = wrapper.faqs
+            debug("Kudit Connect FAQs updated (found \(KuditConnect.shared.faqs.count))")
         } catch {
             debug("Kudit Connect: Unable to load FAQs from server: \(String(describing: error))", level: .ERROR)
         }
@@ -418,7 +420,7 @@ public struct KuditConnectMenu<Content: View>: View {
             // TODO: Try with KuditLogo shape?
         }
         .sheet(isPresented: $showFAQs) {
-            KuditConnectFAQs(faqs: KuditConnect.shared.faqs)
+            KuditConnectFAQs(connect: KuditConnect.shared)
         }
         /// Kudos view
         .fullScreenCover(isPresented: $showKudos) {
@@ -556,7 +558,7 @@ struct KCTestView_Previews: PreviewProvider {
     static var previews: some View {
         KCTestView()
             .previewDisplayName("KC Test")
-        KuditConnectFAQs(faqs: KuditConnect.shared.faqs)
+        KuditConnectFAQs(connect: KuditConnect.shared)
             .previewDisplayName("FAQs")
         KuditConnectFAQ(faq: KuditConnect.shared.faqs.first!)
             .previewDisplayName("FAQ")

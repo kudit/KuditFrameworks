@@ -2,6 +2,7 @@
 
 Additional components, simpler, and convenience code for Kudit projects.
 
+v4.0.4 10/10/2023 Made coding parameters align with the dictionary and JSON encoders and decoders for easier consistency.  Made sure to add public init functions to allow consistent use.  Fixed frameworks app testing code for FAQs.  Added pull to refresh for FAQs.
 v4.0.3 10/10/2023 Made dictionary coding functions public.  Made ParameterEncoding public and static functions.  Included asBool function on String.  Added ability to get Dictionary from a query string.
 v4.0.2 10/9/2023 Changing Application.main.appIdentifier to include the full identifier rather than just the last path component.  Not sure why that was like that.  Hopefully doesn't break anything.  Adding debug for additional info when generating mail link so more human readable.  Added appIdentifier to app info. Added appInfo to KuditFrameworksTestView.  Added KuditLogo to view and added color parameter for better sizing and styling.
 v4.0.1 10/9/2023 Added additional Date.mysqlDateTimeFormat and Date().mysqlDateTime functions.  Added FAQ feature back to Kudit Connect.  Enabled ability to provide custom Menu code injected into KuditConnect menu.  Added capabilities flag for testing server connections from framework.  Added public modifiers to KuColor functions.  Fixed typo with ParameterEncoding.  Extracted KuditConnect functions from the Views to improve MVC separation.  Added debug code to support mailto link creation.

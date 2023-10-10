@@ -64,19 +64,6 @@ public extension URL {
     var queryDictionary: [String: String] {
         // parse parameters from URL
         guard let query = self.query else { return [:] }
-        var dictionary = [String: String]()
-        for pairString in query.components(separatedBy: "&") {
-            let pairs = pairString.components(separatedBy: "=")
-            guard pairs.count == 2 else {
-                debug("Unable to get Key=Value pair from: \(pairString)")
-                continue
-            }
-            let key = pairs[0]
-            var value = pairs[1]
-            value = value.replacingOccurrences(of: "+", with: " ")
-            value = value.removingPercentEncoding ?? value
-            dictionary[key] = value
-        }
-        return dictionary
+        return ParameterDecoder().decodeDictionary(query)
     }
 }

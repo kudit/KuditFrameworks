@@ -21,6 +21,10 @@ public struct KuditFrameworksTestView: View {
                 KuditLogo()
                     .frame(size: 44)
                 Text("Hello, Kudit world!")
+//                let encoded = KuditConnect.shared.faqs.asJSON()
+  //              Text(encoded)
+                //let decode = try! JSONDecoder().decode([KuditFAQ].self, from: encoded.asData())
+//                Text("\(.decod("12") < Version("2") ? "true" : "false")")
                 Text("Unix time: \(time)").onReceive(timer, perform: { _ in
                     //debug("updating \(time)")
                     time = PHP.time()

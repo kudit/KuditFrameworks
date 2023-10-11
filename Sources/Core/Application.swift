@@ -7,6 +7,7 @@
 //
 
 import Foundation
+
 // TODO: add functions for sorting versions?  Major, Minor, Something?  Make enum or other struct that can be converted to/from String?
 // TODO: See if we can deprecate this if there are better swifty equivalents.  Doesn't seem to be currently.  Used in KuditConnect.
 public class Application: CustomStringConvertible {
@@ -54,7 +55,8 @@ public class Application: CustomStringConvertible {
         }
         var versionsRun = self.versionsRun
         versionsRun.appendUnique(version)
-        UserDefaults.standard.set(versionsRun, forKey: "kuditVersions")
+        UserDefaults.standard.set(versionsRun.asStringArray, forKey: "kuditVersions")
+        // remove any previous compatibility formats
         UserDefaults.standard.removeObject(forKey: "last_run_version")
         // UserDefaults.synchronize // don't save in case launch issue where it will crash on launch
     }
@@ -92,7 +94,7 @@ public class Application: CustomStringConvertible {
     
         
     /// List of all versions that have been run since install.
-    public var versionsRun: [String] {
+    public var versionsRun: [Version] {
         var versionsRun: [String] = (UserDefaults.standard.object(forKey: "kuditVersions") as? [String] ?? [])
         // if last_run_version set, add that to preserve legacy format
         if let lastRunVersion = UserDefaults.standard.object(forKey: "last_run_version") as? String {
@@ -100,12 +102,12 @@ public class Application: CustomStringConvertible {
         }
         // ensure uniqueness without changing order
         versionsRun.removeDuplicates()
-        return versionsRun
+        return versionsRun.map { Version(rawValue: $0) }
     }
     
-    public func hasRunVersion(before testVersion: String) -> Bool {
+    public func hasRunVersion(before testVersion: Version) -> Bool {
         for versionRun in versionsRun {
-            if versionRun.compare(testVersion) == .orderedAscending {
+            if versionRun < testVersion {
                 return true
             }
         }
@@ -156,7 +158,7 @@ public extension Bundle {
     /// The version of the build that identifies an iteration of the bundle. (1-3 period separated integer notation.  only integers and periods supported).  In Swift, this may return the build number.
     var build: String { getInfo("CFBundleVersion") ?? "⚠️"}
     /// The version of the build that identifies an iteration of the bundle. (1-3 period separated integer notation.  only integers and periods supported)
-    var version: String { getInfo("CFBundleShortVersionString") ?? "⚠️.⚠️"}
+    var version: Version { Version(getInfo("CFBundleShortVersionString") ?? "⚠️.⚠️") }
     //public var appVersionShort: String { getInfo("CFBundleShortVersion") }
     
     fileprivate func getInfo(_ str: String) -> String? { infoDictionary?[str] as? String }

@@ -49,7 +49,6 @@ extension HTML {
         return NSAttributedString(string: cleaned)
     }
 }
-typealias Version = String
 typealias MySQLDate = String // in the future, convert to actual date?  Support conversion to Date object?
 struct KuditFAQ: Codable, Identifiable {
     var question: String
@@ -64,9 +63,18 @@ struct KuditFAQ: Codable, Identifiable {
     var id: String {
         question
     }
+    func visible(in version: Version) -> Bool {
+        if let minversion, minversion > version {
+            return false
+        }
+        if let maxversion, maxversion < version {
+            return false
+        }
+        return true
+    }
     func answerHTML(textColor: Color) -> HTML {
         var debugHTML = """
- <footer>(\(minversion ?? "n/a"),\(maxversion ?? "n/a")) \(updated) text: \(textColor.cssString)</footer>
+ <footer>(\(minversion?.rawValue ?? "n/a"),\(maxversion?.rawValue ?? "n/a")) \(updated) text: \(textColor.cssString)</footer>
 """
 //        debug(debugHTML, level: .DEBUG)
         if false && DebugLevel.currentLevel != .DEBUG {
@@ -201,7 +209,7 @@ public class KuditConnect: ObservableObject {
             identifier = "com.unknown.unknown" // for testing
         }
         let version = Application.main.version
-        let urlString = "\(Self.kuditAPIURL)/\(api).php?identifier=\(identifier.urlEncoded)&version=\(version.urlEncoded)\(info)&kcVersion=\(Self.kuditConnectVersion)"
+        let urlString = "\(Self.kuditAPIURL)/\(api).php?identifier=\(identifier.urlEncoded)&version=\(version)\(info)&kcVersion=\(Self.kuditConnectVersion)"
         debug("Kudit Connect: API URL: \(urlString)", level: .NOTICE)
         return urlString
     }
@@ -265,8 +273,12 @@ public class KuditConnect: ObservableObject {
         do {
             let string = try await loadDataFromAPI("faqs")
             let wrapper = try KCWrapper(fromJSON: string)
-            self.faqs = wrapper.faqs
-            debug("Kudit Connect FAQs updated (found \(KuditConnect.shared.faqs.count))")
+            // filter FAQs based on what the actual app version is
+            let filtered = wrapper.faqs.filter { $0.visible(in: Application.main.version) }
+            main {
+                self.faqs = filtered
+                debug("Kudit Connect FAQs updated (found \(KuditConnect.shared.faqs.count))")
+            }
         } catch {
             debug("Kudit Connect: Unable to load FAQs from server: \(String(describing: error))", level: .ERROR)
         }
@@ -331,7 +343,7 @@ This section is to help us properly route your feedback and help troubleshoot an
     }
     
     public static let kuditAPIURL = "https://www.kudit.com/api"
-    public static let kuditConnectVersion = "3.0"
+    public static let kuditConnectVersion = Version("3.0")
     
     // https://www.kudit.com/api/kudos.php?identifier=com.kudit.BROWSERTEST&version=1.2.3&kcVersion=3.2.1
     // Returns "SUCCESS"

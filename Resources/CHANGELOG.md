@@ -2,6 +2,7 @@
 
 Additional components, simpler, and convenience code for Kudit projects.
 
+v4.0.5 10/10/2023 Shifted the update of FAQs to force on the main thread.  Enabled FAQs to filter by version.  Added Array.pad function.  Created Version struct that is RawRepresentable. Completely shifted Version from String type to custom Version type that will have to be converted to/from String.  Codable conformance SHOULD work.
 v4.0.4 10/10/2023 Made coding parameters align with the dictionary and JSON encoders and decoders for easier consistency.  Made sure to add public init functions to allow consistent use.  Fixed frameworks app testing code for FAQs.  Added pull to refresh for FAQs.
 v4.0.3 10/10/2023 Made dictionary coding functions public.  Made ParameterEncoding public and static functions.  Included asBool function on String.  Added ability to get Dictionary from a query string.
 v4.0.2 10/9/2023 Changing Application.main.appIdentifier to include the full identifier rather than just the last path component.  Not sure why that was like that.  Hopefully doesn't break anything.  Adding debug for additional info when generating mail link so more human readable.  Added appIdentifier to app info. Added appInfo to KuditFrameworksTestView.  Added KuditLogo to view and added color parameter for better sizing and styling.

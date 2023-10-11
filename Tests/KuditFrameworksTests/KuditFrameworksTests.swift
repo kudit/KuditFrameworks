@@ -1,4 +1,4 @@
-#if canImport(XCTest)
+#if canImport(XCTest) && canImport(KuditFrameworks)
 @testable import KuditFrameworks
 import XCTest
 

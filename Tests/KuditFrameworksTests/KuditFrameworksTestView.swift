@@ -3,18 +3,25 @@ import SwiftUI
 import KuditFrameworks
 #endif
 
+struct TimeClockView: View {
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @State var time = -1
+    var body: some View {
+        Text("Unix time: \(time)").onReceive(timer, perform: { _ in
+            //debug("updating \(time)")
+            time = PHP.time()
+        })
+    }
+}
+
 public struct KuditFrameworksTestView: View {
-    
     public init() {
         //debug("Test View Init")
-        //DebugLevel.currentLevel = .ERROR
-        //debug("Bar")
         Application.track()
     }
     
-    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @State var testIsPresented = false
     
-    @State var time = -1
     public var body: some View {
         NavigationView {
             VStack {
@@ -25,15 +32,23 @@ public struct KuditFrameworksTestView: View {
   //              Text(encoded)
                 //let decode = try! JSONDecoder().decode([KuditFAQ].self, from: encoded.asData())
 //                Text("\(.decod("12") < Version("2") ? "true" : "false")")
-                Text("Unix time: \(time)").onReceive(timer, perform: { _ in
-                    //debug("updating \(time)")
-                    time = PHP.time()
-                })
+                TimeClockView()
                 Text(KuditConnect.shared.appInformation)
+                    .padding()
             }
             .navigationTitle("Kudit Frameworks")
             .toolbar {
                 KuditConnectMenu()
+//                Menu("Test") {
+//                    Button("Show Sheet") {
+//                        testIsPresented = true
+//                    }
+//                }
+//                .sheet(isPresented: $testIsPresented) {
+//                    Button("Dismiss") {
+//                        testIsPresented = false
+//                    }
+//                }
             }
         }
     }

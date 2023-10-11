@@ -31,7 +31,10 @@ public struct Version: RawRepresentable, Hashable, Comparable, Codable, CustomSt
     public var patch: Int {
         return self.components[safe: 2] ?? 0
     }
-    
+	public var build: Int {
+		return self.components[safe: 3] ?? 0
+	}
+
     public var components: [Int] {
         self.rawValue.components(separatedBy: ".").map { Int($0) ?? -1 }
     }

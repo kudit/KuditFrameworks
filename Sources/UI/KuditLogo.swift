@@ -83,7 +83,6 @@ public struct KuditLogo: View {
     }
 }
 
-//@available(iOS 14.0, *)
 struct KuditLogo_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {

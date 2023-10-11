@@ -17,7 +17,7 @@ import StoreKit
 import DeviceKit
 // https://swiftuirecipes.com/blog/send-mail-in-swiftui
 
-// TODO: Build these out with special functions.  Named types to keep things clear and consistent.
+// MARK: - FAQs
 typealias HTML = String
 extension HTML {
     /// Cleans the HTML content to ensure this isn't just a snippet of HTML and includes the proper headers, etc.
@@ -124,6 +124,7 @@ struct KuditConnectFAQ: View {
 // TODO: Add searching and pull to refresh to FAQs
 struct KuditConnectFAQs: View {
     @Environment(\.dismiss) var dismiss
+	@Environment(\.openURL) var openURL
     var selectedFAQ: String? // TODO: allow setting this to automatically navigate to the selected FAQ
     @ObservedObject var connect: KuditConnect
     var body: some View {
@@ -141,6 +142,11 @@ struct KuditConnectFAQs: View {
                         }
                     }
                 }
+				Section("Question not answered?") {
+					Button("Contact Support") {
+						KuditConnect.shared.contactSupport(openURL)
+					}
+				}
                 // TODO: add in section to contact support
             }
             .refreshable {
@@ -189,6 +195,10 @@ struct KuditConnectFAQs: View {
  // TODO: Trap mailto links and convert to internal action to present mail controller?
 */
 
+/// For presenting KuditConnect menu information.  Usually won't need, but if you want to customize the email message, modify this shared object.  Example to append data:
+///  KuditConnect.shared.customizeMessageBody = { original in original + "\nMy New Data" }
+// TODO: Have option to include data as file attachment (for Shout It, Score, Halloween Tracker)
+// MARK: - KuditConnect model
 public class KuditConnect: ObservableObject {
     static var shared = KuditConnect()
     
@@ -233,7 +243,7 @@ public class KuditConnect: ObservableObject {
     
     /// This should be run in a background thread to get API data from the server.
     func loadDataFromAPI(_ api: String, info: String = "") async throws -> String {
-        let apiURLString = apiURLString("faq", info: info)
+        let apiURLString = apiURLString(api, info: info)
 
         // Convert string to URL (should never fail!)
         guard let url = URL(string:apiURLString) else {
@@ -271,7 +281,7 @@ public class KuditConnect: ObservableObject {
     }
     func loadFromServer() async {
         do {
-            let string = try await loadDataFromAPI("faqs")
+            let string = try await loadDataFromAPI("faq")
             let wrapper = try KCWrapper(fromJSON: string)
             // filter FAQs based on what the actual app version is
             let filtered = wrapper.faqs.filter { $0.visible(in: Application.main.version) }
@@ -286,6 +296,7 @@ public class KuditConnect: ObservableObject {
     
     @Published var faqs: [KuditFAQ] // TODO: have a way of loading on demand
     
+	// MARK: - Support Email
     @Published public var customizeMessageBody: (String) -> String = {$0} // TODO: Add ability to add files and photos?
     
     @Published var supportEmailData = ComposeMailData(subject: "Unspecified", recipients: [], message: "Overwrite", attachments: nil)
@@ -302,8 +313,8 @@ public class KuditConnect: ObservableObject {
   Device: \(Device.current.description)
   Screen Ratio: \(Device.current.screenRatio)
   System: \(Device.current.systemName ?? "Unavailable") \(Device.current.systemVersion ?? "Unknown")
-  Battery Level: \(String(describing: Device.current.batteryLevel))
-  Available Storage: \(Device.volumeAvailableCapacityForOpportunisticUsage?.description ?? "Unknown")
+  Battery Level: \(Device.current.batteryLevel?.description ?? "Unknown")%
+  Available Storage: \(Device.volumeAvailableCapacityForOpportunisticUsage?.byteString ?? "Unknown")
   KuditFrameworks version: \(Application.main.frameworkVersion)
   KuditConnect version: \(Self.kuditConnectVersion)
   """
@@ -341,7 +352,11 @@ This section is to help us properly route your feedback and help troubleshoot an
             attachments: nil)
         return supportEmailData.mailtoLink
     }
-    
+
+	public func contactSupport(_ openURL: OpenURLAction) {
+		openURL(generateSupportEmailLink())
+	}
+
     public static let kuditAPIURL = "https://www.kudit.com/api"
     public static let kuditConnectVersion = Version("3.0")
     
@@ -354,7 +369,7 @@ This section is to help us properly route your feedback and help troubleshoot an
         do {
             let string = try await loadDataFromAPI("kudos", info: "&info=\(customizeMessageBody(appInformation).urlEncoded)")
             if string != "SUCCESS" {
-                throw CustomError("Unable to send Kudos :-(", level: .ERROR)
+                throw CustomError("Unable to send Kudos :-( Server responded: \(string)", level: .ERROR)
             }
             return "Thank you so much for sending kudos to the \(displayName) team!  It means a lot to them.  Please rate the app and leave a review to really help the team out!"
         } catch {
@@ -366,9 +381,8 @@ This section is to help us properly route your feedback and help troubleshoot an
 
 public struct KuditConnectMenu<Content: View>: View {
     public var additionalMenus: () -> Content
-    
-    public init(customizeMessageBody: @escaping (String) -> String = {$0}, @ViewBuilder additionalMenus: @escaping () -> Content = { EmptyView() }) {
-        KuditConnect.shared.customizeMessageBody = customizeMessageBody
+	    
+    public init(@ViewBuilder additionalMenus: @escaping () -> Content = { EmptyView() }) {
         self.additionalMenus = additionalMenus
     }
         
@@ -391,7 +405,7 @@ public struct KuditConnectMenu<Content: View>: View {
             Button(action: {
                 Vibration.light.vibrate()
                 // Generate support email when button pressed but not before
-                contactSupport()
+				KuditConnect.shared.contactSupport(openURL)
 //                showMailView = true
             }) {
                 Label("Contact Support", systemImage: "envelope")
@@ -415,8 +429,19 @@ public struct KuditConnectMenu<Content: View>: View {
             }*/
             Button(action: {
                 Vibration.light.vibrate()
-                showKudos.toggle()
-                Task {
+
+				// TODO: Double check and polish animations
+				var transaction = Transaction(animation: .linear)
+				transaction.disablesAnimations = true
+				// add custom animation for presenting and dismissing the FullScreenCover
+				transaction.animation = .linear(duration: 0.2)
+
+				// disable the default FullScreenCover animation
+				withTransaction(transaction) {
+					showKudos.toggle()
+				}
+
+				Task {
                     // Use kudos messages result in KudosView - have a binding so can change/update
                     kudosMessageText = await KuditConnect.shared.sendKudos()
                     Vibration.heavy.vibrate()
@@ -429,7 +454,6 @@ public struct KuditConnectMenu<Content: View>: View {
             //                    Button("Add Passbook Pass", action: {})
         } label: {
             Label("KuditConnect support menu", systemImage: "questionmark.bubble")
-            // TODO: Try with KuditLogo shape?
         }
         .sheet(isPresented: $showFAQs) {
             KuditConnectFAQs(connect: KuditConnect.shared)
@@ -441,7 +465,16 @@ public struct KuditConnectMenu<Content: View>: View {
                     KudosView(messageText: $kudosMessageText, isKudosScreenVisible: $isKudosScreenVisible)
                     .onDisappear {
                         // dismiss the FullScreenCover - how does making this invisible making it disappear?
-                        showKudos = false
+
+						var transaction = Transaction(animation: .linear)
+						transaction.disablesAnimations = true
+						// add custom animation for presenting and dismissing the FullScreenCover
+						transaction.animation = .linear(duration: 0.2)
+
+						// disable the default FullScreenCover animation
+						withTransaction(transaction) {
+							showKudos = false
+						}
                     }
                 }
             }
@@ -449,20 +482,6 @@ public struct KuditConnectMenu<Content: View>: View {
                 isKudosScreenVisible = true
             }
         }
-        .transaction({ transaction in
-            // disable the default FullScreenCover animation
-            transaction.disablesAnimations = true
-            // add custom animation for presenting and dismissing the FullScreenCover
-            transaction.animation = .linear(duration: 0.2)
-        })
-
-    }
-    
-    // MARK: - FAQs
-
-    // MARK: - Support Email
-    public func contactSupport() {
-        openURL(KuditConnect.shared.generateSupportEmailLink())
     }
 }
 // MARK: - Kudos
@@ -511,6 +530,7 @@ private struct KudosOverlayView: View {
                 Text(messageText)
                     .italic()
                     .multilineTextAlignment(.center)
+					.frame(maxWidth: 300)
                 if #available(iOS 16, *) {
                     ReviewButton {
                         isKudosScreenVisible = false

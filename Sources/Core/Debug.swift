@@ -38,6 +38,7 @@ public enum DebugLevel: Comparable {
     case WARNING
     case NOTICE
     case DEBUG
+	/// Change this value in production to DebugLevvel.ERROR to minimize logging.
     public static var currentLevel = DebugLevel.DEBUG
     public static var defaultLevel = DebugLevel.ERROR
 	/// setting this to false will make debug( act exactly like print(

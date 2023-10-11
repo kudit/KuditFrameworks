@@ -200,7 +200,7 @@ struct KuditConnectFAQs: View {
 // TODO: Have option to include data as file attachment (for Shout It, Score, Halloween Tracker)
 // MARK: - KuditConnect model
 public class KuditConnect: ObservableObject {
-    static var shared = KuditConnect()
+    public static var shared = KuditConnect()
     
     public init() {
         // TODO: Load FAQs

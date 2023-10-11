@@ -2,6 +2,7 @@
 
 Additional components, simpler, and convenience code for Kudit projects.
 
+v4.0.6 10/11/2023 Fixed versioning numbering to support swift package updates.
 v4.0.5.1 10/11/2023 Fixed problem with KuditConnect API loader not calling appropriate API (causing Kudos to fail).  Added additional check in Tests to silence warning in Xcode.  Added .build parameter for versioning so development checkins are incrementing the build number, not the patch value.  Fixed byteString to be available on Int64 as well as UInt64.  Fixed issues with KuditConnectMenu initialization setting a value.  Will need to assign separately from now on.  Fixed FAQ animations (were disabled due to Kudos transactions)
 v4.0.5 10/10/2023 Shifted the update of FAQs to force on the main thread.  Enabled FAQs to filter by version.  Added Array.pad function.  Created Version struct that is RawRepresentable. Completely shifted Version from String type to custom Version type that will have to be converted to/from String.  Codable conformance SHOULD work.
 v4.0.4 10/10/2023 Made coding parameters align with the dictionary and JSON encoders and decoders for easier consistency.  Made sure to add public init functions to allow consistent use.  Fixed frameworks app testing code for FAQs.  Added pull to refresh for FAQs.

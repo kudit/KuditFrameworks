@@ -22,18 +22,18 @@ public struct Version: RawRepresentable, Hashable, Comparable, Codable, CustomSt
         return rawValue
     }
     
+    /// MAJOR version when you make incompatible API changes
     public var major: Int {
         return self.components[safe: 0] ?? 0
     }
+    /// MINOR version when you add functionality in a backward compatible manner
     public var minor: Int {
         return self.components[safe: 1] ?? 0
     }
+    /// PATCH version when you make backward compatible bug fixes
     public var patch: Int {
         return self.components[safe: 2] ?? 0
     }
-	public var build: Int {
-		return self.components[safe: 3] ?? 0
-	}
 
     public var components: [Int] {
         self.rawValue.components(separatedBy: ".").map { Int($0) ?? -1 }

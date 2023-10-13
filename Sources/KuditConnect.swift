@@ -97,34 +97,18 @@ extension [KuditFAQ] {
     }
 }
 
-import UIKit
-struct HTMLView: UIViewRepresentable {
-    let html: HTML
-    func updateUIView(_ uiView: UITextView, context: UIViewRepresentableContext<Self>) {
-        DispatchQueue.main.async {
-            uiView.isEditable = false
-            uiView.attributedText = html.attributedString
-        }
-    }
-    func makeUIView(context: UIViewRepresentableContext<Self>) -> UITextView {
-        let label = UITextView()
-        return label
-    }
-}
-
 struct KuditConnectFAQ: View {
     @Environment(\.colorScheme) var colorScheme
     var faq: KuditFAQ
     var body: some View {
-        HTMLView(html: faq.answerHTML(textColor: colorScheme == .dark ? .white : .black))
-            .padding()
+        HTMLView(htmlString: faq.answerHTML(textColor: colorScheme == .dark ? .white : .black))
             .navigationTitle(faq.question)
     }
 }
 // TODO: Add searching and pull to refresh to FAQs
 struct KuditConnectFAQs: View {
     @Environment(\.dismiss) var dismiss
-	@Environment(\.openURL) var openURL
+    @Environment(\.openURL) var openURL
     var selectedFAQ: String? // TODO: allow setting this to automatically navigate to the selected FAQ
     @ObservedObject var connect: KuditConnect
     var body: some View {
@@ -142,11 +126,11 @@ struct KuditConnectFAQs: View {
                         }
                     }
                 }
-				Section("Question not answered?") {
-					Button("Contact Support") {
-						KuditConnect.shared.contactSupport(openURL)
-					}
-				}
+                Section("Question not answered?") {
+                    Button("Contact Support") {
+                        KuditConnect.shared.contactSupport(openURL)
+                    }
+                }
                 // TODO: add in section to contact support
             }
             .refreshable {
@@ -296,7 +280,7 @@ public class KuditConnect: ObservableObject {
     
     @Published var faqs: [KuditFAQ] // TODO: have a way of loading on demand
     
-	// MARK: - Support Email
+    // MARK: - Support Email
     @Published public var customizeMessageBody: (String) -> String = {$0} // TODO: Add ability to add files and photos?
     
     @Published var supportEmailData = ComposeMailData(subject: "Unspecified", recipients: [], message: "Overwrite", attachments: nil)
@@ -353,9 +337,9 @@ This section is to help us properly route your feedback and help troubleshoot an
         return supportEmailData.mailtoLink
     }
 
-	public func contactSupport(_ openURL: OpenURLAction) {
-		openURL(generateSupportEmailLink())
-	}
+    public func contactSupport(_ openURL: OpenURLAction) {
+        openURL(generateSupportEmailLink())
+    }
 
     public static let kuditAPIURL = "https://www.kudit.com/api"
     public static let kuditConnectVersion = Version("3.0")
@@ -381,7 +365,7 @@ This section is to help us properly route your feedback and help troubleshoot an
 
 public struct KuditConnectMenu<Content: View>: View {
     public var additionalMenus: () -> Content
-	    
+        
     public init(@ViewBuilder additionalMenus: @escaping () -> Content = { EmptyView() }) {
         self.additionalMenus = additionalMenus
     }
@@ -395,7 +379,7 @@ public struct KuditConnectMenu<Content: View>: View {
     @State private var isKudosScreenVisible = false
     public var body: some View {
         Menu {
-            Text("Version \(Application.main.version)")
+            Text("Version \(Application.main.version)" + (DebugLevel.currentLevel == .DEBUG ? "  DEBUG" : ""))
             additionalMenus()
             Button(action: {
                 showFAQs = true
@@ -405,7 +389,7 @@ public struct KuditConnectMenu<Content: View>: View {
             Button(action: {
                 Vibration.light.vibrate()
                 // Generate support email when button pressed but not before
-				KuditConnect.shared.contactSupport(openURL)
+                KuditConnect.shared.contactSupport(openURL)
 //                showMailView = true
             }) {
                 Label("Contact Support", systemImage: "envelope")
@@ -430,18 +414,18 @@ public struct KuditConnectMenu<Content: View>: View {
             Button(action: {
                 Vibration.light.vibrate()
 
-				// TODO: Double check and polish animations
-				var transaction = Transaction(animation: .linear)
-				transaction.disablesAnimations = true
-				// add custom animation for presenting and dismissing the FullScreenCover
-				transaction.animation = .linear(duration: 0.2)
+                // TODO: Double check and polish animations
+                var transaction = Transaction(animation: .linear)
+                transaction.disablesAnimations = true
+                // add custom animation for presenting and dismissing the FullScreenCover
+                transaction.animation = .linear(duration: 0.2)
 
-				// disable the default FullScreenCover animation
-				withTransaction(transaction) {
-					showKudos.toggle()
-				}
+                // disable the default FullScreenCover animation
+                withTransaction(transaction) {
+                    showKudos.toggle()
+                }
 
-				Task {
+                Task {
                     // Use kudos messages result in KudosView - have a binding so can change/update
                     kudosMessageText = await KuditConnect.shared.sendKudos()
                     Vibration.heavy.vibrate()
@@ -466,15 +450,15 @@ public struct KuditConnectMenu<Content: View>: View {
                     .onDisappear {
                         // dismiss the FullScreenCover - how does making this invisible making it disappear?
 
-						var transaction = Transaction(animation: .linear)
-						transaction.disablesAnimations = true
-						// add custom animation for presenting and dismissing the FullScreenCover
-						transaction.animation = .linear(duration: 0.2)
+                        var transaction = Transaction(animation: .linear)
+                        transaction.disablesAnimations = true
+                        // add custom animation for presenting and dismissing the FullScreenCover
+                        transaction.animation = .linear(duration: 0.2)
 
-						// disable the default FullScreenCover animation
-						withTransaction(transaction) {
-							showKudos = false
-						}
+                        // disable the default FullScreenCover animation
+                        withTransaction(transaction) {
+                            showKudos = false
+                        }
                     }
                 }
             }
@@ -530,7 +514,7 @@ private struct KudosOverlayView: View {
                 Text(messageText)
                     .italic()
                     .multilineTextAlignment(.center)
-					.frame(maxWidth: 300)
+                    .frame(maxWidth: 300)
                 if #available(iOS 16, *) {
                     ReviewButton {
                         isKudosScreenVisible = false

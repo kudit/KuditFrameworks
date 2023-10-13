@@ -17,6 +17,22 @@ public protocol KuColor: Codable {
     func getHue(_ hue: UnsafeMutablePointer<CGFloat>?, saturation: UnsafeMutablePointer<CGFloat>?, brightness: UnsafeMutablePointer<CGFloat>?, alpha: UnsafeMutablePointer<CGFloat>?) -> Bool
 }
 
+// the LosslessStringConvertible extension does not work for KuColor since a color may be initialized by a string but the corresponding unlabelled init function is not the one we want.
+public extension KuColor {
+    init(string: String?, defaultColor: Self) {
+        guard let string else {
+            self = defaultColor
+            return
+        }
+        guard let color = Self(string: string) else {
+            self = defaultColor
+            return
+        }
+        self = color
+    }
+}
+
+
 #if canImport(UIKit)
 import UIKit
 extension UIColor: KuColor {}
@@ -452,7 +468,7 @@ public extension KuColor {
         self.init(red: color.redComponent, green: color.greenComponent, blue: color.blueComponent, alpha: color.alphaComponent)
     }
     /**
-     KF: Creates a Color from the given string in #HEX format, named CSS string, rgb(), or rgba() format.
+     KF: Creates a Color from the given string in #HEX format, named CSS string, rgb(), or rgba() format.  Important to have named parameter string: to differentiate from SwiftUI Color(_:String) init from a named color in an asset bundle.
      
      - Parameter string: The string to be converted.
      

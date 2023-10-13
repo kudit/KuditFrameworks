@@ -2,6 +2,7 @@
 
 Additional components, simpler, and convenience code for Kudit projects.
 
+v4.0.8 10/11/2023 Added encoding/decoding strategies to dictionary coding.  Added Debug message to KuditConnect for reminder to set DebugLevel.current = .NOTICE (or higher for production).  Re-worked FAQ rendering to use new HTMLView which works better with images and layout.  Added LosslessStringConvertible and KuColor default value constructors to work with possibly empty values to guarantee a return so we don't have to do an optionals dance.
 v4.0.7 10/11/2023 Fixed non-public access for KuditConnect.shared to support customizeMessageBody handler.
 v4.0.6 10/11/2023 Fixed versioning numbering to support swift package updates.
 v4.0.5.1 10/11/2023 Fixed problem with KuditConnect API loader not calling appropriate API (causing Kudos to fail).  Added additional check in Tests to silence warning in Xcode.  Added .build parameter for versioning so development checkins are incrementing the build number, not the patch value.  Fixed byteString to be available on Int64 as well as UInt64.  Fixed issues with KuditConnectMenu initialization setting a value.  Will need to assign separately from now on.  Fixed FAQ animations (were disabled due to Kudos transactions)

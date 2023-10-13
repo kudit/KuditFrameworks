@@ -17,14 +17,31 @@ import Foundation
 //import AppKit
 //#endif
 public extension Int64 {
-	var byteString: String {
-		ByteCountFormatter().string(fromByteCount: self)
-	}
+    /// Formats this value as a number of bytes (or kB/MB/GB/etc) using the ByteCountFormatter() to get a nice clean string.
+    var byteString: String {
+        ByteCountFormatter().string(fromByteCount: self)
+    }
 }
 public extension UInt64 {
-	var byteString: String {
-		Int64(self).byteString
-	}
+    /// Formats this value as a number of bytes (or kB/MB/GB/etc) using the ByteCountFormatter() to get a nice clean string.
+    var byteString: String {
+        Int64(self).byteString
+    }
+}
+
+public extension LosslessStringConvertible {
+    /// Initialize from a possibly empty string and a default value if the string is nil or if the conversion fails
+    init(string: String?, defaultValue: Self) {
+        guard let string else {
+            self = defaultValue
+            return
+        }
+        guard let converted = Self(string) else {
+            self = defaultValue
+            return
+        }
+        self = converted
+    }
 }
 
 extension CharacterSet: Testable {

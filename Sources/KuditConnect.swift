@@ -50,7 +50,7 @@ public struct KuditFAQ: Codable, Identifiable {
             debugHTML = ""
         }
         return """
- <html><head><link rel="stylesheet" type="text/css" href="\(KuditConnect.kuditAPIURL)/styles.css?lastUpdate=\(updated)" /></head><body style="font-family: -apple-system;color: \(textColor.cssString);">\(answer)\(debugHTML)</body></html>
+ <html><head><meta name="viewport" content="width=device-width" /><link rel="stylesheet" type="text/css" href="\(KuditConnect.kuditAPIURL)/styles.css?lastUpdate=\(updated)" /></head><body style="font-family: -apple-system;color: \(textColor.cssString);">\(answer)\(debugHTML)</body></html>
 """
     }
 }

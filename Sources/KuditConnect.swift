@@ -18,52 +18,21 @@ import DeviceKit
 // https://swiftuirecipes.com/blog/send-mail-in-swiftui
 
 // MARK: - FAQs
-typealias HTML = String
-extension HTML {
-    /// Cleans the HTML content to ensure this isn't just a snippet of HTML and includes the proper headers, etc.
-    var cleaned: HTML {
-        var cleaned = self
-        if !cleaned.contains("<body>") {
-            cleaned = """
-<body>
-\(cleaned)
-</body>
-"""
-        }        
-        if !cleaned.contains("<html>") {
-            cleaned = """
-<html>
-\(cleaned)
-</html>
-"""
-        }  
-        return cleaned
-    }
-    /// Generate an NSAttributedString from the HTML content enclosed
-    var attributedString: NSAttributedString {
-        let cleaned = self.cleaned
-        let data = Data(cleaned.utf8)
-        if let attributedString = try? NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil) {
-            return attributedString
-        }
-        return NSAttributedString(string: cleaned)
-    }
-}
-typealias MySQLDate = String // in the future, convert to actual date?  Support conversion to Date object?
-struct KuditFAQ: Codable, Identifiable {
-    var question: String
-    var answer: HTML
-    var category: String
-    var minversion: Version? // could be null
-    var maxversion: Version? // could be null
-    var updated: MySQLDate
-    var key: String { // TODO: Is this still needed?
+public typealias MySQLDate = String // in the future, convert to actual date?  Support conversion to Date object?
+public struct KuditFAQ: Codable, Identifiable {
+    public var question: String
+    public var answer: HTML
+    public var category: String
+    public var minversion: Version? // could be null
+    public var maxversion: Version? // could be null
+    public var updated: MySQLDate
+    public var key: String { // TODO: Is this still needed?
         return "kuditConnectAlertShown:\(question)"
     }
-    var id: String {
+    public var id: String {
         question
     }
-    func visible(in version: Version) -> Bool {
+    public func visible(in version: Version) -> Bool {
         if let minversion, minversion > version {
             return false
         }
@@ -72,7 +41,7 @@ struct KuditFAQ: Codable, Identifiable {
         }
         return true
     }
-    func answerHTML(textColor: Color) -> HTML {
+    public func answerHTML(textColor: Color) -> HTML {
         var debugHTML = """
  <footer>(\(minversion?.rawValue ?? "n/a"),\(maxversion?.rawValue ?? "n/a")) \(updated) text: \(textColor.cssString)</footer>
 """
@@ -85,7 +54,7 @@ struct KuditFAQ: Codable, Identifiable {
 """
     }
 }
-extension [KuditFAQ] {
+public extension [KuditFAQ] {
     var categories: [String] {
         var categories = [String]()
         for faq in self {
@@ -203,7 +172,9 @@ public class KuditConnect: ObservableObject {
             identifier = "com.unknown.unknown" // for testing
         }
         let version = Application.main.version
-        let urlString = "\(Self.kuditAPIURL)/\(api).php?identifier=\(identifier.urlEncoded)&version=\(version)\(info)&kcVersion=\(Self.kuditConnectVersion)"
+        var urlString = "\(Self.kuditAPIURL)/\(api).php?identifier=\(identifier.urlEncoded)&version=\(version)&kcVersion=\(Self.kuditConnectVersion)\(info)"
+        // limit to 2000 characters to prevent URI overflow
+        urlString = String(urlString.prefix(2000))
         debug("Kudit Connect: API URL: \(urlString)", level: .NOTICE)
         return urlString
     }
@@ -278,7 +249,7 @@ public class KuditConnect: ObservableObject {
         }
     }
     
-    @Published var faqs: [KuditFAQ] // TODO: have a way of loading on demand
+    @Published public var faqs: [KuditFAQ] // TODO: have a way of loading on demand
     
     // MARK: - Support Email
     @Published public var customizeMessageBody: (String) -> String = {$0} // TODO: Add ability to add files and photos?

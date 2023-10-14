@@ -26,7 +26,7 @@ public struct KuditFrameworksTestView: View {
         NavigationView {
             VStack {
                 KuditLogo()
-                    .frame(size: 44)
+					.frame(size: 44)
                 Text("Hello, Kudit world!")
 //                let encoded = KuditConnect.shared.faqs.asJSON()
   //              Text(encoded)
@@ -51,5 +51,6 @@ public struct KuditFrameworksTestView: View {
 //                }
             }
         }
+		.navigationViewStyle(.stack)
     }
 }

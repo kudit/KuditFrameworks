@@ -2,6 +2,7 @@
 
 Additional components, simpler, and convenience code for Kudit projects.
 
+v4.0.9 10/12/2023 Truncated Kudit API calls to prevent long URL issues.  Added public visibility for HTMLView.  Re-worked to allow opening URLs in app/external app.  Fixed testing navigation styles to .stack for iPad views.  Deleted WebView since we're not really using that for anything.  Can look through history if you ever need a WebView.  Added HTML cleaning for strings.
 v4.0.8 10/11/2023 Added encoding/decoding strategies to dictionary coding.  Added Debug message to KuditConnect for reminder to set DebugLevel.current = .NOTICE (or higher for production).  Re-worked FAQ rendering to use new HTMLView which works better with images and layout.  Added LosslessStringConvertible and KuColor default value constructors to work with possibly empty values to guarantee a return so we don't have to do an optionals dance.
 v4.0.7 10/11/2023 Fixed non-public access for KuditConnect.shared to support customizeMessageBody handler.
 v4.0.6 10/11/2023 Fixed versioning numbering to support swift package updates.

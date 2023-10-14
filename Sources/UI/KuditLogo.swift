@@ -122,6 +122,7 @@ struct KuditLogo_Previews: PreviewProvider {
                 }
             }
         }
+		.navigationViewStyle(.stack)
         //.previewLayout(.fixed(width: 500, height: 500   ))
     }
 }

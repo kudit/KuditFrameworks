@@ -74,6 +74,39 @@ public extension CharacterSet {
     }
 }
 
+// MARK: - HTML
+public typealias HTML = String
+public extension HTML {
+    /// Cleans the HTML content to ensure this isn't just a snippet of HTML and includes the proper headers, etc.
+    var cleaned: HTML {
+        var cleaned = self
+        if !cleaned.contains("<body>") {
+            cleaned = """
+<body>
+\(cleaned)
+</body>
+"""
+        }        
+        if !cleaned.contains("<html>") {
+            cleaned = """
+<html>
+\(cleaned)
+</html>
+"""
+        }  
+        return cleaned
+    }
+    /// Generate an NSAttributedString from the HTML content enclosed
+    var attributedString: NSAttributedString {
+        let cleaned = self.cleaned
+        let data = Data(cleaned.utf8)
+        if let attributedString = try? NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html], documentAttributes: nil) {
+            return attributedString
+        }
+        return NSAttributedString(string: cleaned)
+    }
+}
+
 extension String: Testable {}
 public extension String {
     static var INVALID_ENCODING = "INVALID_ENCODING"

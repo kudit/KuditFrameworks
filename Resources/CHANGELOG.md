@@ -2,6 +2,7 @@
 
 Additional components, simpler, and convenience code for Kudit projects.
 
+v4.0.12 10/15/2023 Fixed bug where debug message was showing up in web view FAQ answers.  Default DebugLevel.currentLevel to .DEBUG when DEBUG flag is set and .NOTICE when not (for distribution).  Updated padding and default system font style for FAQ items.  Added Ink dependency for markdown parsing (and support markdown in FAQ items).
 v4.0.11 10/13/2023 Previous comment containing HTML seems to break Xcodes ability to include.
 v4.0.10 10/13/2023 Added <meta name="viewport" content="width=device-width" /> to FAQ HTML views to make layout and sized better for devices.
 v4.0.9 10/12/2023 Truncated Kudit API calls to prevent long URL issues.  Added public visibility for HTMLView.  Re-worked to allow opening URLs in app/external app.  Fixed testing navigation styles to .stack for iPad views.  Deleted WebView since we're not really using that for anything.  Can look through history if you ever need a WebView.  Added HTML cleaning for strings.
@@ -72,7 +73,15 @@ v3 was the iOS 13 compatible version (listed as v1.0.x above)
 v2 was the original SwiftUI port
 v1 Realistically was the original Objective-C Kudit Frameworks
 
-// TODO: Go through and add more tests for better code coverage!
+  // Ways to generate compiler warnings in code:
+ #warning("message")
+ #error("message")
 
+MARK: - Bugs to fix
+ FIXME: In tracking checks, look for DebugLevel set to debug and if so, add #warning to ensure compiler warning? Is this even possible?  
+
+MARK: - Features to add:
+ TODO: KuditConnect automatic screenshot when tapping menu
+// TODO: Go through and add more tests for better code coverage!
 
 // TODO: Update this once Swift 5.9 is released for playgrounds support Swift Macros: https://www.avanderlee.com/swift/macros/

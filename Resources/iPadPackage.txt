@@ -39,14 +39,16 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/GetStream/effects-library", "1.0.0"..<"2.0.0"),
-        .package(url: "https://github.com/devicekit/DeviceKit.git", "5.1.0"..<"6.0.0")
+        .package(url: "https://github.com/devicekit/DeviceKit.git", "5.1.0"..<"6.0.0"),
+        .package(url: "https://github.com/johnsundell/ink.git", "0.6.0"..<"1.0.0")
     ],
     targets: [
         .executableTarget(
             name: "AppModule",
             dependencies: [
                 .product(name: "EffectsLibrary", package: "effects-library"),
-                .product(name: "DeviceKit", package: "DeviceKit")
+                .product(name: "DeviceKit", package: "DeviceKit"),
+                .product(name: "Ink", package: "ink")
             ],
             path: ".",
             exclude: [], // "Sources/KuditFrameworks/KuditConnect/KuditConnectFAQs.xcdatamodeld"

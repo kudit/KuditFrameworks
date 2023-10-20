@@ -18,6 +18,7 @@ import DeviceKit
 // https://swiftuirecipes.com/blog/send-mail-in-swiftui
 
 // MARK: - FAQs
+import Ink
 public typealias MySQLDate = String // in the future, convert to actual date?  Support conversion to Date object?
 public struct KuditFAQ: Codable, Identifiable {
     public var question: String
@@ -46,11 +47,14 @@ public struct KuditFAQ: Codable, Identifiable {
  <footer>(\(minversion?.rawValue ?? "n/a"),\(maxversion?.rawValue ?? "n/a")) \(updated) text: \(textColor.cssString)</footer>
 """
 //        debug(debugHTML, level: .DEBUG)
-        if false && DebugLevel.currentLevel != .DEBUG {
+        if DebugLevel.currentLevel != .DEBUG {
             debugHTML = ""
         }
+        let parser = MarkdownParser()
+        let answerHTML = parser.html(from: answer)
+        // use web style so that we can update without updating code.
         return """
- <html><head><meta name="viewport" content="width=device-width" /><link rel="stylesheet" type="text/css" href="\(KuditConnect.kuditAPIURL)/styles.css?lastUpdate=\(updated)" /></head><body style="font-family: -apple-system;color: \(textColor.cssString);">\(answer)\(debugHTML)</body></html>
+ <html><head><meta name="viewport" content="width=device-width" /><link rel="stylesheet" type="text/css" href="\(KuditConnect.kuditAPIURL)/styles.css?version=\(Application.main.frameworkVersion)&lastUpdate=\(updated)" /></head><body style="font-family: -apple-system;color: \(textColor.cssString);">\(answerHTML)\(debugHTML)</body></html>
 """
     }
 }

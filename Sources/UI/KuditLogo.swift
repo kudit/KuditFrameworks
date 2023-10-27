@@ -33,7 +33,7 @@ public struct KuditLogoShape: Shape {
         }
     }
 
-    private let balls = [
+    private static let balls = [
         Ball(x: 0.69, y: 0.30, radius: 0.06), // NE
         Ball(x: 0.37, y: 0.75, radius: 0.13), // SW
         Ball(x: 0.32, y: 0.22, radius: 0.07), // NW
@@ -47,8 +47,8 @@ public struct KuditLogoShape: Shape {
         //// Bezier Drawing
         var path = Path()
         if (!ballsOnly) {
-            path.move(to: balls[0].center(for: rect))
-            balls.forEach { ball in
+            path.move(to: Self.balls[0].center(for: rect))
+            Self.balls.forEach { ball in
                 let center = ball.center(for: rect)
                 path.addLine(to: center)
             }
@@ -57,7 +57,7 @@ public struct KuditLogoShape: Shape {
                 .path(in: rect)
             path.addPath(circle)
         }
-        balls.forEach { ball in
+        Self.balls.forEach { ball in
             let ballRect = ball.rect(in: rect)
             let circle = Circle()
                 .path(in: ballRect)
@@ -122,7 +122,7 @@ struct KuditLogo_Previews: PreviewProvider {
                 }
             }
         }
-		.navigationViewStyle(.stack)
+        .navigationViewStyle(.stack)
         //.previewLayout(.fixed(width: 500, height: 500   ))
     }
 }

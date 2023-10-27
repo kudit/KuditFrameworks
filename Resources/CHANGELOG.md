@@ -2,6 +2,8 @@
 
 Additional components, simpler, and convenience code for Kudit projects.
 
+v4.0.14 10/27/2023 Fixed so KuditLogo could be public.
+v4.0.13 10/27/2023 Fix for missing comma in package causing it not to update.
 v4.0.12 10/15/2023 Fixed bug where debug message was showing up in web view FAQ answers.  Default DebugLevel.currentLevel to .DEBUG when DEBUG flag is set and .NOTICE when not (for distribution).  Updated padding and default system font style for FAQ items.  Added Ink dependency for markdown parsing (and support markdown in FAQ items).
 v4.0.11 10/13/2023 Previous comment containing HTML seems to break Xcodes ability to include.
 v4.0.10 10/13/2023 Added <meta name="viewport" content="width=device-width" /> to FAQ HTML views to make layout and sized better for devices.

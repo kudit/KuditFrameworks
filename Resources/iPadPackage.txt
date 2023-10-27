@@ -47,7 +47,7 @@ let package = Package(
             name: "AppModule",
             dependencies: [
                 .product(name: "EffectsLibrary", package: "effects-library"),
-                .product(name: "DeviceKit", package: "DeviceKit"),
+                .product(name: "DeviceKit", package: "devicekit"),
                 .product(name: "Ink", package: "ink")
             ],
             path: ".",

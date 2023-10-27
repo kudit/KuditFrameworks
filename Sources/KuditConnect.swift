@@ -344,7 +344,7 @@ public struct KuditConnectMenu<Content: View>: View {
     public init(@ViewBuilder additionalMenus: @escaping () -> Content = { EmptyView() }) {
         self.additionalMenus = additionalMenus
     }
-        
+            
     @Environment(\.openURL) var openURL
 
     @State private var showFAQs = false
@@ -412,6 +412,7 @@ public struct KuditConnectMenu<Content: View>: View {
             Text("KuditConnect v\(KuditConnect.kuditConnectVersion)")
             //                    Button("Add Passbook Pass", action: {})
         } label: {
+            // TODO: Have a way to customize global default as well as customizing on a per menu basis
             Label("KuditConnect support menu", systemImage: "questionmark.bubble")
         }
         .sheet(isPresented: $showFAQs) {

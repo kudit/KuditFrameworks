@@ -9,10 +9,10 @@ import SwiftUI
 
 // Our custom view modifier to track rotation and
 // call our action
-struct DeviceRotationViewModifier: ViewModifier {
+public struct DeviceRotationViewModifier: ViewModifier {
     let action: (UIDeviceOrientation) -> Void
         
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         content
             .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
                 action(UIDevice.current.orientation)
@@ -21,7 +21,7 @@ struct DeviceRotationViewModifier: ViewModifier {
 }
 
 // A View wrapper to make the modifier easier to use
-extension View {
+public extension View {
     func onRotate(perform action: @escaping (UIDeviceOrientation) -> Void) -> some View {
         self.modifier(DeviceRotationViewModifier(action: action))
     }

@@ -222,7 +222,7 @@ public class ExternalDisplayManager: ObservableObject {
         //        }
     }
     
-    @ViewBuilder var orientationPicker : some View {
+    @ViewBuilder public var orientationPicker : some View {
         let binding = Binding(get: {
             self.orientation
         }, set: {

@@ -26,7 +26,7 @@ public struct KuditFrameworksTestView: View {
         NavigationView {
             VStack {
                 KuditLogo()
-					.frame(size: 44)
+                    .frame(size: 44)
                 Text("Hello, Kudit world!")
 //                let encoded = KuditConnect.shared.faqs.asJSON()
   //              Text(encoded)
@@ -35,6 +35,7 @@ public struct KuditFrameworksTestView: View {
                 TimeClockView()
                 Text(KuditConnect.shared.appInformation)
                     .padding()
+                ColorPrettyTests()
             }
             .navigationTitle("Kudit Frameworks")
             .toolbar {
@@ -48,9 +49,11 @@ public struct KuditFrameworksTestView: View {
 //                    Button("Dismiss") {
 //                        testIsPresented = false
 //                    }
+//                    ColorPrettyTests()
+//                    TestsListView(tests: Color.tests + CharacterSet.tests + String.tests + PHP.tests)
 //                }
             }
         }
-		.navigationViewStyle(.stack)
+        .navigationViewStyle(.stack)
     }
 }

@@ -173,7 +173,7 @@ public extension Data {
 
 import SwiftUI
 @available(iOS 15, macCatalyst 15.0, *)
-class RecognizedImageModel: ObservableObject {
+public class RecognizedImageModel: ObservableObject {
     let urlString: String
     @Published var recognizedTexts = [RecognizedText]()
     

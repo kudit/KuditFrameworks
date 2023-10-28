@@ -9,7 +9,20 @@
  https://getstream.io/blog/using-swiftui-effects-library-how-to-add-particle-effects-to-ios-apps/
  
  https://github.com/GetStream/effects-library
+ 
+ Example usage with additional menu items:
+ 
+KuditConnectMenu {
+    Section {
+        Toggle("Left-handed mode", systemImage: manager.leftHandedMode ? "hand.point.left.fill" : "hand.point.left", isOn: $manager.leftHandedMode)
+        if ExternalDisplayManager.shared.displayConnected {
+            ExternalDisplayManager.shared.orientationPicker
+                .pickerStyle(.menu)
+        }
+    }
+}
  */
+
 
 import SwiftUI
 import StoreKit
@@ -341,7 +354,7 @@ This section is to help us properly route your feedback and help troubleshoot an
 public struct KuditConnectMenu<Content: View>: View {
     public var additionalMenus: () -> Content
         
-    public init(@ViewBuilder additionalMenus: @escaping () -> Content = { EmptyView() }) {
+	public init(@ViewBuilder additionalMenus: @escaping () -> Content = { EmptyView() }) {
         self.additionalMenus = additionalMenus
     }
             

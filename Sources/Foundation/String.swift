@@ -236,8 +236,10 @@ public extension String {
         self = self.trimmed
     }
     /// Returns a new string made by removing from both ends of the `String` instances of the given string.
+    /// Returns a new string made by removing from both ends of the `String` instances of the given string.
+    // Fixed to use Substrings so we don't have to do length or indexing.
     func trimming(_ trimString: String) -> String {
-        var returnString = self[self.startIndex...self.endIndex]
+        var returnString = Substring(self)
         while returnString.hasPrefix(trimString) {
             //returnString = returnString.substring(from: returnString.characters.index(returnString.startIndex, offsetBy: trimString.length))
             let index = returnString.index(returnString.startIndex, offsetBy: trimString.count)
@@ -245,6 +247,7 @@ public extension String {
         }
         while returnString.hasSuffix(trimString) {
             let index = returnString.index(returnString.endIndex, offsetBy: -trimString.count)
+            print("Trimming suffix \(trimString) from \(returnString) offset: \(-trimString.count)")
             returnString = returnString.prefix(through: index)
             //returnString = returnString.substring(to: returnString.characters.index(returnString.endIndex, offsetBy: -trimString.length))
         }

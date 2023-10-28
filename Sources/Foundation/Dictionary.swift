@@ -9,8 +9,12 @@
 import Foundation
 
 public extension Dictionary where Value: AnyObject {
-    /// return the first encountered key for the given class object.
+    @available(*, deprecated, renamed: "firstKey")
     func key(for value: AnyObject) -> Key? {
+        return firstKey(for: value)         
+    }
+    /// return the first encountered key for the given class object.
+    func firstKey(for value: AnyObject) -> Key? {
         for (key, val) in self {
             if val === value {
                 return key
@@ -20,8 +24,12 @@ public extension Dictionary where Value: AnyObject {
     }
 }
 public extension Dictionary where Value: Equatable {
-    /// return the first encountered key for the given equatable value.
+    @available(*, deprecated, renamed: "firstKey")
     func key(for value: Value) -> Key? {
+        return firstKey(for: value)         
+    }
+    /// return the first encountered key for the given equatable value.
+    func firstKey(for value: Value) -> Key? {
         for (key, val) in self {
             if val == value {
                 return key

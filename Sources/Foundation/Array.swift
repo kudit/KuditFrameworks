@@ -92,3 +92,27 @@ public extension Collection {
         }
     }  
 }
+
+// Array Identifiable
+extension Array where Element: Identifiable {
+    public subscript(id: Element.ID) -> Element? {
+        get {
+            first { $0.id == id }
+        }
+        set {
+            guard let index = firstIndex(where: { $0.id == id }) else {
+                debug("Attempting to set a value in an array keyed by id subscript but index could not be found")
+                return
+            }
+            guard let newValue else {
+                debug("Attempting to set an id subscript value to nil")
+                return
+            }
+            self[index] = newValue
+        }
+    }
+}
+
+// let arrayOfIdentifiables = []
+// let itemWithId = arrayOfIdentifiables[id]
+

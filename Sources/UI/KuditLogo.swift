@@ -65,13 +65,16 @@ public struct KuditLogoShape: Shape {
         }
         return path
     }
+    public init(ballsOnly: Bool = false) {
+		self.ballsOnly = ballsOnly
+	}
 }
 
 #if canImport(SwiftUI)
 import SwiftUI
 public struct KuditLogo: View {
-    public var weight: CGFloat = 1
-    public var color: Color = .accentColor
+    public var weight: CGFloat
+    public var color: Color
     public var body: some View {
         ZStack {
             KuditLogoShape()
@@ -80,6 +83,10 @@ public struct KuditLogo: View {
             KuditLogoShape(ballsOnly: true)
                 .fill(color)
         }
+    }
+    public init(weight: CGFloat = 1, color: Color = .accentColor) {
+        self.weight = weight
+        self.color = color
     }
 }
 

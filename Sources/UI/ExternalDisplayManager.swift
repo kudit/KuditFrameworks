@@ -165,7 +165,7 @@ struct ExternalViewWrapper<Content: View>: View {
 }
 
 public class ExternalDisplayManager: ObservableObject {
-    static var shared = ExternalDisplayManager()
+    public static var shared = ExternalDisplayManager()
     
     @Published public var orientation: ExternalDisplayOrientation = .upright
     @Published private var externalWindow: UIWindow?

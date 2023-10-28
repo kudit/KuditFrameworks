@@ -2,6 +2,7 @@
 
 Additional components, simpler, and convenience code for Kudit projects.
 
+v4.0.17 10/27/2023 Fixed ExternalDisplayManager.shared not being public.
 v4.0.16 10/27/2023 Fixed onRotate not being public.
 v4.0.15 10/27/2023 Tried adding public init methods to KuditLogo to allow public init.  Added ExternalDisplayManager code to simplify use in Shout It and Score.  Updated trimming code to be more compatible.  Added pretty version of KuColor for better output.  Fixed HEX output of color to go to FF rather than FE.  Enabled KuditConnectMenu() with no parameters.  Added alpha support for SwiftUI colors now that it's supported (iOS 13+).  Will need to find another way to extract values from SwiftUI color now that cgColor view is deprecated.
 v4.0.14 10/27/2023 Fixed so KuditLogo could be public. (didn't work)

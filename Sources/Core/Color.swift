@@ -20,173 +20,173 @@ public protocol KuColor: Codable, Equatable {
 
 // the LosslessStringConvertible extension does not work for KuColor since a color may be initialized by a string but the corresponding unlabelled init function is not the one we want.
 public extension KuColor {
-    init(string: String?, defaultColor: Self) {
-        guard let string else {
-            self = defaultColor
-            return
-        }
-        guard let color = Self(string: string) else {
-            self = defaultColor
-            return
-        }
-        self = color
-    }
+	init(string: String?, defaultColor: Self) {
+		guard let string else {
+			self = defaultColor
+			return
+		}
+		guard let color = Self(string: string) else {
+			self = defaultColor
+			return
+		}
+		self = color
+	}
 }
 
 // adding equatable conformance for colors
 extension KuColor {
-    static func ==(lhs:Self, rhs:Self) -> Bool {
-        return lhs.redComponent == rhs.redComponent
-        && lhs.greenComponent == rhs.greenComponent
-        && lhs.blueComponent == rhs.blueComponent
-        && lhs.alphaComponent == rhs.alphaComponent
-    }
+	static func ==(lhs:Self, rhs:Self) -> Bool {
+		return lhs.redComponent == rhs.redComponent
+		&& lhs.greenComponent == rhs.greenComponent
+		&& lhs.blueComponent == rhs.blueComponent
+		&& lhs.alphaComponent == rhs.alphaComponent
+	}
 }
 
 #if canImport(UIKit)
 import UIKit
 extension UIColor: KuColor {}
 public extension KuColor {
-    var uiColor: UIColor {
-        let components = rgbaComponents
-        return UIColor(red: components.red, green: components.green, blue: components.blue, alpha: components.alpha)
-    }
+	var uiColor: UIColor {
+		let components = rgbaComponents
+		return UIColor(red: components.red, green: components.green, blue: components.blue, alpha: components.alpha)
+	}
 }
 public extension UIColor {
-    // for coding assistance
-    func asData() throws -> Data {
-        return try NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: true)
-    }
-    convenience init?(_ data: Data) {
-        guard let c = try? NSKeyedUnarchiver.unarchivedObject(ofClass: UIColor.self, from: data) else {
-            return nil
-        }
-        // init with values
-        self.init(red: c.redComponent, green: c.greenComponent, blue: c.blueComponent, alpha: c.alphaComponent)
-    }
+	// for coding assistance
+	func asData() throws -> Data {
+		return try NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: true)
+	}
+	convenience init?(_ data: Data) {
+		guard let c = try? NSKeyedUnarchiver.unarchivedObject(ofClass: UIColor.self, from: data) else {
+			return nil
+		}
+		// init with values
+		self.init(red: c.redComponent, green: c.greenComponent, blue: c.blueComponent, alpha: c.alphaComponent)
+	}
 }
 #endif
 
 #if canImport(SwiftUI)
 import SwiftUI
 extension Color: KuColor {
-    public init(red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
+	public init(red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
 		self.init(red: red, green: green, blue: blue, opacity: alpha)
-    }
-    
-    public init(hue: CGFloat, saturation: CGFloat, brightness: CGFloat, alpha: CGFloat) {
+	}
+	
+	public init(hue: CGFloat, saturation: CGFloat, brightness: CGFloat, alpha: CGFloat) {
 		self.init(hue: hue, saturation: saturation, brightness: brightness, opacity: alpha)
-    }
-    
-    public func getRed(_ red: UnsafeMutablePointer<CGFloat>?, green: UnsafeMutablePointer<CGFloat>?, blue: UnsafeMutablePointer<CGFloat>?, alpha: UnsafeMutablePointer<CGFloat>?) -> Bool {
-        // Switch for built-in colors
-        let zero = CGFloat(0.0)
-        let black = (red: zero, green: zero, blue: zero, alpha: zero)
-        var rgba = black
-        switch self {
-        case .blue:
-            rgba = (red: 0/255, green: 112/255, blue: 255/255, alpha: 1)
-        case .brown:
-            rgba = (red: 162/255, green: 132/255, blue: 94/255, alpha: 1)
-        case .clear:
-            rgba = (red: 0, green: 0, blue: 0, alpha: 0)
-        case .cyan:
-            rgba = (red: 50/255, green: 173/255, blue: 230/255, alpha: 1)
-        case .gray:
-            rgba = (red: 142/255, green: 142/255, blue: 147/255, alpha: 1)
-        case .green:
-            rgba = (red: 52/255, green: 199/255, blue: 89/255, alpha: 1)
-        case .indigo:
-            rgba = (red: 88/255, green: 86/255, blue: 214/255, alpha: 1)
-        case .mint:
-            rgba = (red: 0/255, green: 199/255, blue: 190/255, alpha: 1)
-        case .orange:
-            rgba = (red: 255/255, green: 149/255, blue: 0/255, alpha: 1)
-        case .pink:
-            rgba = (red: 255/255, green: 45/255, blue: 85/255, alpha: 1)
-        case .purple:
-            rgba = (red: 175/255, green: 82/255, blue: 222/255, alpha: 1)
-        case .red:
-            rgba = (red: 255/255, green: 59/255, blue: 48/255, alpha: 1)
-        case .teal:
-            rgba = (red: 48/255, green: 176/255, blue: 199/255, alpha: 1)
-        case .white: // seems to work already
-            rgba = (red: 1, green: 1, blue: 1, alpha: 1)
-        case .yellow:
-            rgba = (red: 255/255, green: 204/255, blue: 0/255, alpha: 1)
-        default:
-            break
-            // nothing.  Default to black.
-            // Impossible to calculate for accentColor/primary/secondary/.  Perhaps return something else?
-            //print("Unable to determine SwiftUI Color: \(color)")
-        }
-        if rgba != black {
-            // try using defined values first from above
-            red?.pointee = rgba.red
-            green?.pointee = rgba.green
-            blue?.pointee = rgba.blue
-            alpha?.pointee = rgba.alpha
-            return true
-        }
-        
-        guard let cgColor = cgColor, let components = cgColor.components, components.count >= 3 else {
-            return false
-        }
-        
-        red?.pointee = components[0]
-        green?.pointee = components[1]
-        blue?.pointee = components[2]
+	}
+	
+	public func getRed(_ red: UnsafeMutablePointer<CGFloat>?, green: UnsafeMutablePointer<CGFloat>?, blue: UnsafeMutablePointer<CGFloat>?, alpha: UnsafeMutablePointer<CGFloat>?) -> Bool {
+		// Switch for built-in colors
+		let zero = CGFloat(0.0)
+		let black = (red: zero, green: zero, blue: zero, alpha: zero)
+		var rgba = black
+		switch self {
+		case .blue:
+			rgba = (red: 0/255, green: 112/255, blue: 255/255, alpha: 1)
+		case .brown:
+			rgba = (red: 162/255, green: 132/255, blue: 94/255, alpha: 1)
+		case .clear:
+			rgba = (red: 0, green: 0, blue: 0, alpha: 0)
+		case .cyan:
+			rgba = (red: 50/255, green: 173/255, blue: 230/255, alpha: 1)
+		case .gray:
+			rgba = (red: 142/255, green: 142/255, blue: 147/255, alpha: 1)
+		case .green:
+			rgba = (red: 52/255, green: 199/255, blue: 89/255, alpha: 1)
+		case .indigo:
+			rgba = (red: 88/255, green: 86/255, blue: 214/255, alpha: 1)
+		case .mint:
+			rgba = (red: 0/255, green: 199/255, blue: 190/255, alpha: 1)
+		case .orange:
+			rgba = (red: 255/255, green: 149/255, blue: 0/255, alpha: 1)
+		case .pink:
+			rgba = (red: 255/255, green: 45/255, blue: 85/255, alpha: 1)
+		case .purple:
+			rgba = (red: 175/255, green: 82/255, blue: 222/255, alpha: 1)
+		case .red:
+			rgba = (red: 255/255, green: 59/255, blue: 48/255, alpha: 1)
+		case .teal:
+			rgba = (red: 48/255, green: 176/255, blue: 199/255, alpha: 1)
+		case .white: // seems to work already
+			rgba = (red: 1, green: 1, blue: 1, alpha: 1)
+		case .yellow:
+			rgba = (red: 255/255, green: 204/255, blue: 0/255, alpha: 1)
+		default:
+			break
+			// nothing.  Default to black.
+			// Impossible to calculate for accentColor/primary/secondary/.  Perhaps return something else?
+			//print("Unable to determine SwiftUI Color: \(color)")
+		}
+		if rgba != black {
+			// try using defined values first from above
+			red?.pointee = rgba.red
+			green?.pointee = rgba.green
+			blue?.pointee = rgba.blue
+			alpha?.pointee = rgba.alpha
+			return true
+		}
+		
+		guard let cgColor = cgColor, let components = cgColor.components, components.count >= 3 else {
+			return false
+		}
+		
+		red?.pointee = components[0]
+		green?.pointee = components[1]
+		blue?.pointee = components[2]
 		alpha?.pointee = cgColor.alpha
-        return true
-    }
+		return true
+	}
 
-    public func getWhite(_ white: UnsafeMutablePointer<CGFloat>?, alpha: UnsafeMutablePointer<CGFloat>?) -> Bool {
-        guard let cgColor = cgColor, let components = cgColor.components, components.count == 2 else {
-            return false
-        }
-        
-        white?.pointee = components[0]
+	public func getWhite(_ white: UnsafeMutablePointer<CGFloat>?, alpha: UnsafeMutablePointer<CGFloat>?) -> Bool {
+		guard let cgColor = cgColor, let components = cgColor.components, components.count == 2 else {
+			return false
+		}
+		
+		white?.pointee = components[0]
 		alpha?.pointee = cgColor.alpha
-        return true
-    }
+		return true
+	}
 
-    public func getHue(_ hue: UnsafeMutablePointer<CGFloat>?, saturation: UnsafeMutablePointer<CGFloat>?, brightness: UnsafeMutablePointer<CGFloat>?, alpha: UnsafeMutablePointer<CGFloat>?) -> Bool {
-        // SwiftUI color will almost guaranteed not be in HSB color space so return false so we can convert from RGB
-        return false
-//        guard let cgColor = cgColor, let components = cgColor.components, components.count >= 3 else {
-//            return false
-//        }
-//        
-//        hue?.pointee = components[0]
-//        saturation?.pointee = components[1]
-//        brightness?.pointee = components[2]
-//        alpha?.pointee = 1.0 // SwiftUI colors do not support Alpha Channel
-//        return true
-    }
+	public func getHue(_ hue: UnsafeMutablePointer<CGFloat>?, saturation: UnsafeMutablePointer<CGFloat>?, brightness: UnsafeMutablePointer<CGFloat>?, alpha: UnsafeMutablePointer<CGFloat>?) -> Bool {
+		// SwiftUI color will almost guaranteed not be in HSB color space so return false so we can convert from RGB
+		return false
+//		guard let cgColor = cgColor, let components = cgColor.components, components.count >= 3 else {
+//			return false
+//		}
+//		
+//		hue?.pointee = components[0]
+//		saturation?.pointee = components[1]
+//		brightness?.pointee = components[2]
+//		alpha?.pointee = 1.0 // SwiftUI colors do not support Alpha Channel
+//		return true
+	}
 }
 #elseif !canImport(UIKit) // Add in functions to make sure they're available on KuColor protocol
 public extension KuColor {
-    // functions to get around native implementation change with no return
-    public func getRed(_ red: UnsafeMutablePointer<CGFloat>?, green: UnsafeMutablePointer<CGFloat>?, blue: UnsafeMutablePointer<CGFloat>?, alpha: UnsafeMutablePointer<CGFloat>?) -> Bool {
-        let _:Void = getRed(red, green: green, blue: blue, alpha: alpha)
-        return true
-    }
-    
-    public func getWhite(_ white: UnsafeMutablePointer<CGFloat>?, alpha: UnsafeMutablePointer<CGFloat>?) -> Bool {
-        let _:Void = getWhite(white, alpha: alpha)
-        return true
-    }
-    
-    public func getHue(_ hue: UnsafeMutablePointer<CGFloat>?, saturation: UnsafeMutablePointer<CGFloat>?, brightness: UnsafeMutablePointer<CGFloat>?, alpha: UnsafeMutablePointer<CGFloat>?) -> Bool {
-        let _:Void = getHue(hue, saturation: saturation, brightness: brightness, alpha: alpha)
-        return true
-    }
+	// functions to get around native implementation change with no return
+	public func getRed(_ red: UnsafeMutablePointer<CGFloat>?, green: UnsafeMutablePointer<CGFloat>?, blue: UnsafeMutablePointer<CGFloat>?, alpha: UnsafeMutablePointer<CGFloat>?) -> Bool {
+		let _:Void = getRed(red, green: green, blue: blue, alpha: alpha)
+		return true
+	}
+	
+	public func getWhite(_ white: UnsafeMutablePointer<CGFloat>?, alpha: UnsafeMutablePointer<CGFloat>?) -> Bool {
+		let _:Void = getWhite(white, alpha: alpha)
+		return true
+	}
+	
+	public func getHue(_ hue: UnsafeMutablePointer<CGFloat>?, saturation: UnsafeMutablePointer<CGFloat>?, brightness: UnsafeMutablePointer<CGFloat>?, alpha: UnsafeMutablePointer<CGFloat>?) -> Bool {
+		let _:Void = getHue(hue, saturation: saturation, brightness: brightness, alpha: alpha)
+		return true
+	}
 }
 #endif
 
 public extension KuColor {
 	// TODO: Standardize 255
-	//    static let eightBitDenominator = 255.0
+	//	static let eightBitDenominator = 255.0
 	// MARK: - Get RGB Colors
 	/// returns the RGBA values of the color if it can be determined and black-clear if not.
 	var rgbaComponents: (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
@@ -306,27 +306,28 @@ public extension KuColor {
 				debugDescription: "Could not decode Color"
 			)
 		}
-		//        let data = try container.decode(Data.self)
-		//        guard let color = try NSKeyedUnarchiver.unarchivedObject(ofClass: UIColor.self, from: data) else {
-		//            throw DecodingError.dataCorruptedError(
-		//                in: container,
-		//                debugDescription: "Invalid color"
-		//            )
-		//        }
-		//        wrappedValue = color
+		//		let data = try container.decode(Data.self)
+		//		guard let color = try NSKeyedUnarchiver.unarchivedObject(ofClass: UIColor.self, from: data) else {
+		//			throw DecodingError.dataCorruptedError(
+		//				in: container,
+		//				debugDescription: "Invalid color"
+		//			)
+		//		}
+		//		wrappedValue = color
 		//
-		//        else if let data = try? UIColor
-		//        } else if let data = try? Data(from: decoder), let uiColor = UIColor(data)
+		//		else if let data = try? UIColor
+		//		} else if let data = try? Data(from: decoder), let uiColor = UIColor(data)
 		//
-		//        }
+		//		}
 		// TODO: check to see if we can value decode this?  • Unable to decode Color data: Foundation.(unknown context at $181152d90).JSONDecoderImpl
 		//decoder.singleValueContainer().decode()
 		throw CustomError("Unable to decode Color data: \(String(describing: decoder))")
-		//        self.init(string: string)!
+		//		self.init(string: string)!
 	}
+	
+	// for coding
 	func encode(to encoder: Encoder) throws {
-		// TODO: Change to pretty version?
-		try cssString.encode(to: encoder)
+		try pretty.encode(to: encoder)
 	}
 	
 	
@@ -668,7 +669,7 @@ public extension KuColor {
 	/// returns either white or black depending on the base color to make sure it's visible against the background.  In the future we may want to change this to some sort of vibrancy.
 	var contrastingColor: Color {
 		// TODO: Fix so primary color - dark mode shows black
-		//        return isDark ? .white : .black
+		//		return isDark ? .white : .black
 		return luminance < 0.6 ? .white : .black
 	}
 	
@@ -707,140 +708,140 @@ struct ColorPrettyTests: View {
 
 let DEFAULT_CONTENT = EmptyView()
 struct Swatch: View {
-    var color: Color
-    var logo: Bool = false
-    init(color: Color, logo: Bool = false) { 
-        self.color = color
-        self.logo = logo
-    }
-    var body: some View {
-        RoundedRectangle(cornerRadius: 15)
-            .frame(size: 50)
-            .foregroundColor(color)
-            .overlay {
-                ZStack {
-                    if logo {
-                        Image(systemName: "applelogo")
-                            .imageScale(.large)
-                    } else {
-                        Text("\(self.color.hexString)")
-                            .bold()
-                    }
-                }
-                .foregroundColor(color.contrastingColor) // isDark ? .white : .black
-            }
-    }
+	var color: Color
+	var logo: Bool = false
+	init(color: Color, logo: Bool = false) { 
+		self.color = color
+		self.logo = logo
+	}
+	var body: some View {
+		RoundedRectangle(cornerRadius: 15)
+			.frame(size: 50)
+			.foregroundColor(color)
+			.overlay {
+				ZStack {
+					if logo {
+						Image(systemName: "applelogo")
+							.imageScale(.large)
+					} else {
+						Text("\(self.color.hexString)")
+							.bold()
+					}
+				}
+				.foregroundColor(color.contrastingColor) // isDark ? .white : .black
+			}
+	}
 }
 struct SwatchTest: View {
-    var color: Color
-    var body: some View {
-        Swatch(color: color, logo: true)
-    }
+	var color: Color
+	var body: some View {
+		Swatch(color: color, logo: true)
+	}
 }
 struct Color_Previews: PreviewProvider {
-    static var previews: some View {
-        VStack {
-            Text("Color Tinting")
-            Swatch(color: .red.lighterColor)
-            Swatch(color: .red)
-            Swatch(color: .red.darkerColor)
-            Swatch(color: .green.lighterColor)
-            Swatch(color: .green)
-            Swatch(color: .green.darkerColor)
-        }
-        VStack {
-            Text("HSV Conversion")
-            HStack {
-                VStack(spacing: 0) {
-                    SwatchTest(color: .red)
-                    SwatchTest(color: .orange)
-                    SwatchTest(color: .yellow)
-                    SwatchTest(color: .green)
-                    SwatchTest(color: .blue)
-                    SwatchTest(color: .purple)
-                }
-                VStack(spacing: 0) {
-                    SwatchTest(color: .red.rgbTest)
-                    SwatchTest(color: .orange.rgbTest)
-                    SwatchTest(color: .yellow.rgbTest)
-                    SwatchTest(color: .green.rgbTest)
-                    SwatchTest(color: .blue.rgbTest)
-                    SwatchTest(color: .purple.rgbTest)
-                }
-                VStack(spacing: 0) {
-                    SwatchTest(color: .red.hsvTest)
-                    SwatchTest(color: .orange.hsvTest)
-                    SwatchTest(color: .yellow.hsvTest)
-                    SwatchTest(color: .green.hsvTest)
-                    SwatchTest(color: .blue.hsvTest)
-                    SwatchTest(color: .purple.hsvTest)
-                }
-                VStack(spacing: 0) {
-                    SwatchTest(color: .red.hsvTest.rgbTest)
-                    SwatchTest(color: .orange.hsvTest.rgbTest)
-                    SwatchTest(color: .yellow.hsvTest.rgbTest)
-                    SwatchTest(color: .green.hsvTest.rgbTest)
-                    SwatchTest(color: .blue.hsvTest.rgbTest)
-                    SwatchTest(color: .purple.hsvTest.rgbTest)
-                }
-            }
-        }
-        VStack {
-            Text("Lightness Tests")
-                .bold()
-            HStack(spacing: 0) {
-                VStack(spacing: 0) {
-                    SwatchTest(color: .red)
-                    SwatchTest(color: .orange)
-                    SwatchTest(color: .yellow)
-                    SwatchTest(color: .green)
-                    SwatchTest(color: .blue)
-                    SwatchTest(color: .purple)
-                }
-                VStack(spacing: 0) {
-                    SwatchTest(color: Color(string:Color.red.hexString) ?? .black)
-                    SwatchTest(color: Color(string:Color.orange.hexString) ?? .black)
-                    SwatchTest(color: Color(string:Color.yellow.hexString) ?? .black)
-                    SwatchTest(color: Color(string:Color.green.hexString) ?? .black)
-                    SwatchTest(color: Color(string:Color.blue.hexString) ?? .black)
-                    SwatchTest(color: Color(string:Color.purple.hexString) ?? .black)
-                }
-                VStack(spacing: 0) {
-                    SwatchTest(color: .white)
-                    SwatchTest(color: Color(string: "#ccc") ?? .black)
-                    SwatchTest(color: Color(string: "Gray") ?? .white)
-                    SwatchTest(color: .gray)
-                    SwatchTest(color: Color(string: "#333") ?? .white)
-                    SwatchTest(color: .black)
-                }
-                VStack(spacing: 0) {
-                    
-                    SwatchTest(color: .accentColor)
-                    SwatchTest(color: .primary)
-                    SwatchTest(color: .secondary)
-                    SwatchTest(color: Color(string:"SkyBlue") ?? .black)
-                    SwatchTest(color: Color(string:"Beige") ?? .black)
-                    SwatchTest(color: Color(string:"LightGray") ?? .black)
-                }
-                VStack(spacing: 0) {
-                    SwatchTest(color: Color(string:Color.pink.hexString) ?? .black)
-                    SwatchTest(color: Color(string:Color.brown.hexString) ?? .black)
-                    SwatchTest(color: Color(string:Color.mint.hexString) ?? .black)
-                    SwatchTest(color: Color(string:Color.teal.hexString) ?? .black)
-                    SwatchTest(color: Color(string:Color.cyan.hexString) ?? .black)
-                    SwatchTest(color: Color(string:Color.indigo.hexString) ?? .black)
-                }
-                VStack(spacing: 0) {
-                    SwatchTest(color: .pink)
-                    SwatchTest(color: .brown)
-                    SwatchTest(color: .mint)
-                    SwatchTest(color: .teal)
-                    SwatchTest(color: .cyan)
-                    SwatchTest(color: .indigo)
-                }
-            }
-            
-        }.padding().background(.gray)
-    }
+	static var previews: some View {
+		VStack {
+			Text("Color Tinting")
+			Swatch(color: .red.lighterColor)
+			Swatch(color: .red)
+			Swatch(color: .red.darkerColor)
+			Swatch(color: .green.lighterColor)
+			Swatch(color: .green)
+			Swatch(color: .green.darkerColor)
+		}
+		VStack {
+			Text("HSV Conversion")
+			HStack {
+				VStack(spacing: 0) {
+					SwatchTest(color: .red)
+					SwatchTest(color: .orange)
+					SwatchTest(color: .yellow)
+					SwatchTest(color: .green)
+					SwatchTest(color: .blue)
+					SwatchTest(color: .purple)
+				}
+				VStack(spacing: 0) {
+					SwatchTest(color: .red.rgbTest)
+					SwatchTest(color: .orange.rgbTest)
+					SwatchTest(color: .yellow.rgbTest)
+					SwatchTest(color: .green.rgbTest)
+					SwatchTest(color: .blue.rgbTest)
+					SwatchTest(color: .purple.rgbTest)
+				}
+				VStack(spacing: 0) {
+					SwatchTest(color: .red.hsvTest)
+					SwatchTest(color: .orange.hsvTest)
+					SwatchTest(color: .yellow.hsvTest)
+					SwatchTest(color: .green.hsvTest)
+					SwatchTest(color: .blue.hsvTest)
+					SwatchTest(color: .purple.hsvTest)
+				}
+				VStack(spacing: 0) {
+					SwatchTest(color: .red.hsvTest.rgbTest)
+					SwatchTest(color: .orange.hsvTest.rgbTest)
+					SwatchTest(color: .yellow.hsvTest.rgbTest)
+					SwatchTest(color: .green.hsvTest.rgbTest)
+					SwatchTest(color: .blue.hsvTest.rgbTest)
+					SwatchTest(color: .purple.hsvTest.rgbTest)
+				}
+			}
+		}
+		VStack {
+			Text("Lightness Tests")
+				.bold()
+			HStack(spacing: 0) {
+				VStack(spacing: 0) {
+					SwatchTest(color: .red)
+					SwatchTest(color: .orange)
+					SwatchTest(color: .yellow)
+					SwatchTest(color: .green)
+					SwatchTest(color: .blue)
+					SwatchTest(color: .purple)
+				}
+				VStack(spacing: 0) {
+					SwatchTest(color: Color(string:Color.red.hexString) ?? .black)
+					SwatchTest(color: Color(string:Color.orange.hexString) ?? .black)
+					SwatchTest(color: Color(string:Color.yellow.hexString) ?? .black)
+					SwatchTest(color: Color(string:Color.green.hexString) ?? .black)
+					SwatchTest(color: Color(string:Color.blue.hexString) ?? .black)
+					SwatchTest(color: Color(string:Color.purple.hexString) ?? .black)
+				}
+				VStack(spacing: 0) {
+					SwatchTest(color: .white)
+					SwatchTest(color: Color(string: "#ccc") ?? .black)
+					SwatchTest(color: Color(string: "Gray") ?? .white)
+					SwatchTest(color: .gray)
+					SwatchTest(color: Color(string: "#333") ?? .white)
+					SwatchTest(color: .black)
+				}
+				VStack(spacing: 0) {
+					
+					SwatchTest(color: .accentColor)
+					SwatchTest(color: .primary)
+					SwatchTest(color: .secondary)
+					SwatchTest(color: Color(string:"SkyBlue") ?? .black)
+					SwatchTest(color: Color(string:"Beige") ?? .black)
+					SwatchTest(color: Color(string:"LightGray") ?? .black)
+				}
+				VStack(spacing: 0) {
+					SwatchTest(color: Color(string:Color.pink.hexString) ?? .black)
+					SwatchTest(color: Color(string:Color.brown.hexString) ?? .black)
+					SwatchTest(color: Color(string:Color.mint.hexString) ?? .black)
+					SwatchTest(color: Color(string:Color.teal.hexString) ?? .black)
+					SwatchTest(color: Color(string:Color.cyan.hexString) ?? .black)
+					SwatchTest(color: Color(string:Color.indigo.hexString) ?? .black)
+				}
+				VStack(spacing: 0) {
+					SwatchTest(color: .pink)
+					SwatchTest(color: .brown)
+					SwatchTest(color: .mint)
+					SwatchTest(color: .teal)
+					SwatchTest(color: .cyan)
+					SwatchTest(color: .indigo)
+				}
+			}
+			
+		}.padding().background(.gray)
+	}
 }
 #endif

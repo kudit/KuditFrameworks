@@ -2,6 +2,7 @@
 
 Additional components, simpler, and convenience code for Kudit projects.
 
+v4.0.19 10/30/2023 Changed coding to use pretty format.
 v4.0.18 10/27/2023 Fixed ExternalDisplayManager.shared.orientationPicker not being public.
 v4.0.17 10/27/2023 Fixed ExternalDisplayManager.shared not being public.
 v4.0.16 10/27/2023 Fixed onRotate not being public.

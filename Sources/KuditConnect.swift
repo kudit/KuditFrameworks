@@ -282,7 +282,7 @@ public class KuditConnect: ObservableObject {
   Previously run versions: \(Application.main.versionsRun.joined(separator: ", "))
   Identifier: \(Application.main.appIdentifier)
   iCloud: \(Application.main.iCloudIsEnabled ? "Enabled" : "Disabled")
-  Device: \(Device.current.description)
+  Device: \(Device.current.description)\(Application.main.inPlayground ? " - PLAYGROUND" : "")
   Screen Ratio: \(Device.current.screenRatio)
   System: \(Device.current.systemName ?? "Unavailable") \(Device.current.systemVersion ?? "Unknown")
   Battery Level: \(Device.current.batteryLevel?.description ?? "Unknown")%
@@ -354,7 +354,7 @@ This section is to help us properly route your feedback and help troubleshoot an
 public struct KuditConnectMenu<Content: View>: View {
     public var additionalMenus: () -> Content
         
-	public init(@ViewBuilder additionalMenus: @escaping () -> Content = { EmptyView() }) {
+    public init(@ViewBuilder additionalMenus: @escaping () -> Content = { EmptyView() }) {
         self.additionalMenus = additionalMenus
     }
             

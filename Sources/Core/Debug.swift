@@ -32,7 +32,7 @@ public enum CustomError: Error {
     }
 }
 
-public enum DebugLevel: Comparable {
+public enum DebugLevel: Comparable, CustomStringConvertible {
     case OFF
     case ERROR
     case WARNING
@@ -47,7 +47,7 @@ public enum DebugLevel: Comparable {
     public static var defaultLevel = DebugLevel.ERROR
     /// setting this to false will make debug( act exactly like print(
     public static var includeContext = true
-    var symbol: String {
+    public var symbol: String {
         switch self {
         case .OFF:
             return ""
@@ -60,6 +60,28 @@ public enum DebugLevel: Comparable {
         case .DEBUG:
             return ":"
         }
+    }
+    public var description: String {
+        switch self {
+        case .OFF:
+            return "OFF"
+        case .ERROR:
+            return "ERROR"
+        case .WARNING:
+            return "WARNING"
+        case .NOTICE:
+            return "NOTICE"
+        case .DEBUG:
+            return "DEBUG"
+        }
+    }
+    /// use to detect if the current level is at least the level.  So if the current level is .NOTICE, .isAtLeast(.ERROR) = true but .isAtLeast(.DEBUG) = false.  Will typically be used like: if DebugLevel.currentLevel.isAtLeast(.DEBUG) to check for whether debugging output is on.  Simplify using convenience static func DebugLevel.isAtLeast(.DEBUG) 
+    public func isAtLeast(_ level: DebugLevel) -> Bool {
+        return level <= self  
+    }
+    /// use to detect if the current level is at least the level.  So if the current level is .NOTICE, .isAtLeast(.ERROR) = true but .isAtLeast(.DEBUG) = false.  Will typically be used like: if DebugLevel.isAtLeast(.DEBUG) to check for whether debugging output is on. 
+    public static func isAtLeast(_ level: DebugLevel) -> Bool {
+        return Self.currentLevel.isAtLeast(level)
     }
 }
 //DebugLevel.currentLevel = .ERROR
@@ -74,7 +96,7 @@ public enum DebugLevel: Comparable {
  - Parameter column: For bubbling down the #column number from a call site. (Not used currently but here for completeness).
  */
 public func debug(_ message: Any, level: DebugLevel = DebugLevel.defaultLevel, file: String = #file, function: String = #function, line: Int = #line, column: Int = #column) {
-    guard level <= DebugLevel.currentLevel else {
+    guard DebugLevel.isAtLeast(level) else {
         return
     }
     let simplerFile = URL(fileURLWithPath: file).lastPathComponent

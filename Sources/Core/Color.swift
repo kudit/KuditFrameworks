@@ -534,7 +534,7 @@ public extension KuColor {
 			// Separate into components by removing commas and spaces
 			let components = source.components(separatedBy: ",")
 			if (components.count != 4 && includesAlpha) || (components.count != 3 && !includesAlpha) {
-				print("Invalid color: \(string)")
+				debug("Invalid color: \(string)", level: .DEBUG)
 				return nil
 			}
 			
@@ -552,7 +552,7 @@ public extension KuColor {
 			var alphaValue:CGFloat = 1.0
 			if includesAlpha {
 				guard let componentAlpha = componentValues[3] else {
-					print("Could not parse alpha value: \(components[3])")
+					debug("Could not parse alpha value: \(components[3])", level: .DEBUG)
 					return nil
 				}
 				alphaValue = CGFloat(componentAlpha)
@@ -578,7 +578,7 @@ public extension KuColor {
 					return
 				}
 			}
-			print("Unknown named color: \(string)")
+			debug("Unknown named color: \(string)", level: .NOTICE)
 			return nil
 		}
 	}
@@ -624,7 +624,7 @@ public extension KuColor {
 			return cssString
 		}
 		guard hexColor == self else {
-			debug("This color can't be represented as hex: \(self) != \(hexColor)", level: .NOTICE)
+			debug("This color can't be represented as hex: \(self) != \(hexColor) (saving as: \(cssString))", level: .NOTICE)
 			return cssString
 		}
 		if let colorName = Self.namedColorMap.firstKey(for: hexString) {

@@ -2,7 +2,8 @@
 
 Additional components, simpler, and convenience code for Kudit projects.
 
-v4.0.19 10/30/2023 Changed coding to use pretty format.
+v4.0.20 11/8/2023 Added description to DebugLevels and .isAtLeast() test.  Added additional color logging when conversions don't work.  Replaced several print statements with debugs.  Added inPlayground check.  Added DataStore code.  Added embossed view modifier.
+v4.0.19 10/30/2023 Changed Color coding to use .pretty format.
 v4.0.18 10/27/2023 Fixed ExternalDisplayManager.shared.orientationPicker not being public.
 v4.0.17 10/27/2023 Fixed ExternalDisplayManager.shared not being public.
 v4.0.16 10/27/2023 Fixed onRotate not being public.
@@ -42,7 +43,7 @@ v1.0.37 9/21/2022 Changed DebugLevel.currentLevel to a var instead of let so tha
 v1.0.36 9/19/2022 Added check for UIKit in share sheet (iMac was unable to build...odd since should support catalyst)
 v1.0.35 9/16/2022 Added debugging line info to call site of CustomError to get better reporting of when the error was thrown. Added Codable support to Color.  Added Color documentation and documentation template to Debug.
 v1.0.34 9/15/2022 Added credit for the RGB to HSV code.
-v1.0.33 9/15/2022 Missed one of the @available(iOS 15.0, *)
+v1.0.33 9/15/2022 Missed one of the @available(iOS 15.0, \*)
 v1.0.32 9/15/2022 Certain colors only available with iOS 15+ so set that as the minimum target for all KuColor stuff.
 v1.0.31 9/14/2022 Updated KuColor protocol to apply to SwiftUI Color.  Removed old UIImage code that could cause crashes.  Added .frame(size:) method.  Fixed issue with RGBA parsing and HSV calculations.  Re-worked SwiftUI color conformance to KuColor protocols to simplify.  Added some test methods.  Reversed order of versioning to make easier to find changes.  macOS can use UIKit via Catalyst or SwiftUI so no need to support NSColor.
 v1.0.30 9/14/2022 Fixed issue where last two updates were the wrong major version number!
@@ -86,8 +87,10 @@ v1 Realistically was the original Objective-C Kudit Frameworks
 
 MARK: - Bugs to fix
  FIXME: In tracking checks, look for DebugLevel set to debug and if so, add #warning to ensure compiler warning? Is this even possible?  
+ TODO: Update ShoutIt to use KuditFrameworks DataStore
 
 MARK: - Features to add:
+TODO: Updating KuditConnect documentation to include how to set the label (not currently possible - needs to be added).
  TODO: KuditConnect automatic screenshot when tapping menu
 // TODO: Go through and add more tests for better code coverage!
 

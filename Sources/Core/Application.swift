@@ -18,7 +18,7 @@ public class Application: CustomStringConvertible {
 
     /// Place `Application.track()` in `application(_:didFinishLaunchingWithOptions:)` or @main struct init() function to enable version tracking.
     public static func track() {
-        print("Kudit Application Tracking:\n\(Application.main)")
+        debug("Kudit Application Tracking:\n\(Application.main)", level: .NOTICE)
     }
     
     /// for resetting version tracking for unit tests only (done here because different domain than the test user defaults)
@@ -51,7 +51,7 @@ public class Application: CustomStringConvertible {
 
     private init() {
         if isFirstRun { // make sure to call before tracking or this won't ever be false
-            print("First Run!")
+            debug("First Run!", level: .NOTICE)
         }
         var versionsRun = self.versionsRun
         versionsRun.appendUnique(version)
@@ -77,6 +77,16 @@ public class Application: CustomStringConvertible {
         return description
     }
     
+    public var inPlayground: Bool {
+        if Bundle.allBundles.contains(where: { ($0.bundleIdentifier ?? "").contains("swift-playgrounds") }) {
+            //print("in playground")
+            return true
+        } else {
+            //print("not in playground")
+            return false
+        }
+    }
+    
     // MARK: - Version information
     // NOTE: in Objective C, the key was kCFBundleVersionKey, but that returns the build number in Swift.
     /// Current app version string (not including build)
@@ -93,7 +103,7 @@ public class Application: CustomStringConvertible {
         && UserDefaults.standard.object(forKey: "kuditVersions") == nil // modern support
     
         
-    /// List of all versions that have been run since install.
+    /// List of all versions that have been run since install.  Local only and doesn't count versions run on other devices.  Perhaps in the future that will change?
     public var versionsRun: [Version] {
         var versionsRun: [String] = (UserDefaults.standard.object(forKey: "kuditVersions") as? [String] ?? [])
         // if last_run_version set, add that to preserve legacy format
@@ -117,11 +127,11 @@ public class Application: CustomStringConvertible {
     // MARK: - Entitlements Information
     public var iCloudIsEnabled: Bool {
         guard let token = FileManager.default.ubiquityIdentityToken else {
-//            print("iCloud not available")
+            debug("iCloud not available", level: .NOTICE)
             return false
         }
         _ = token // suppress unused warning
-//        print("iCloud logged in with token `\(token)`")
+        debug("iCloud logged in with token `\(token)`", level: .NOTICE)
         return true
     }
 

@@ -2,9 +2,9 @@ import SwiftUI
 
 @main
 struct KuditFrameworksApp: App {
-	init() {
-		DebugLevel.currentLevel = .NOTICE
-	}
+    init() {
+        DebugLevel.currentLevel = .NOTICE
+    }
     var body: some Scene {
         WindowGroup {
             KuditFrameworksTestView()
@@ -12,8 +12,7 @@ struct KuditFrameworksApp: App {
     }
 }
 
-struct KuditFrameworksApp_Previews: PreviewProvider {
-    static var previews: some View {
-        KuditFrameworksTestView()
-    }
+#Preview("Test View") {
+    KuditFrameworksTestView()
 }
+

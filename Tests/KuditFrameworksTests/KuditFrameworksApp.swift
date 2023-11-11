@@ -1,4 +1,7 @@
 import SwiftUI
+#if canImport(KuditFrameworks)
+import KuditFrameworks
+#endif
 
 @main
 struct KuditFrameworksApp: App {
@@ -7,12 +10,17 @@ struct KuditFrameworksApp: App {
     }
     var body: some Scene {
         WindowGroup {
+			#if os(watchOS) || os(tvOS)
+			Text("Kudit Frameworks test")
+			#else
             KuditFrameworksTestView()
+			#endif
         }
     }
 }
 
+#if !os(watchOS) && !os(tvOS)
 #Preview("Test View") {
     KuditFrameworksTestView()
 }
-
+#endif

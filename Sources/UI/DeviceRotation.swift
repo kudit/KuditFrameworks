@@ -1,3 +1,4 @@
+#if canImport(UIKit) && os(iOS)
 //
 //  DeviceRotation.swift
 //  Shout It
@@ -26,3 +27,4 @@ public extension View {
         self.modifier(DeviceRotationViewModifier(action: action))
     }
 }
+#endif

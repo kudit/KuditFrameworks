@@ -284,6 +284,7 @@ public extension KuColor {
 	init(from decoder: Decoder) throws {
 		if let data = try? Data(from: decoder) {
 			// likely data representation of UIColor
+#if canImport(UIKit)
 			guard let color = UIColor(data) else {
 				throw DecodingError.dataCorruptedError(
 					in: try decoder.singleValueContainer(),
@@ -292,6 +293,12 @@ public extension KuColor {
 			}
 			// convert in case this is actually a SwiftUI Color initing from a UIColor as in ShoutIt legacy data
 			self.init(color: color)
+#else
+			throw DecodingError.dataCorruptedError(
+				in: try decoder.singleValueContainer(),
+				debugDescription: "Decoding color from data is not supported in macOS without catalyst."
+			)
+#endif
 		} else if let string = try? String(from: decoder) {
 			guard let color = Color(string: string) else {
 				throw DecodingError.dataCorruptedError(

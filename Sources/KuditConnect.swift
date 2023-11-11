@@ -87,8 +87,12 @@ struct KuditConnectFAQ: View {
     @Environment(\.colorScheme) var colorScheme
     var faq: KuditFAQ
     var body: some View {
+#if canImport(WebKit) && canImport(UIKit)
         HTMLView(htmlString: faq.answerHTML(textColor: colorScheme == .dark ? .white : .black))
             .navigationTitle(faq.question)
+#else
+		Text(faq.answer)
+#endif
     }
 }
 // TODO: Add searching and pull to refresh to FAQs
@@ -276,7 +280,7 @@ public class KuditConnect: ObservableObject {
     public static var supportEmail = "support+\(Application.main.appIdentifier)@kudit.com"
     public static var supportEmailSubject = "App Feedback for \(Application.main.name)"
     public var appInformation: String {
-        """
+        var infostring = """
   Application: \(Application.main.name)
   Version: \(Application.main.version)
   Previously run versions: \(Application.main.versionsRun.joined(separator: ", "))
@@ -285,11 +289,24 @@ public class KuditConnect: ObservableObject {
   Device: \(Device.current.description)\(Application.main.inPlayground ? " - PLAYGROUND" : "")
   Screen Ratio: \(Device.current.screenRatio)
   System: \(Device.current.systemName ?? "Unavailable") \(Device.current.systemVersion ?? "Unknown")
+  """
+#if canImport(UIKit) && !os(tvOS)
+	infostring +=
+"""
   Battery Level: \(Device.current.batteryLevel?.description ?? "Unknown")%
+  """
+#endif
+#if canImport(UIKit) && !os(watchOS) && !os(tvOS)
+	infostring += """
   Available Storage: \(Device.volumeAvailableCapacityForOpportunisticUsage?.byteString ?? "Unknown")
+  """
+#endif
+		infostring +=
+"""
   KuditFrameworks version: \(Application.main.frameworkVersion)
   KuditConnect version: \(Self.kuditConnectVersion)
   """
+		return infostring
     }
     
     public func generateSupportEmail() -> String {
@@ -351,6 +368,7 @@ This section is to help us properly route your feedback and help troubleshoot an
     }
 }
 
+#if !os(watchOS) && !os(tvOS)
 public struct KuditConnectMenu<Content: View>: View {
     public var additionalMenus: () -> Content
         
@@ -366,8 +384,8 @@ public struct KuditConnectMenu<Content: View>: View {
     @State private var showKudos = false
     @State private var isKudosScreenVisible = false
     public var body: some View {
-        Menu {
-            Text("Version \(Application.main.version)" + (DebugLevel.currentLevel == .DEBUG ? "  DEBUG" : ""))
+		Menu {
+			Text("Version \(Application.main.version)" + (DebugLevel.currentLevel == .DEBUG ? "  DEBUG" : ""))
             additionalMenus()
             Button(action: {
                 showFAQs = true
@@ -399,6 +417,7 @@ public struct KuditConnectMenu<Content: View>: View {
             }) {
                 Label("Share App With Friends", systemImage: "square.and.arrow.up")
             }*/
+#if canImport(UIKit)
             Button(action: {
                 Vibration.light.vibrate()
 
@@ -421,6 +440,7 @@ public struct KuditConnectMenu<Content: View>: View {
             }) {
                 Label("Send Us Kudos", systemImage: "hands.sparkles") // hand.thumbsup
             }
+#endif
 //            Text("KuditFrameworks v\(Application.main.frameworkVersion)")
             Text("KuditConnect v\(KuditConnect.kuditConnectVersion)")
             //                    Button("Add Passbook Pass", action: {})
@@ -431,6 +451,7 @@ public struct KuditConnectMenu<Content: View>: View {
         .sheet(isPresented: $showFAQs) {
             KuditConnectFAQs(connect: KuditConnect.shared)
         }
+#if canImport(UIKit)
         /// Kudos view
         .fullScreenCover(isPresented: $showKudos) {
             Group {
@@ -451,14 +472,15 @@ public struct KuditConnectMenu<Content: View>: View {
                     }
                 }
             }
-            .onAppear {
+			.onAppear {
                 isKudosScreenVisible = true
             }
         }
+#endif
     }
 }
 // MARK: - Kudos
-#if canImport(EffectsLibrary)
+#if canImport(EffectsLibrary) && canImport(UIKit)
 import EffectsLibrary
 private struct FancyView: View {
     var body: some View {
@@ -480,7 +502,7 @@ private struct FancyView: View {
 }
 #endif
 
-@available(iOS 16.0, *)
+@available(macOS 13.0, iOS 16.0, tvOS 20.0, *)
 private struct ReviewButton: View {
     @Environment(\.requestReview) var requestReview
     var action: () -> Void
@@ -504,7 +526,7 @@ private struct KudosOverlayView: View {
                     .italic()
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: 300)
-                if #available(iOS 16, *) {
+				if #available(iOS 16, macOS 13.0, tvOS 20.0, *) {
                     ReviewButton {
                         isKudosScreenVisible = false
                     }
@@ -524,7 +546,7 @@ struct KudosView: View {
     @Binding var messageText: String
     @Binding var isKudosScreenVisible: Bool
     var body: some View {
-        if #available(iOS 16.4, *) {
+        if #available(iOS 16.4, macOS 13.3, *) {
             KudosOverlayView(messageText: _messageText, isKudosScreenVisible: _isKudosScreenVisible)
             .presentationBackground(.black.opacity(0.4))
                 // .yellow.opacity(0.2))
@@ -584,3 +606,4 @@ struct KCTestView_Previews: PreviewProvider {
 //#Preview("KuditConnect") {
 //    KCTestView()
 //}
+#endif

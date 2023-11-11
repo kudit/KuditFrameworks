@@ -59,6 +59,7 @@ public extension Binding {
 	}
 }
 
+#if !os(tvOS)
 struct ConvertTestView: View {
 	@State private var count: Int = 1
 	var body: some View {
@@ -80,11 +81,7 @@ struct ConvertTestView: View {
 		.padding()
 	}
 }
-struct ConvertTest_Previews: PreviewProvider {
-    static var previews: some View {
-        ConvertTestView()
-    }
+#Preview("Convert Test") {
+	ConvertTestView()
 }
-//#Preview("Convert Test") {
-//	ConvertTestView()
-//}
+#endif

@@ -21,8 +21,8 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
-        .package(url: "https://github.com/GetStream/effects-library", "1.0.0"..<"2.0.0"),
-        .package(url: "https://github.com/devicekit/DeviceKit.git", "5.1.0"..<"6.0.0"),
+        .package(url: "https://github.com/kudit/effects-library", "1.0.0"..<"2.0.0"),
+        .package(url: "https://github.com/kudit/DeviceKit.git", "5.1.0"..<"6.0.0"),
         .package(url: "https://github.com/johnsundell/ink.git", "0.6.0"..<"1.0.0")
     ],
     targets: [

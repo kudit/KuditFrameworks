@@ -7,6 +7,7 @@
 
 
 import Foundation
+#if canImport(Vision)
 import Vision
 
 public struct RecognizedText: Identifiable {
@@ -239,3 +240,4 @@ struct ImageRecognizer_Previews: PreviewProvider {
         }
     }
 }
+#endif

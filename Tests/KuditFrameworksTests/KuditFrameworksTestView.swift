@@ -2,6 +2,7 @@ import SwiftUI
 #if canImport(KuditFrameworks) // since this is needed in XCode but is unavailable in Playgrounds
 import KuditFrameworks
 #endif
+#if !os(watchOS) && !os(tvOS)
 
 struct TimeClockView: View {
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
@@ -35,7 +36,7 @@ public struct KuditFrameworksTestView: View {
                 TimeClockView()
                 Text(KuditConnect.shared.appInformation)
                     .padding()
-                ColorPrettyTests()
+//                ColorPrettyTests()
             }
             .navigationTitle("Kudit Frameworks")
             .toolbar {
@@ -54,6 +55,9 @@ public struct KuditFrameworksTestView: View {
 //                }
             }
         }
-        .navigationViewStyle(.stack)
+#if !os(macOS)
+		.navigationViewStyle(.stack)
+#endif
     }
 }
+#endif

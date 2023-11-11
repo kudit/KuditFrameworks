@@ -2,6 +2,7 @@
 
 Additional components, simpler, and convenience code for Kudit projects.
 
+v4.0.21 11/11/2023 Added conditional compiler directives to remove code when importing in watchOS, tvOS, or macOS (non-catalyst) projects.  Updated dependencies to use patched versions.  Ensured compatibility by also using forked versions of projects.
 v4.0.20 11/8/2023 Added description to DebugLevels and .isAtLeast() test.  Added additional color logging when conversions don't work.  Replaced several print statements with debugs.  Added inPlayground check.  Added DataStore code.  Added embossed view modifier.
 v4.0.19 10/30/2023 Changed Color coding to use .pretty format.
 v4.0.18 10/27/2023 Fixed ExternalDisplayManager.shared.orientationPicker not being public.

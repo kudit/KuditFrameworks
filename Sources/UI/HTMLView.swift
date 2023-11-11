@@ -1,3 +1,4 @@
+#if canImport(WebKit) && canImport(UIKit)
 import SwiftUI
 import WebKit
 // https://alexpaul.dev/2023/01/19/rendering-web-content-in-swiftui-using-uiviewrepresentable-html-and-css/
@@ -43,10 +44,11 @@ class HTMLViewDelegate: NSObject, ObservableObject, WKNavigationDelegate {
         decisionHandler(.allow)*/
     }
 }
+
 // Create a custom `UIViewRepresentable` that will render web content.
 public struct HTMLView: UIViewRepresentable {
-    @Environment(\.openURL) var openURL
-    static var testHTML = """
+	@Environment(\.openURL) var openURL
+	static var testHTML = """
 <html>
     <head>
 <style type="text/css">
@@ -159,3 +161,4 @@ struct HTMLView_Previews: PreviewProvider {
         HTMLView(htmlString: KuditConnect.shared.faqs[safe: 1]?.answerHTML(textColor: .red) ?? HTMLView.testHTML)
     }
 }
+#endif

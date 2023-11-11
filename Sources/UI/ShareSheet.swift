@@ -6,7 +6,9 @@
 //
 // https://developer.apple.com/forums/thread/123951
 
-#if canImport(UIKit)
+// TODO: See if this is actually used anywhere and delete if not!
+
+#if canImport(UIKit) && !os(watchOS) && !os(tvOS)
 import SwiftUI
 import UIKit
 

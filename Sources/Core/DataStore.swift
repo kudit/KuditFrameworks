@@ -17,6 +17,7 @@ self.store = DataStoreObserver.getObservedStore(migrateLocal: {
  */
 
 
+@available(watchOS 9.0, *)
 public protocol DataStore {
     static var notificationName: NSNotification.Name { get }
     @discardableResult func synchronize() -> Bool
@@ -72,6 +73,7 @@ public protocol DataStore {
     ///Returns a dictionary that contains a union of all key-value pairs in the domains in the search list.
     func dictionaryRepresentation() -> [String : Any]
 }
+@available(watchOS 9.0, *)
 extension NSUbiquitousKeyValueStore: DataStore {
     public func set(_ value: Int, forKey defaultName: String) {
         self.set(Int64(value), forKey: defaultName)
@@ -81,6 +83,7 @@ extension NSUbiquitousKeyValueStore: DataStore {
         set(value?.absoluteString, forKey: defaultName)
     }
 }
+@available(watchOS 9.0, *)
 public extension NSUbiquitousKeyValueStore {
     static var notificationName = NSUbiquitousKeyValueStore.didChangeExternallyNotification
     var isLocal: Bool { false }
@@ -110,15 +113,19 @@ public extension NSUbiquitousKeyValueStore {
         return self.dictionaryRepresentation
     }
 }
+@available(watchOS 9.0, *)
 extension UserDefaults: DataStore {}
+@available(watchOS 9.0, *)
 public extension UserDefaults {
     static var notificationName = UserDefaults.didChangeNotification
     var isLocal: Bool { true }
 }
+@available(watchOS 9.0, *)
 public enum DataStoreError: Error {
     // Throw when data cannot be initialized from a store
     case load
 }
+@available(watchOS 9.0, *)
 public class DataStoreObserver {
     static var observers: [DataStoreObserver] = []
     let store: DataStore

@@ -16,6 +16,26 @@ public protocol KuColor: Codable, Equatable {
 	func getRed(_ red: UnsafeMutablePointer<CGFloat>?, green: UnsafeMutablePointer<CGFloat>?, blue: UnsafeMutablePointer<CGFloat>?, alpha: UnsafeMutablePointer<CGFloat>?) -> Bool
 	func getWhite(_ white: UnsafeMutablePointer<CGFloat>?, alpha: UnsafeMutablePointer<CGFloat>?) -> Bool
 	func getHue(_ hue: UnsafeMutablePointer<CGFloat>?, saturation: UnsafeMutablePointer<CGFloat>?, brightness: UnsafeMutablePointer<CGFloat>?, alpha: UnsafeMutablePointer<CGFloat>?) -> Bool
+		
+	// named colors
+	associatedtype UnderlyingColorType // cannot use Self because UIColor is non-final.  But apparently Swift compiler can infer this type without having to manually define it! :)
+	static var black: UnderlyingColorType { get }
+	static var blue: UnderlyingColorType { get }
+	static var brown: UnderlyingColorType { get }
+	static var clear: UnderlyingColorType { get }
+	static var cyan: UnderlyingColorType { get }
+	static var gray: UnderlyingColorType { get }
+	static var green: UnderlyingColorType { get }
+	static var indigo: UnderlyingColorType { get }
+	static var magenta: UnderlyingColorType { get }
+	static var mint: UnderlyingColorType { get }
+	static var orange: UnderlyingColorType { get }
+	static var pink: UnderlyingColorType { get }
+	static var purple: UnderlyingColorType { get }
+	static var red: UnderlyingColorType { get }
+	static var teal: UnderlyingColorType { get }
+	static var white: UnderlyingColorType { get }
+	static var yellow: UnderlyingColorType { get }
 }
 
 // the LosslessStringConvertible extension does not work for KuColor since a color may be initialized by a string but the corresponding unlabelled init function is not the one we want.
@@ -45,7 +65,23 @@ extension KuColor {
 
 #if canImport(UIKit)
 import UIKit
-extension UIColor: KuColor {}
+extension UIColor: KuColor {
+	public static var indigo: UIColor {
+		return .systemPurple
+	}
+
+	public static var mint: UIColor {
+		return .systemMint
+	}
+
+	public static var pink: UIColor {
+		return .systemPink
+	}
+
+	public static var teal: UIColor {
+		return .systemTeal
+	}
+}
 public extension KuColor {
 	var uiColor: UIColor {
 		let components = rgbaComponents
@@ -69,7 +105,14 @@ public extension UIColor {
 
 #if canImport(SwiftUI)
 import SwiftUI
+extension KuColor {
+	typealias DefaultColorType = Color
+}
 extension Color: KuColor {
+	public static var magenta: Color {
+		return .init(red: 1, green: 0, blue: 1, alpha: 1)
+	}
+
 	public init(red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
 		self.init(red: red, green: green, blue: blue, opacity: alpha)
 	}
@@ -139,7 +182,7 @@ extension Color: KuColor {
 		alpha?.pointee = cgColor.alpha
 		return true
 	}
-
+	
 	public func getWhite(_ white: UnsafeMutablePointer<CGFloat>?, alpha: UnsafeMutablePointer<CGFloat>?) -> Bool {
 		guard let cgColor = cgColor, let components = cgColor.components, components.count == 2 else {
 			return false
@@ -149,7 +192,7 @@ extension Color: KuColor {
 		alpha?.pointee = cgColor.alpha
 		return true
 	}
-
+	
 	public func getHue(_ hue: UnsafeMutablePointer<CGFloat>?, saturation: UnsafeMutablePointer<CGFloat>?, brightness: UnsafeMutablePointer<CGFloat>?, alpha: UnsafeMutablePointer<CGFloat>?) -> Bool {
 		// SwiftUI color will almost guaranteed not be in HSB color space so return false so we can convert from RGB
 		return false
@@ -164,21 +207,64 @@ extension Color: KuColor {
 //		return true
 	}
 }
-#elseif !canImport(UIKit) // Add in functions to make sure they're available on KuColor protocol
-public extension KuColor {
+#elseif canImport(UIKit)
+extension KuColor {
+	typealias DefaultColorType = UIColor
+}
+#else // Add in functions to make sure KuColor functions work even in non-UI environments
+extension KuColor {
+	typealias DefaultColorType = Color
+}
+// create a Color struct that can be used to store color data
+struct Color: KuColor {
+	// all values should be 0-1
+	var red: CGFloat
+	var green: CGFloat
+	var blue: CGFloat
+	var alpha: CGFloat
+
 	// functions to get around native implementation change with no return
 	public func getRed(_ red: UnsafeMutablePointer<CGFloat>?, green: UnsafeMutablePointer<CGFloat>?, blue: UnsafeMutablePointer<CGFloat>?, alpha: UnsafeMutablePointer<CGFloat>?) -> Bool {
-		let _:Void = getRed(red, green: green, blue: blue, alpha: alpha)
+		if var red {
+			red.pointee = self.red
+		}
+		if var green {
+			green.pointee = self.green
+		}
+		if var blue {
+			blue.pointee = self.blue
+		}
+		if var alpha {
+			alpha.pointee = self.alpha
+		}
 		return true
 	}
 	
 	public func getWhite(_ white: UnsafeMutablePointer<CGFloat>?, alpha: UnsafeMutablePointer<CGFloat>?) -> Bool {
-		let _:Void = getWhite(white, alpha: alpha)
+		if var white {
+			white.pointee = (self.red + self.green + self.blue) / 3
+		}
+		if var alpha {
+			alpha.pointee = self.alpha
+		}
 		return true
 	}
 	
 	public func getHue(_ hue: UnsafeMutablePointer<CGFloat>?, saturation: UnsafeMutablePointer<CGFloat>?, brightness: UnsafeMutablePointer<CGFloat>?, alpha: UnsafeMutablePointer<CGFloat>?) -> Bool {
-		let _:Void = getHue(hue, saturation: saturation, brightness: brightness, alpha: alpha)
+		// use KuColor calculations of HSB
+		let components = hsbComponents
+		if var hue {
+			hue.pointee = components.hue
+		}
+		if var saturation {
+			saturation.pointee = components.saturation
+		}
+		if var brightness {
+			brightness.pointee = components.brightness
+		}
+		if var alpha {
+			alpha.pointee = self.alpha
+		}
 		return true
 	}
 }
@@ -502,7 +588,7 @@ public extension KuColor {
 			
 			// String should be 6 or 3 characters
 			guard source.count == 6 || source.count == 3 else {
-				debug("Unknown color string: \(string)", level: .WARNING)
+				debug("Unknown color string: \(string)", level: DebugLevel.colorLogging ? .WARNING : .SILENT)
 				return nil
 			}
 			let shortForm = (source.count == 3)
@@ -559,7 +645,7 @@ public extension KuColor {
 			var alphaValue:CGFloat = 1.0
 			if includesAlpha {
 				guard let componentAlpha = componentValues[3] else {
-					debug("Could not parse alpha value: \(components[3])", level: .DEBUG)
+					debug("Could not parse alpha value: \(components[3])", level: !DebugLevel.colorLogging ? .SILENT : .DEBUG)
 					return nil
 				}
 				alphaValue = CGFloat(componentAlpha)
@@ -585,7 +671,7 @@ public extension KuColor {
 					return
 				}
 			}
-			debug("Unknown named color: \(string)", level: .NOTICE)
+			debug("Unknown named color: \(string)", level: !DebugLevel.colorLogging ? .SILENT : .NOTICE)
 			return nil
 		}
 	}
@@ -624,16 +710,17 @@ public extension KuColor {
 		guard alphaComponent == 1.0 else {
 			return cssString
 		}
-		// convert to hex and make sure converting back gets the same numbers (otherwise, it's probably an extended color space)
 		guard let hexColor = Self(string: hexString) else {
 			// unable to initialize color from the converted hexString.  This should not be possible.
 			debug("Unable to convert color \(self) to hexString \(self.hexString) and back.", level: .ERROR)
 			return cssString
 		}
+		// convert to hex and make sure converting back gets the same numbers (otherwise, it's probably an extended color space)
 		guard hexColor == self else {
-			debug("This color can't be represented as hex: \(self) != \(hexColor) (saving as: \(cssString))", level: .NOTICE)
+			debug("This color can't be represented as hex: \(self) != \(hexColor) (saving as: \(cssString))", level: !DebugLevel.colorLogging ? .SILENT : .NOTICE)
 			return cssString
 		}
+		// we should show named color names if available
 		if let colorName = Self.namedColorMap.firstKey(for: hexString) {
 			return colorName
 		} else {

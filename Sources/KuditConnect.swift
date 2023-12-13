@@ -263,7 +263,7 @@ public class KuditConnect: ObservableObject {
             let filtered = wrapper.faqs.filter { $0.visible(in: Application.main.version) }
             main {
                 self.faqs = filtered
-                debug("Kudit Connect FAQs updated (found \(KuditConnect.shared.faqs.count))")
+                debug("Kudit Connect FAQs updated (found \(KuditConnect.shared.faqs.count))", level: .NOTICE)
             }
         } catch {
             debug("Kudit Connect: Unable to load FAQs from server: \(String(describing: error))", level: .ERROR)

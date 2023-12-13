@@ -8,7 +8,20 @@ struct TimeClockView: View {
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     @State var time = -1
     var body: some View {
-        Text("Unix time: \(time)").onReceive(timer, perform: { _ in
+        VStack {
+            Text("Unix time: \(time)")
+            Button {
+                DebugLevel.currentLevel.rotate()
+            } label: {
+                HStack {
+                    Text("DEBUG LEVEL: \(DebugLevel.currentLevel.emoji)")
+                    Text(DebugLevel.currentLevel.description)
+                        .foregroundStyle(Color(color: DebugLevel.currentLevel.color))
+                }
+            }
+            .buttonStyle(.bordered)
+        }
+        .onReceive(timer, perform: { _ in
             //debug("updating \(time)")
             time = PHP.time()
         })

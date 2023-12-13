@@ -6,7 +6,8 @@ import KuditFrameworks
 @main
 struct KuditFrameworksApp: App {
     init() {
-        DebugLevel.currentLevel = .NOTICE
+//        DebugLevel.currentLevel = .WARNING
+        debug("in App init()", level: DebugLevel.currentLevel)
     }
     var body: some Scene {
         WindowGroup {

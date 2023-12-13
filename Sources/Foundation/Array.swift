@@ -116,3 +116,14 @@ extension Array where Element: Identifiable {
 // let arrayOfIdentifiables = []
 // let itemWithId = arrayOfIdentifiables[id]
 
+extension Array {
+    /// Sort array by KeyPath
+    func sorted<T: Comparable>(by keyPath: KeyPath<Element, T>, isAscending: Bool = true) -> [Element] {
+        return sorted {
+            let lhs = $0[keyPath: keyPath]
+            let rhs = $1[keyPath: keyPath]
+            return isAscending ? lhs < rhs : lhs > rhs
+        }
+    }
+}
+

@@ -2,6 +2,7 @@
 
 Additional components, simpler, and convenience code for Kudit projects.
 
+v4.0.22 12/13/2023 Fixed so DebugLevel defaults to .DEBUG and if a message is set to .SILENT it will never print.  Added .SILENT level.  Added colors.  Added emoji for color in console.  Added basic colors to KuColor.  Added rotate() function to DebugLevel for testing and made CaseIterable.  Added array sorting by KeyPath.  Added DebugLevel.colorLogging to KuColor methods so that parsing a string that fails (which might be intentional) doesn't log unnecessarily. Changes merged.
 v4.0.21 11/11/2023 Added conditional compiler directives to remove code when importing in watchOS, tvOS, or macOS (non-catalyst) projects.  Updated dependencies to use patched versions.  Ensured compatibility by also using forked versions of projects.
 v4.0.20 11/8/2023 Added description to DebugLevels and .isAtLeast() test.  Added additional color logging when conversions don't work.  Replaced several print statements with debugs.  Added inPlayground check.  Added DataStore code.  Added embossed view modifier.
 v4.0.19 10/30/2023 Changed Color coding to use .pretty format.
@@ -94,5 +95,7 @@ MARK: - Features to add:
 TODO: Updating KuditConnect documentation to include how to set the label (not currently possible - needs to be added).
  TODO: KuditConnect automatic screenshot when tapping menu
 // TODO: Go through and add more tests for better code coverage!
+
+Should failed parsing color throw rather than just returning `nil` so we can get the message if we want and ignore otherwise?
 
 // TODO: Update this once Swift 5.9 is released for playgrounds support Swift Macros: https://www.avanderlee.com/swift/macros/

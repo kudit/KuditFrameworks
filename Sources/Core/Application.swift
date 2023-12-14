@@ -127,11 +127,12 @@ public class Application: CustomStringConvertible {
     // MARK: - Entitlements Information
     public var iCloudIsEnabled: Bool {
         guard let token = FileManager.default.ubiquityIdentityToken else {
-            debug("iCloud not available", level: .NOTICE)
+            debug("iCloud not available", level: .SILENT)
             return false
         }
         _ = token // suppress unused warning
-        debug("iCloud logged in with token `\(token)`", level: .NOTICE)
+        debug("iCloud logged in", level: .SILENT)
+        debug("iCloud token: `\(token)`", level: .SILENT)
         return true
     }
 

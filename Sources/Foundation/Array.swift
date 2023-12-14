@@ -94,8 +94,8 @@ public extension Collection {
 }
 
 // Array Identifiable
-extension Array where Element: Identifiable {
-    public subscript(id: Element.ID) -> Element? {
+public extension Array where Element: Identifiable {
+    subscript(id: Element.ID) -> Element? {
         get {
             first { $0.id == id }
         }
@@ -116,7 +116,7 @@ extension Array where Element: Identifiable {
 // let arrayOfIdentifiables = []
 // let itemWithId = arrayOfIdentifiables[id]
 
-extension Array {
+public extension Array {
     /// Sort array by KeyPath
     func sorted<T: Comparable>(by keyPath: KeyPath<Element, T>, isAscending: Bool = true) -> [Element] {
         return sorted {

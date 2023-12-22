@@ -1,7 +1,7 @@
 import Foundation
 
 /// Version in dot notation
-public struct Version: RawRepresentable, Hashable, Comparable, Codable, CustomStringConvertible, LosslessStringConvertible, Testable {
+public struct Version: ExpressibleByStringLiteral, RawRepresentable, Hashable, Comparable, Codable, CustomStringConvertible, LosslessStringConvertible, Testable {
     public var rawValue: String
     
     public init(rawValue: String) {
@@ -10,6 +10,9 @@ public struct Version: RawRepresentable, Hashable, Comparable, Codable, CustomSt
     public init(_ rawValue: String) {
         self.init(rawValue: rawValue)
     }
+	public init(stringLiteral: String) {
+		self = Version(rawValue: stringLiteral)
+	}
     /*public init?(_ description: String) {
         self.init(rawValue: description)
         for item in self.components {
@@ -70,8 +73,8 @@ public struct Version: RawRepresentable, Hashable, Comparable, Codable, CustomSt
     internal static let testVersion: TestClosure = {
         let first = Version("2")
         let second = Version("12.1")
-        let third = Version("2.12.1")
-        let fourth = Version("12.1.0")
+		let third: Version = "2.12.1"
+		let fourth: Version = "12.1.0"
         var check = first < second && third > first && fourth == second && third < fourth
         return (check, "\(first) < \(second) && \(third) > \(first) && \(fourth) == \(second) && \(third) < \(fourth)")
     }
@@ -80,6 +83,7 @@ public struct Version: RawRepresentable, Hashable, Comparable, Codable, CustomSt
     ]
 }
 
+// With ExpressibleByStringLiteral, is this still necessary?
 public extension String {
     init(_ version: Version) {
         self = version.rawValue
@@ -101,4 +105,8 @@ public extension LocalizedStringKey.StringInterpolation {
     mutating func appendInterpolation(_ value: Version) {
         appendInterpolation(value.description)
     }
+}
+
+#Preview("Tests") {
+	TestsListView(tests: Version.tests)
 }

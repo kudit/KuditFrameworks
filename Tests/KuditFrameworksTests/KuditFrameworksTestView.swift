@@ -11,7 +11,7 @@ struct TimeClockView: View {
         VStack {
             Text("Unix time: \(time)")
             Button {
-                DebugLevel.currentLevel.rotate()
+                DebugLevel.currentLevel++
             } label: {
                 HStack {
                     Text("DEBUG LEVEL: \(DebugLevel.currentLevel.emoji)")

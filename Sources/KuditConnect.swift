@@ -286,7 +286,7 @@ public class KuditConnect: ObservableObject {
   Previously run versions: \(Application.main.versionsRun.joined(separator: ", "))
   Identifier: \(Application.main.appIdentifier)
   iCloud: \(Application.main.iCloudIsEnabled ? "Enabled" : "Disabled")
-  Device: \(Device.current.description)\(Application.main.inPlayground ? " - PLAYGROUND" : "")
+  Device: \(Device.current.description)\(Application.inPlayground ? " - PLAYGROUND" : "")
   Screen Ratio: \(Device.current.screenRatio)
   System: \(Device.current.systemName ?? "Unavailable") \(Device.current.systemVersion ?? "Unknown")
   """
@@ -347,7 +347,7 @@ This section is to help us properly route your feedback and help troubleshoot an
 	}
 
 	public static let kuditAPIURL = "https://www.kudit.com/api"
-	public static let kuditConnectVersion = Version("3.0")
+	public static let kuditConnectVersion: Version = "3.0"
 	
 	// https://www.kudit.com/api/kudos.php?identifier=com.kudit.BROWSERTEST&version=1.2.3&kcVersion=3.2.1
 	// Returns "SUCCESS"

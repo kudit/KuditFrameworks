@@ -131,22 +131,6 @@ public enum DebugLevel: Comparable, CustomStringConvertible, CaseIterable {
     public static func isAtLeast(_ level: DebugLevel) -> Bool {
         return Self.currentLevel.isAtLeast(level)
     }
-    
-    mutating func rotate() {
-        let cases = DebugLevel.allCases
-        guard var index = cases.firstIndex(of: self) else {
-            fatalError("Unknown case!")
-        }
-        index++
-        if index >= cases.count {
-            index = 0
-        }
-        // can't print or access the currentLevel while mutating the same value
-//        print("Current debug level: \(DebugLevel.currentLevel.description)")
-        //print("Rotating to: \(index): \(cases[index].description)")
-        self = cases[index]
-//        print("Current debug level: \(DebugLevel.currentLevel.description)")
-    }
 }
 //DebugLevel.currentLevel = .ERROR
 /**

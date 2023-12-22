@@ -17,8 +17,8 @@ public class Application: CustomStringConvertible {
     // use Bundle.kuditFrameworks.version instead
 
     /// Place `Application.track()` in `application(_:didFinishLaunchingWithOptions:)` or @main struct init() function to enable version tracking.
-    public static func track() {
-        debug("Kudit Application Tracking:\n\(Application.main)", level: .NOTICE)
+    public static func track(file: String = #file, function: String = #function, line: Int = #line, column: Int = #column) {
+        debug("Kudit Application Tracking:\n\(Application.main)", level: .NOTICE, file: file, function: function, line: line, column: column)
     }
     
     /// for resetting version tracking for unit tests only (done here because different domain than the test user defaults)
@@ -41,7 +41,16 @@ public class Application: CustomStringConvertible {
     // MARK: - Application information
     public static let main = Application()
     /// Human readable display name for the application.
-    public let name = Bundle.main.name
+    public let name = {
+        var name = Bundle.main.name
+        if Application.inPlayground {
+            name += " (Playground)"
+        }
+        if Application.inPreview {
+            name += " (#Preview)"
+        }
+        return name
+    }()
 
     /// Name that appears on the Home Screen
     public let appName = Bundle.main.appName
@@ -77,7 +86,13 @@ public class Application: CustomStringConvertible {
         return description
     }
     
-    public var inPlayground: Bool {
+    // MARK: - Environment information
+    // In macOS Playgrounds Preview: swift-playgrounds-dev-previews.swift-playgrounds-app.hdqfptjlmwifrrakcettacbhdkhn.501.KuditFramework
+    // In macOS Playgrounds Running: swift-playgrounds-dev-run.swift-playgrounds-app.hdqfptjlmwifrrakcettacbhdkhn.501.KuditFrameworksApp
+    // In iPad Playgrounds Preview: swift-playgrounds-dev-previews.swift-playgrounds-app.agxhnwfqkxciovauscbmuhqswxkm.501.KuditFramework
+    // In iPad Playgrounds Running: swift-playgrounds-dev-run.swift-playgrounds-app.agxhnwfqkxciovauscbmuhqswxkm.501.KuditFrameworksApp
+    public static var inPlayground: Bool {
+        debug("Testing inPlayground: Bundles: \(Bundle.allBundles.map { $0.bundleIdentifier }.description)", level: .SILENT)
         if Bundle.allBundles.contains(where: { ($0.bundleIdentifier ?? "").contains("swift-playgrounds") }) {
             //print("in playground")
             return true
@@ -85,6 +100,10 @@ public class Application: CustomStringConvertible {
             //print("not in playground")
             return false
         }
+    }
+    
+    public static var inPreview: Bool {
+        ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1"
     }
     
     // MARK: - Version information
@@ -174,3 +193,19 @@ public extension Bundle {
     
     fileprivate func getInfo(_ str: String) -> String? { infoDictionary?[str] as? String }
 }
+
+#if canImport(SwiftUI)
+import SwiftUI
+#Preview("Preview Check") {
+    VStack {
+        Text("Application: \(Application.main.name)")
+        if Application.inPlayground {
+            Text("In Playground")
+        }
+        if Application.inPreview {
+            Text("In Preview")
+        }
+        Spacer()
+    }
+}
+#endif

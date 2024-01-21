@@ -151,6 +151,7 @@ public func debug(_ message: Any, level: DebugLevel = DebugLevel.defaultLevel, f
     let simplerFunction = function.replacingOccurrences(of: "__preview__", with: "_p_")
     let threadInfo = Thread.isMainThread ? "" : "^"
     if DebugLevel.includeContext {
+        // TODO: Add timestamps to debug calls so we can see how long things take?  Have a debug format static string so we can propertly interleave?
         print("\(simplerFile)(\(line)) : \(simplerFunction)\(threadInfo)\n\(level.emoji) \(message)")
     } else {
         print(message)

@@ -2,6 +2,7 @@
 
 Additional components, simpler, and convenience code for Kudit projects.
 
+v4.1.0 1/19/2024 Fixed line break issues with the app info section.  Removed KuditConnect version from menu.  Made app version smaller and grouped with KuditConnect info via section Header.  Made `Testable` framework public so we can include in apps.  Added division and multiplication functions and `doubleValue` for `Int` to support double and float returns when dividing by an `Int`.  Added `average()` and `sum()` functions for numeric collections.  Support displaying string as an alternative in nil coalescing.  Added Color Groups to `KuColor` arrays of colors for easy usage (improved over previous implementation which may require code updates).  Added `RadialLayout`.  Added `OverlappingHStack` and `OverlappingVStack` (fixed so the layout doesn't have a fixed overlap and doesn't scale contents).
 v4.0.24 12/22/2023 Updated Application.main.name to include a parenthetical if running in Playground or #Preview.  Added in better loggging level to Application.track() to be clearer where tracked.  Added string literal initialization and assignment of Version.  Removed unnecessary rotate() function since we already have that in ++ function on CaseIterable (made sure that was public as well).
 v4.0.23 12/14/2023 Fixed permissions for Array sorting.  Removed unnecessary iCloud logging.
 v4.0.22 12/13/2023 Fixed so DebugLevel defaults to .DEBUG and if a message is set to .SILENT it will never print.  Added .SILENT level.  Added colors.  Added emoji for color in console.  Added basic colors to KuColor.  Added rotate() function to DebugLevel for testing and made CaseIterable.  Added array sorting by KeyPath.  Added DebugLevel.colorLogging to KuColor methods so that parsing a string that fails (which might be intentional) doesn't log unnecessarily. Changes merged.
@@ -94,6 +95,9 @@ MARK: - Bugs to fix
  TODO: Update ShoutIt to use KuditFrameworks DataStore
 
 MARK: - Features to add:
+// TODO: See where we can use @autoclosure in Kudit Frameworks to delay execution (particularly in test frameworks!)
+
+TODO: Add .rotated(n) function on arrays for cycling things like the .rainbow array.
 TODO: Updating KuditConnect documentation to include how to set the label (not currently possible - needs to be added).
  TODO: KuditConnect automatic screenshot when tapping menu
 // TODO: Go through and add more tests for better code coverage!

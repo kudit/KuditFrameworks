@@ -4,8 +4,8 @@ import Foundation
 public typealias TestTuple = (Bool, String)
 public typealias TestClosure = () async throws -> TestTuple
 
-// don't make this public to avoid compiling test stuff into framework
-protocol Testable {
+// don't make this public to avoid compiling test stuff into framework, however, do make public so apps can add in their own tests.
+public protocol Testable {
     static var tests: [Test] { get }
 }
 

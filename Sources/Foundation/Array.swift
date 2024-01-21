@@ -34,6 +34,31 @@ public extension Array {
             self.append(element)
         }
     }
+    /// returns an array with the elements of the base array repeated `count` times.  If count is less than 1, will return an empty array of the same type
+    func repeated(_ count: Int) -> Self {
+        var returnArray = self // so we get the same type of array
+        
+        guard count > 0 else {
+            returnArray.removeAll()
+            return returnArray
+        }
+        
+        for _ in 1..<count { // 1 since first will be included above
+            returnArray.append(contentsOf: self)
+        }
+        return returnArray
+    }
+    
+    /// chunks the array into `size` sized chunks.  Last array may have fewer than `size` elements if it does not divide evenly.
+    ///  https://www.hackingwithswift.com/example-code/language/how-to-split-an-array-into-chunks
+    func chunked(into size: Int) -> [[Element]] {
+        guard size > 0 && count > 0 else {
+            return []
+        }
+        return stride(from: 0, to: count, by: size).map {
+            Array(self[$0 ..< Swift.min($0 + size, count)])
+        }
+    }
 }
 
 public extension Array where Element: Hashable {
@@ -90,7 +115,22 @@ public extension Collection {
         guard array[safe: 5] == nil else {
             fatalError("Should be a safe nil return")
         }
-    }  
+    }
+    /// return the `nth` element.  If `nth` is more than the array size, loop around to the beginning (for use in getting an item in an array that should loop).  Will crash if array is empty.
+    // TODO: Rename to something else that's clearer?
+    subscript (nth offset: Int) -> Element {
+        let index = self.index(self.startIndex, offsetBy: offset % self.count)
+        return self[index]
+    }
+    static func nthTests() {
+        let array = [1,2,3]
+        guard array[nth: 0] == 1 else {
+            fatalError("Basic functionality fails")
+        }
+        guard array[nth: 7] == 2 else {
+            fatalError("Should be looped value")
+        }
+    }
 }
 
 // Array Identifiable
@@ -127,3 +167,18 @@ public extension Array {
     }
 }
 
+// MARK: - Numeric collection functions
+
+public extension Sequence where Element: AdditiveArithmetic {
+    /// calculates the sum of the sequence
+    func sum() -> Element {
+        return self.reduce(.zero, +)
+        
+    }
+}
+public extension Collection where Element: DoubleConvertible & AdditiveArithmetic {
+    /// calculates the average value of the collection
+    func average() -> Double {
+        return self.sum().doubleValue / self.count
+    }
+}

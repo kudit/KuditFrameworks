@@ -39,7 +39,11 @@ public struct KuditFrameworksTestView: View {
     public var body: some View {
         NavigationView {
             VStack {
-                KuditLogo()
+                ColorBar(colors: .rainbow)
+                    .mask {
+                        KuditLogo()
+                            .padding(2)
+                    }
                     .frame(size: 44)
                 Text("Hello, Kudit world!")
 //                let encoded = KuditConnect.shared.faqs.asJSON()
@@ -50,6 +54,8 @@ public struct KuditFrameworksTestView: View {
                 Text(KuditConnect.shared.appInformation)
                     .padding()
 //                ColorPrettyTests()
+                ColorBar(label: "Test", colors: .rainbow)
+                    .frame(height: 10)
             }
             .navigationTitle("Kudit Frameworks")
             .toolbar {
@@ -69,7 +75,7 @@ public struct KuditFrameworksTestView: View {
             }
         }
 #if !os(macOS)
-		.navigationViewStyle(.stack)
+        .navigationViewStyle(.stack)
 #endif
     }
 }

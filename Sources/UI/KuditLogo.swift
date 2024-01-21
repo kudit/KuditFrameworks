@@ -66,8 +66,8 @@ public struct KuditLogoShape: Shape {
         return path
     }
     public init(ballsOnly: Bool = false) {
-		self.ballsOnly = ballsOnly
-	}
+        self.ballsOnly = ballsOnly
+    }
 }
 
 #if canImport(SwiftUI)
@@ -91,65 +91,69 @@ public struct KuditLogo: View {
 }
 
 struct TestPreview: View {
-	var body: some View {
-		Form {
-			Section {
-				KuditLogo()
-				//.stroke(lineWidth: 7)
-				//.fill(Color.blue)
-				KuditLogo(weight: 4)
-					.accentColor(.blue)
-				//.stroke(lineWidth: 7)
-				KuditLogo(weight: 4)
-					.accentColor(.black)
-				KuditLogo(weight: 1, color: .accentColor)
-					.frame(size: 44)
-			}
-			
-		}.environment(\.defaultMinListRowHeight, 200)
-			.navigationTitle("SwiftUI")
-			.toolbar {
-				HStack {
-					Button(action: {
-						print("button kudit")
-					}) {
-						KuditLogo(weight: 1)
-							.aspectRatio(1, contentMode: .fill)
-					}
-					Button(action: {
-						print("share action")
-					}) {
-						Image(systemName: "square.and.arrow.up")
-							.resizable()
-					}
-					Button("Hello") {
-						print("hello world")
-					}
-				}
-			}
-		#if !os(macOS)
-			.navigationViewStyle(.stack)
-		#endif
-			//.previewLayout(.fixed(width: 500, height: 500   ))
-	}
+    var body: some View {
+        Form {
+            Section {
+                KuditLogo()
+                //.stroke(lineWidth: 7)
+                //.fill(Color.blue)
+                KuditLogo(weight: 4)
+                    .accentColor(.blue)
+                //.stroke(lineWidth: 7)
+                ColorBar(colors: .rainbow)
+                    .mask {
+                        KuditLogo(weight: 4)
+                            .padding(2)
+                    }
+                    .frame(size: 100)
+                KuditLogo(weight: 1, color: .accentColor)
+                    .frame(size: 44)
+            }
+            
+        }.environment(\.defaultMinListRowHeight, 200)
+            .navigationTitle("SwiftUI")
+            .toolbar {
+                HStack {
+                    Button(action: {
+                        print("button kudit")
+                    }) {
+                        KuditLogo(weight: 1)
+                            .aspectRatio(1, contentMode: .fill)
+                    }
+                    Button(action: {
+                        print("share action")
+                    }) {
+                        Image(systemName: "square.and.arrow.up")
+                            .resizable()
+                    }
+                    Button("Hello") {
+                        print("hello world")
+                    }
+                }
+            }
+        #if !os(macOS)
+            .navigationViewStyle(.stack)
+        #endif
+            //.previewLayout(.fixed(width: 500, height: 500   ))
+    }
 }
 
 struct TestWrapper: View {
-	var body: some View {
-		if #available(macOS 13, watchOS 9.0, tvOS 16.0, iOS 16.0, *) { // errors if macOS 13 or watchOS 9 which is what we want.
-			NavigationStack {
-				TestPreview()
-			}
-		} else {
-			// Fallback on earlier versions
-			NavigationView {
-				TestPreview()
-			}
-		}
-	}
+    var body: some View {
+        if #available(macOS 13, watchOS 9.0, tvOS 16.0, iOS 16.0, *) { // errors if macOS 13 or watchOS 9 which is what we want.
+            NavigationStack {
+                TestPreview()
+            }
+        } else {
+            // Fallback on earlier versions
+            NavigationView {
+                TestPreview()
+            }
+        }
+    }
 }
 
 #Preview("Tests") {
-	TestWrapper()
+    TestWrapper()
 }
 #endif

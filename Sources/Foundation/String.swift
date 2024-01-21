@@ -45,7 +45,7 @@ public extension LosslessStringConvertible {
 }
 
 extension CharacterSet: Testable {
-    static var tests = [
+    public static var tests = [
         Test("character strings", testCharacterStrings),
     ]
 }
@@ -665,6 +665,18 @@ public extension NSSecureCoding {
     /// Convert a valid Object to string representation in compact form.
     var asPrettyJSON: String? {
         return self.JSONString(false)
+    }
+}
+
+// TODO: See where we can use @autoclosure in Kudit Frameworks to delay execution (particularly in test frameworks!)
+extension Optional where Wrapped == any Numeric {
+    /// Support displaying string as an alternative in nil coalescing for inline \(optionalNum ?? "String description of nil")
+    static func ?? (optional: Wrapped?, defaultValue: @autoclosure () -> String) -> String {
+        if let optional {
+            return String(describing: optional)
+        } else {
+            return defaultValue()
+        }
     }
 }
 

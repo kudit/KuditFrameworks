@@ -10,9 +10,9 @@ public struct Version: ExpressibleByStringLiteral, RawRepresentable, Hashable, C
     public init(_ rawValue: String) {
         self.init(rawValue: rawValue)
     }
-	public init(stringLiteral: String) {
-		self = Version(rawValue: stringLiteral)
-	}
+    public init(stringLiteral: String) {
+        self = Version(rawValue: stringLiteral)
+    }
     /*public init?(_ description: String) {
         self.init(rawValue: description)
         for item in self.components {
@@ -73,12 +73,12 @@ public struct Version: ExpressibleByStringLiteral, RawRepresentable, Hashable, C
     internal static let testVersion: TestClosure = {
         let first = Version("2")
         let second = Version("12.1")
-		let third: Version = "2.12.1"
-		let fourth: Version = "12.1.0"
+        let third: Version = "2.12.1"
+        let fourth: Version = "12.1.0"
         var check = first < second && third > first && fourth == second && third < fourth
         return (check, "\(first) < \(second) && \(third) > \(first) && \(fourth) == \(second) && \(third) < \(fourth)")
     }
-    static var tests = [
+    public static var tests = [
         Test("Version comparisons", Version.testVersion),
     ]
 }
@@ -108,5 +108,5 @@ public extension LocalizedStringKey.StringInterpolation {
 }
 
 #Preview("Tests") {
-	TestsListView(tests: Version.tests)
+    TestsListView(tests: Version.tests)
 }

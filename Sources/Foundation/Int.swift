@@ -65,6 +65,32 @@ public extension Int {
     }
 }
 
+// Division & Multiplication of Float/Double by Int
+public extension Int {
+    // NOTE: Static func operators should be defined in one of the argument type extensions, not the return type
+    /// Divide left hand side by the right hand side.  For easily dividing by an `Int` since not suppported by the standard library for some reason.
+    static func /(lhs: Double, rhs: Int) -> Double {
+        return lhs / rhs.doubleValue
+    }
+    /// Divide left hand side by the right hand side.  For easily dividing by an `Int` since not suppported by the standard library for some reason.
+    static func /(lhs: Float, rhs: Int) -> Float {
+        return Float(lhs.doubleValue / rhs.doubleValue)
+    }
+    /// Divide left hand side by the right hand side.  For easily dividing by an `Int` since not suppported by the standard library for some reason.
+    static func /(lhs: Int, rhs: Int) -> Double {
+        return lhs.doubleValue / rhs
+    }
+    /// multiple left hand side by the right hand side.  For easily multiplying by an `Int` since this is not suppported by the standard library for some reason.
+    static func *<T: ExpressibleByFloatLiteral & DoubleConvertible>(lhs: T, rhs: Int) -> Double {
+        return lhs.doubleValue * rhs.doubleValue
+    }
+    /// multiple left hand side by the right hand side.  For easily multiplying by an `Int` since this is not suppported by the standard library for some reason.
+    static func *<T: ExpressibleByFloatLiteral & DoubleConvertible>(lhs: Int, rhs: T) -> Double {
+        return lhs.doubleValue * rhs.doubleValue
+    }
+}
+
+
 #if canImport(SwiftUI)
 import SwiftUI
 struct MyView_Previews: PreviewProvider {

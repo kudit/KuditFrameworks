@@ -9,14 +9,14 @@ import SwiftUI
 //    init(content: @escaping () -> Content)
 //}
 //public extension ContainerView {
-//    init(@ViewBuilder _ content: @escaping () -> Content) {
+//    public init(@ViewBuilder _ content: @escaping () -> Content) {
 //        self.init(content: content)
 //    }
 //}
 
 public struct RadialStack<Content:View>: View {
     public var content: () -> Content
-    init(@ViewBuilder _ content: @escaping () -> Content) {
+    public init(@ViewBuilder _ content: @escaping () -> Content) {
         self.content = content
     }
     public var body: some View {
@@ -64,7 +64,7 @@ public struct RadialLayout: Layout {
         ForEach(0 ..< 20) { item in
             Circle()
                 .fill([Color].rainbow[nth: item])
-                .frame(width: 44)
+                .frame(width: 64)
                 .overlay(Image(systemName: "calendar")
                     .foregroundColor(.white)
                 )

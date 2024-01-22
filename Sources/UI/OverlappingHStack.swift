@@ -3,15 +3,6 @@ import SwiftUI
 
 // NOTE: Used in Monetization
 
-//public protocol ContainerView: View {
-//    associatedtype Content
-//    init(content: @escaping () -> Content)
-//}
-//public extension ContainerView {
-//    init(@ViewBuilder _ content: @escaping () -> Content) {
-//        self.init(content: content)
-//    }
-//}
 private enum OrientationAlignment {
     case horizontal(VerticalAlignment)
     case vertical(HorizontalAlignment)
@@ -110,7 +101,7 @@ private struct OverlappingStackContainer<StackContent:View>: View {
 public struct OverlappingHStack<Content:View>: View {
     var alignment: VerticalAlignment
     var content: () -> Content
-    init(alignment: VerticalAlignment = .center, @ViewBuilder content: @escaping () -> Content) {
+    public init(alignment: VerticalAlignment = .center, @ViewBuilder content: @escaping () -> Content) {
         self.alignment = alignment
         self.content = content
     }
@@ -121,7 +112,7 @@ public struct OverlappingHStack<Content:View>: View {
 public struct OverlappingVStack<Content:View>: View {
     var alignment: HorizontalAlignment = .center
     var content: () -> Content
-    init(alignment: HorizontalAlignment = .center, @ViewBuilder content: @escaping () -> Content) {
+    public init(alignment: HorizontalAlignment = .center, @ViewBuilder content: @escaping () -> Content) {
         self.alignment = alignment
         self.content = content
     }
@@ -242,7 +233,7 @@ private struct OverlappingStack: Layout {
             ForEach(0..<6) { index in
                 Circle().fill([Color].rainbow[nth: index])
             }
-            Capsule().fill(.white)
+            Capsule().fill(.foreground)
                 .frame(width: 150, height: 10)
         }
         .frame(height: 60)

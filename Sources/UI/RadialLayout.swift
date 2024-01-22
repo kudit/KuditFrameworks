@@ -4,6 +4,34 @@ import SwiftUI
 
 // from https://designcode.io/swiftui-handbook-radial-layout
 
+//public protocol ContainerView: View {
+//    associatedtype Content
+//    init(content: @escaping () -> Content)
+//}
+//public extension ContainerView {
+//    init(@ViewBuilder _ content: @escaping () -> Content) {
+//        self.init(content: content)
+//    }
+//}
+
+public struct RadialStack<Content:View>: View {
+    public var content: () -> Content
+    init(@ViewBuilder _ content: @escaping () -> Content) {
+        self.content = content
+    }
+    public var body: some View {
+        if #available(macOS 13.0, iOS 16.0, tvOS 20.0, *) {
+            RadialLayout {
+                content()
+            }
+        } else {
+            ZStack {
+                content()
+            }
+        }
+    }
+}
+
 public struct RadialLayout: Layout {
     @available(macOS 13.0, iOS 16.0, tvOS 20.0, *)
     public func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
@@ -46,7 +74,7 @@ public struct RadialLayout: Layout {
 
 @available(macOS 13.0, iOS 16.0, tvOS 20.0, *)
 #Preview("Colors") {
-    RadialLayout {
+    RadialStack {
         Group {
             Circle().fill(.orange)
             Circle().fill(.yellow)

@@ -21,3 +21,6 @@ Add package `https://github.com/kudit/KuditFrameworks`
 ## Attribution
 
 This project may become open source but for now it is the property of Kudit LLC.  Please let us know if you need this in your own project.
+
+## Contributors
+The complete list of people who contributed to this project is available [here](https://github.com/kudit/KuditFrameworks/graphs/contributors).

@@ -796,9 +796,17 @@ public extension KuColor {
     }
 }
 
-public struct ColorBar: View {
-    var label: String?
-    var colors: [Color]
+#if canImport(SwiftUI)
+import SwiftUI
+
+public struct ColorBarView: View {
+    public var text: String?
+    public var colors: [Color]
+    // auto-generated doesn't work externally.  need to explicitly define so can be public.
+    public init(text: String? = nil, colors: [Color]) {
+        self.text = text
+        self.colors = colors
+    }
     public var body: some View {
         ZStack {
             HStack(spacing: 0) {
@@ -806,8 +814,8 @@ public struct ColorBar: View {
                     color
                 }
             }
-            if let label {
-                Text(label)
+            if let text {
+                Text(text)
                     .font(.title).bold()
                     .foregroundStyle(.white)
                     .shadow(radius: 1)
@@ -818,17 +826,12 @@ public struct ColorBar: View {
 
 #Preview("Colors") {
     VStack {
-        ColorBar(label: "Rainbow", colors: .rainbow)
-        ColorBar(label: "Prioritized", colors: .prioritized)
-        ColorBar(label: "Named", colors: .named)
-        ColorBar(label: "Grayscale", colors: .grayscale)
+        ColorBarView(text: "Rainbow", colors: .rainbow)
+        ColorBarView(text: "Prioritized", colors: .prioritized)
+        ColorBarView(text: "Named", colors: .named)
+        ColorBarView(text: "Grayscale", colors: .grayscale)
     }
 }
-
-
-#if canImport(SwiftUI)
-import SwiftUI
-
 
 struct ColorPrettyTests: View {
     var body: some View {

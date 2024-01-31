@@ -39,7 +39,7 @@ public struct KuditFrameworksTestView: View {
     public var body: some View {
         NavigationView {
             VStack {
-                ColorBar(colors: .rainbow)
+                ColorBarView(colors: .rainbow)
                     .mask {
                         KuditLogo()
                             .padding(2)
@@ -54,7 +54,7 @@ public struct KuditFrameworksTestView: View {
                 Text(KuditConnect.shared.appInformation)
                     .padding()
 //                ColorPrettyTests()
-                ColorBar(label: "Test", colors: .rainbow)
+                ColorBarView(text: "Test", colors: .rainbow)
                     .frame(height: 10)
             }
             .navigationTitle("Kudit Frameworks")

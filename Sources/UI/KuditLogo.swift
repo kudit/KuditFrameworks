@@ -100,7 +100,7 @@ struct TestPreview: View {
                 KuditLogo(weight: 4)
                     .accentColor(.blue)
                 //.stroke(lineWidth: 7)
-                ColorBar(colors: .rainbow)
+                ColorBarView(colors: .rainbow)
                     .mask {
                         KuditLogo(weight: 4)
                             .padding(2)

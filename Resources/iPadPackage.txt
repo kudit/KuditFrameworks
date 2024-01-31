@@ -10,14 +10,16 @@ import AppleProductTypes
 let package = Package(
     name: "KuditFrameworksApp",
     platforms: [
-        .iOS("15.2")
+        .iOS("15.2"),
+        .macOS("14.3"),
+        .visionOS("1.0"),
     ],
     products: [
         .iOSApplication(
             name: "KuditFrameworksApp",
             targets: ["AppModule"],
             teamIdentifier: "3QPV894C33",
-            displayVersion: "4.0.9",
+            displayVersion: "4.1.3",
             bundleVersion: "1",
             appIcon: .asset("AppIcon"),
             accentColor: .presetColor(.teal),
@@ -38,8 +40,10 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/GetStream/effects-library", "1.0.0"..<"2.0.0"),
-        .package(url: "https://github.com/devicekit/DeviceKit.git", "5.1.0"..<"6.0.0"),
+//        .package(url: "https://github.com/GetStream/effects-library", "1.0.0"..<"2.0.0"),
+        .package(url: "https://github.com/kudit/effects-library", "1.0.0"..<"2.0.0"),
+//        .package(url: "https://github.com/devicekit/DeviceKit.git", "5.1.0"..<"6.0.0"),
+        .package(url: "https://github.com/kudit/DeviceKit.git", "5.1.0"..<"6.0.0"),
         .package(url: "https://github.com/johnsundell/ink.git", "0.6.0"..<"1.0.0")
     ],
     targets: [

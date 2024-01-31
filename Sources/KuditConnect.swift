@@ -122,6 +122,8 @@ struct KuditConnectFAQs: View {
                     }
                 }
                 // TODO: add in section to contact support
+                Text("\(Application.main.name) v\(Application.main.version) © \(String(Date().year)) Kudit LLC All Rights Reserved.\nRead our [Privacy Policy](https://kudit.com/privacy.php) or [Terms of Use](https://kudit.com/terms.php).\n\nOpen Source projects used include [DeviceKit](https://github.com/devicekit/DeviceKit), [Effects Library](https://github.com/GetStream/effects-library), and [Ink](https://github.com/JohnSundell/Ink).\(connect.additionalLegalInfo)")
+                    .font(.footnote)
             }
             .refreshable {
                 await KuditConnect.shared.loadFromServer()
@@ -271,6 +273,8 @@ public class KuditConnect: ObservableObject {
     }
     
     @Published public var faqs: [KuditFAQ] // TODO: have a way of loading on demand
+    
+    public var additionalLegalInfo = "" // use to add any copyright or license information
     
     // MARK: - Support Email
     @Published public var customizeMessageBody: (String) -> String = {$0} // TODO: Add ability to add files and photos?

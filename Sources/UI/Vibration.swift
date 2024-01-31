@@ -24,7 +24,7 @@ public enum Vibration: CaseIterable {
 	case rigid
 	case soft
 	public func vibrate() {
-#if canImport(UIKit)
+#if canImport(UIKit) && !os(visionOS)
 		switch self {
 		case .system:
 			#if canImport(AudioToolbox)
@@ -33,40 +33,40 @@ public enum Vibration: CaseIterable {
 			WKInterfaceDevice.current().play(.notification)
 			#endif
 		case .heavy:
-#if canImport(AudioToolbox)
+            #if canImport(AudioToolbox)
 			let generator = UIImpactFeedbackGenerator(style: .heavy)
 			generator.impactOccurred()
-#elseif canImport(WatchKit)
+            #elseif canImport(WatchKit)
 			WKInterfaceDevice.current().play(.failure)
-#endif
+            #endif
 		case .light:
-#if canImport(AudioToolbox)
+            #if canImport(AudioToolbox)
 			let generator = UIImpactFeedbackGenerator(style: .light)
 			generator.impactOccurred()
-#elseif canImport(WatchKit)
+            #elseif canImport(WatchKit)
 			WKInterfaceDevice.current().play(.click)
-#endif
+            #endif
 		case .medium:
-#if canImport(AudioToolbox)
+            #if canImport(AudioToolbox)
 			let generator = UIImpactFeedbackGenerator(style: .medium)
 			generator.impactOccurred()
-#elseif canImport(WatchKit)
+            #elseif canImport(WatchKit)
 			WKInterfaceDevice.current().play(.start)
-#endif
+            #endif
 		case .rigid:
-#if canImport(AudioToolbox)
+            #if canImport(AudioToolbox)
 			let generator = UIImpactFeedbackGenerator(style: .soft)
 			generator.impactOccurred()
-#elseif canImport(WatchKit)
+            #elseif canImport(WatchKit)
 			WKInterfaceDevice.current().play(.retry)
-#endif
+            #endif
 		case .soft:
-#if canImport(AudioToolbox)
+            #if canImport(AudioToolbox)
 			let generator = UIImpactFeedbackGenerator(style: .soft)
 			generator.impactOccurred()
-#elseif canImport(WatchKit)
+            #elseif canImport(WatchKit)
 			WKInterfaceDevice.current().play(.success)
-#endif
+            #endif
 		}
 #else
 		AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))

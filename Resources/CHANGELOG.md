@@ -2,6 +2,7 @@
 
 Additional components, simpler, and convenience code for Kudit projects.
 
+v4.2 1/31/2024 Added legal notice to the bottom of the FAQ section including links to privacy policy and terms of use for App Store subscription compliance.  Added attribution credit to included packages.  Updated swift tools version to 5.9 to support visionOS.  Added support for macOS and visionOS.  Fixed ColorBarView not being public (also renamed from ColorBar).  Updating DeviceKit to support visionOS.  Updated vibration code to make sure uses simple audio feedback on visionOS.
 v4.1.2 1/21/2024 Fixed missing public initializer for RadialStack.
 v4.1.1 1/21/2024 Added public to optional nil coalescing that was missing in previous version.  Added tests for operations mixing Double and Int.  Updated package dependencies.  Fixed public missing to initializers for OverlappingHStack.  Fixed so RadialStack works since RadialLayout seems to not work in framework.  Updated version of Kudit's version of DeviceKit to make sure included.  Updated dependency.
 v4.1.0 1/19/2024 Fixed line break issues with the app info section.  Removed KuditConnect version from menu.  Made app version smaller and grouped with KuditConnect info via section Header.  Made `Testable` framework public so we can include in apps.  Added division and multiplication functions and `doubleValue` for `Int` to support double and float returns when dividing by an `Int`.  Added `average()` and `sum()` functions for numeric collections.  Support displaying string as an alternative in nil coalescing.  Added Color Groups to `KuColor` arrays of colors for easy usage (improved over previous implementation which may require code updates).  Added `RadialLayout`.  Added `OverlappingHStack` and `OverlappingVStack` (fixed so the layout doesn't have a fixed overlap and doesn't scale contents).
@@ -97,6 +98,8 @@ MARK: - Bugs to fix
  TODO: Update ShoutIt to use KuditFrameworks DataStore
 
 MARK: - Features to add:
+// TODO: Completely re-write DeviceKit to be clearer and easier to maintain and update and simplify for various platforms.  Have device dependency code within the function so that the functions are always present and the usage just may return nil depending on the device if not supported.  Also make a simpler package for updating with Swift Playgrounds for more development support.
+
 // TODO: See where we can use @autoclosure in Kudit Frameworks to delay execution (particularly in test frameworks!)
 
 TODO: Add .rotated(n) function on arrays for cycling things like the .rainbow array.
@@ -107,3 +110,5 @@ TODO: Updating KuditConnect documentation to include how to set the label (not c
 Should failed parsing color throw rather than just returning `nil` so we can get the message if we want and ignore otherwise?
 
 // TODO: Update this once Swift 5.9 is released for playgrounds support Swift Macros: https://www.avanderlee.com/swift/macros/
+
+TODO: Package Debug, KuColor, Application & Version, Test Frameworks, Layouts, Foundation improvements, etc into separate packages that can be separate active open source projects like DeviceKit.  Submit some of the foundation packages to Foundation open source projects.

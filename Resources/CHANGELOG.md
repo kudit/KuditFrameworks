@@ -2,6 +2,7 @@
 
 Additional components, simpler, and convenience code for Kudit projects.
 
+v4.2.1 1/31/2024 Fixed shadow Package files to update swift version to 5.9. Updated colors to include named lightGray and darkGray and changed order from black to white to white to black.
 v4.2 1/31/2024 Added legal notice to the bottom of the FAQ section including links to privacy policy and terms of use for App Store subscription compliance.  Added attribution credit to included packages.  Updated swift tools version to 5.9 to support visionOS.  Added support for macOS and visionOS.  Fixed ColorBarView not being public (also renamed from ColorBar).  Updating DeviceKit to support visionOS.  Updated vibration code to make sure uses simple audio feedback on visionOS.
 v4.1.2 1/21/2024 Fixed missing public initializer for RadialStack.
 v4.1.1 1/21/2024 Added public to optional nil coalescing that was missing in previous version.  Added tests for operations mixing Double and Int.  Updated package dependencies.  Fixed public missing to initializers for OverlappingHStack.  Fixed so RadialStack works since RadialLayout seems to not work in framework.  Updated version of Kudit's version of DeviceKit to make sure included.  Updated dependency.

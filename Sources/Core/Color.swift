@@ -27,7 +27,6 @@ public protocol KuColor: Codable, Equatable {
     static var gray: UnderlyingColorType { get }
     static var green: UnderlyingColorType { get }
     static var indigo: UnderlyingColorType { get }
-    static var magenta: UnderlyingColorType { get }
     static var mint: UnderlyingColorType { get }
     static var orange: UnderlyingColorType { get }
     static var pink: UnderlyingColorType { get }
@@ -36,6 +35,10 @@ public protocol KuColor: Codable, Equatable {
     static var teal: UnderlyingColorType { get }
     static var white: UnderlyingColorType { get }
     static var yellow: UnderlyingColorType { get }
+    // Kudit Added
+    static var magenta: UnderlyingColorType { get }
+    static var lightGray: UnderlyingColorType { get }
+    static var darkGray: UnderlyingColorType { get }
 }
 
 // MARK: - color groups
@@ -53,8 +56,8 @@ public extension Array where Element: KuColor, Element.UnderlyingColorType == El
     static var prioritized: [Element] { [.red, .green, .blue, .yellow, .magenta, .cyan, .orange, .purple, .mint, .indigo, .brown] }
     /// All Apple named colors (adds cyan and magenta)
     static var named: [Element] { [.red, .orange, .yellow, .green, .mint, .teal, .cyan, .blue, .indigo, .purple, .magenta, .pink, .brown, .clear, .gray, .black, .white] }
-    /// Grayscale colors from black to white
-    static var grayscale: [Element] { [.black, .gray, .white] }
+    /// Grayscale colors from white to black
+    static var grayscale: [Element] { [.white, .lightGray, .gray, .darkGray, .black] }
 }
 
 // the LosslessStringConvertible extension does not work for KuColor since a color may be initialized by a string but the corresponding unlabelled init function is not the one we want.
@@ -128,6 +131,14 @@ public extension KuColor {
     typealias DefaultColorType = Color
 }
 extension Color: KuColor {
+    public static var lightGray: Color {
+        return .init(string: "#CBCBCB", defaultColor: .white)
+    }
+    
+    public static var darkGray: Color {
+        return .init(string: "#515151", defaultColor: .black)
+    }
+    
     public static var magenta: Color {
         return .init(red: 1, green: 0, blue: 1, alpha: 1)
     }
@@ -156,6 +167,10 @@ extension Color: KuColor {
             rgba = (red: 50/255, green: 173/255, blue: 230/255, alpha: 1)
         case .gray:
             rgba = (red: 142/255, green: 142/255, blue: 147/255, alpha: 1)
+        case .lightGray:
+            rgba = (red: 204/255, green: 204/255, blue: 204/255, alpha: 1)
+        case .darkGray:
+            rgba = (red: 51/255, green: 51/255, blue: 51/255, alpha: 1)
         case .green:
             rgba = (red: 52/255, green: 199/255, blue: 89/255, alpha: 1)
         case .indigo:
@@ -848,7 +863,7 @@ struct ColorPrettyTests: View {
     }
 }
 
-#Preview("test pretty") {
+#Preview("Pretty Text") {
     ColorPrettyTests()
 }
 
@@ -884,110 +899,112 @@ struct SwatchTest: View {
         Swatch(color: color, logo: true)
     }
 }
-struct Color_Previews: PreviewProvider {
-    static var previews: some View {
-        VStack {
-            Text("Color Tinting")
-            Swatch(color: .red.lighterColor)
-            Swatch(color: .red)
-            Swatch(color: .red.darkerColor)
-            Swatch(color: .green.lighterColor)
-            Swatch(color: .green)
-            Swatch(color: .green.darkerColor)
-        }
-        VStack {
-            Text("HSV Conversion")
-            HStack {
-                VStack(spacing: 0) {
-                    SwatchTest(color: .red)
-                    SwatchTest(color: .orange)
-                    SwatchTest(color: .yellow)
-                    SwatchTest(color: .green)
-                    SwatchTest(color: .blue)
-                    SwatchTest(color: .purple)
-                }
-                VStack(spacing: 0) {
-                    SwatchTest(color: .red.rgbTest)
-                    SwatchTest(color: .orange.rgbTest)
-                    SwatchTest(color: .yellow.rgbTest)
-                    SwatchTest(color: .green.rgbTest)
-                    SwatchTest(color: .blue.rgbTest)
-                    SwatchTest(color: .purple.rgbTest)
-                }
-                VStack(spacing: 0) {
-                    SwatchTest(color: .red.hsvTest)
-                    SwatchTest(color: .orange.hsvTest)
-                    SwatchTest(color: .yellow.hsvTest)
-                    SwatchTest(color: .green.hsvTest)
-                    SwatchTest(color: .blue.hsvTest)
-                    SwatchTest(color: .purple.hsvTest)
-                }
-                VStack(spacing: 0) {
-                    SwatchTest(color: .red.hsvTest.rgbTest)
-                    SwatchTest(color: .orange.hsvTest.rgbTest)
-                    SwatchTest(color: .yellow.hsvTest.rgbTest)
-                    SwatchTest(color: .green.hsvTest.rgbTest)
-                    SwatchTest(color: .blue.hsvTest.rgbTest)
-                    SwatchTest(color: .purple.hsvTest.rgbTest)
-                }
-            }
-        }
-        VStack {
-            Text("Lightness Tests")
-                .bold()
-            HStack(spacing: 0) {
-                VStack(spacing: 0) {
-                    SwatchTest(color: .red)
-                    SwatchTest(color: .orange)
-                    SwatchTest(color: .yellow)
-                    SwatchTest(color: .green)
-                    SwatchTest(color: .blue)
-                    SwatchTest(color: .purple)
-                }
-                VStack(spacing: 0) {
-                    SwatchTest(color: Color(string:Color.red.hexString) ?? .black)
-                    SwatchTest(color: Color(string:Color.orange.hexString) ?? .black)
-                    SwatchTest(color: Color(string:Color.yellow.hexString) ?? .black)
-                    SwatchTest(color: Color(string:Color.green.hexString) ?? .black)
-                    SwatchTest(color: Color(string:Color.blue.hexString) ?? .black)
-                    SwatchTest(color: Color(string:Color.purple.hexString) ?? .black)
-                }
-                VStack(spacing: 0) {
-                    SwatchTest(color: .white)
-                    SwatchTest(color: Color(string: "#ccc") ?? .black)
-                    SwatchTest(color: Color(string: "Gray") ?? .white)
-                    SwatchTest(color: .gray)
-                    SwatchTest(color: Color(string: "#333") ?? .white)
-                    SwatchTest(color: .black)
-                }
-                VStack(spacing: 0) {
-                    
-                    SwatchTest(color: .accentColor)
-                    SwatchTest(color: .primary)
-                    SwatchTest(color: .secondary)
-                    SwatchTest(color: Color(string:"SkyBlue") ?? .black)
-                    SwatchTest(color: Color(string:"Beige") ?? .black)
-                    SwatchTest(color: Color(string:"LightGray") ?? .black)
-                }
-                VStack(spacing: 0) {
-                    SwatchTest(color: Color(string:Color.pink.hexString) ?? .black)
-                    SwatchTest(color: Color(string:Color.brown.hexString) ?? .black)
-                    SwatchTest(color: Color(string:Color.mint.hexString) ?? .black)
-                    SwatchTest(color: Color(string:Color.teal.hexString) ?? .black)
-                    SwatchTest(color: Color(string:Color.cyan.hexString) ?? .black)
-                    SwatchTest(color: Color(string:Color.indigo.hexString) ?? .black)
-                }
-                VStack(spacing: 0) {
-                    SwatchTest(color: .pink)
-                    SwatchTest(color: .brown)
-                    SwatchTest(color: .mint)
-                    SwatchTest(color: .teal)
-                    SwatchTest(color: .cyan)
-                    SwatchTest(color: .indigo)
-                }
-            }
-            
-        }.padding().background(.gray)
+#Preview("Color Tinting") {
+    VStack {
+        Text("Color Tinting")
+        Swatch(color: .red.lighterColor)
+        Swatch(color: .red)
+        Swatch(color: .red.darkerColor)
+        Swatch(color: .green.lighterColor)
+        Swatch(color: .green)
+        Swatch(color: .green.darkerColor)
     }
+}
+#Preview("HSV Conversion") {
+    VStack {
+        Text("HSV Conversion")
+        HStack {
+            VStack(spacing: 0) {
+                SwatchTest(color: .red)
+                SwatchTest(color: .orange)
+                SwatchTest(color: .yellow)
+                SwatchTest(color: .green)
+                SwatchTest(color: .blue)
+                SwatchTest(color: .purple)
+            }
+            VStack(spacing: 0) {
+                SwatchTest(color: .red.rgbTest)
+                SwatchTest(color: .orange.rgbTest)
+                SwatchTest(color: .yellow.rgbTest)
+                SwatchTest(color: .green.rgbTest)
+                SwatchTest(color: .blue.rgbTest)
+                SwatchTest(color: .purple.rgbTest)
+            }
+            VStack(spacing: 0) {
+                SwatchTest(color: .red.hsvTest)
+                SwatchTest(color: .orange.hsvTest)
+                SwatchTest(color: .yellow.hsvTest)
+                SwatchTest(color: .green.hsvTest)
+                SwatchTest(color: .blue.hsvTest)
+                SwatchTest(color: .purple.hsvTest)
+            }
+            VStack(spacing: 0) {
+                SwatchTest(color: .red.hsvTest.rgbTest)
+                SwatchTest(color: .orange.hsvTest.rgbTest)
+                SwatchTest(color: .yellow.hsvTest.rgbTest)
+                SwatchTest(color: .green.hsvTest.rgbTest)
+                SwatchTest(color: .blue.hsvTest.rgbTest)
+                SwatchTest(color: .purple.hsvTest.rgbTest)
+            }
+        }
+    }
+}
+#Preview("Lightness Tests") {
+    VStack {
+        Text("Lightness Tests")
+            .bold()
+        HStack(spacing: 0) {
+            VStack(spacing: 0) {
+                SwatchTest(color: .red)
+                SwatchTest(color: .orange)
+                SwatchTest(color: .yellow)
+                SwatchTest(color: .green)
+                SwatchTest(color: .blue)
+                SwatchTest(color: .purple)
+            }
+            VStack(spacing: 0) {
+                SwatchTest(color: Color(string:Color.red.hexString) ?? .black)
+                SwatchTest(color: Color(string:Color.orange.hexString) ?? .black)
+                SwatchTest(color: Color(string:Color.yellow.hexString) ?? .black)
+                SwatchTest(color: Color(string:Color.green.hexString) ?? .black)
+                SwatchTest(color: Color(string:Color.blue.hexString) ?? .black)
+                SwatchTest(color: Color(string:Color.purple.hexString) ?? .black)
+            }
+            VStack(spacing: 0) {
+                SwatchTest(color: .white)
+                SwatchTest(color: .lightGray)
+                SwatchTest(color: Color(string: "Gray") ?? .white)
+                SwatchTest(color: .gray)
+                SwatchTest(color: .darkGray)
+                SwatchTest(color: .black)
+            }
+            VStack(spacing: 0) {
+                
+                SwatchTest(color: .accentColor)
+                SwatchTest(color: .primary)
+                SwatchTest(color: .secondary)
+                SwatchTest(color: Color(string:"SkyBlue") ?? .black)
+                SwatchTest(color: Color(string:"Beige") ?? .black)
+                SwatchTest(color: Color(string:"LightGray") ?? .black)
+            }
+            VStack(spacing: 0) {
+                SwatchTest(color: Color(string:Color.pink.hexString) ?? .black)
+                SwatchTest(color: Color(string:Color.brown.hexString) ?? .black)
+                SwatchTest(color: Color(string:Color.mint.hexString) ?? .black)
+                SwatchTest(color: Color(string:Color.teal.hexString) ?? .black)
+                SwatchTest(color: Color(string:Color.cyan.hexString) ?? .black)
+                SwatchTest(color: Color(string:Color.indigo.hexString) ?? .black)
+            }
+            VStack(spacing: 0) {
+                SwatchTest(color: .pink)
+                SwatchTest(color: .brown)
+                SwatchTest(color: .mint)
+                SwatchTest(color: .teal)
+                SwatchTest(color: .cyan)
+                SwatchTest(color: .indigo)
+            }
+        }
+        
+    }.padding().background(.gray)
 }
 #endif

@@ -1,7 +1,5 @@
 import SwiftUI
-#if canImport(KuditFrameworks) // since this is needed in XCode but is unavailable in Playgrounds
 import KuditFrameworks
-#endif
 #if !os(watchOS) && !os(tvOS)
 
 struct TimeClockView: View {
@@ -36,6 +34,10 @@ public struct KuditFrameworksTestView: View {
     
     @State var testIsPresented = false
     
+    var tests: [Test] {
+        Version.tests + CharacterSet.tests + String.tests + Date.tests + PHP.tests
+    }
+
     public var body: some View {
         NavigationView {
             VStack {
@@ -54,24 +56,26 @@ public struct KuditFrameworksTestView: View {
                 Text(KuditConnect.shared.appInformation)
                     .padding()
 //                ColorPrettyTests()
-                ColorBarView(text: "Test", colors: .rainbow)
-                    .frame(height: 10)
+                Button {
+                    testIsPresented = true
+                } label: {
+                    ColorBarView(text: "Test", colors: .rainbow)
+                        .frame(height: 10)
+                }
+            }
+            .sheet(isPresented: $testIsPresented) {
+                NavigationView {
+                    TestsListView(tests: tests)
+                        .toolbar {
+                            Button("Dismiss") {
+                                testIsPresented = false
+                            }
+                        }
+                }
             }
             .navigationTitle("Kudit Frameworks")
             .toolbar {
                 KuditConnectMenu()
-//                Menu("Test") {
-//                    Button("Show Sheet") {
-//                        testIsPresented = true
-//                    }
-//                }
-//                .sheet(isPresented: $testIsPresented) {
-//                    Button("Dismiss") {
-//                        testIsPresented = false
-//                    }
-//                    ColorPrettyTests()
-//                    TestsListView(tests: Color.tests + CharacterSet.tests + String.tests + PHP.tests)
-//                }
             }
         }
 #if !os(macOS)

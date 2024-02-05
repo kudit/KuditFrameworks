@@ -2,6 +2,7 @@
 
 Additional components, simpler, and convenience code for Kudit projects.
 
+v4.2.2 2/4/2024 Consolidated Package.swift files so that we only need to maintain one version that works in both Playgrounds and as a package.  Changed framework color to Red.  Moved test files out of unnecessary wrapper folder.  Added Development folder for example app code.  Updated TestView to use standard Test list.  Moved CHANGELOG.md to root.
 v4.2.1 1/31/2024 Fixed shadow Package files to update swift version to 5.9. Updated colors to include named lightGray and darkGray and changed order from black to white to white to black.
 v4.2 1/31/2024 Added legal notice to the bottom of the FAQ section including links to privacy policy and terms of use for App Store subscription compliance.  Added attribution credit to included packages.  Updated swift tools version to 5.9 to support visionOS.  Added support for macOS and visionOS.  Fixed ColorBarView not being public (also renamed from ColorBar).  Updating DeviceKit to support visionOS.  Updated vibration code to make sure uses simple audio feedback on visionOS.
 v4.1.2 1/21/2024 Fixed missing public initializer for RadialStack.

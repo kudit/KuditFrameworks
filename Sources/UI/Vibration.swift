@@ -6,8 +6,9 @@
 //
 #if !os(tvOS) // none of this is relevant for tvOS except maybe an alert sound.  TODO?
 
-#if canImport(AudioToolbox)
+#if canImport(AudioToolbox) && canImport(CoreAudioTypes)
 import AudioToolbox
+import CoreAudioTypes
 #endif
 #if canImport(UIKit)
 import UIKit

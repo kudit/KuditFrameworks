@@ -16,6 +16,8 @@ public class Application: CustomStringConvertible {
 //    public static let KuditFrameworksVersion = (KuditFrameworksBundle?.infoDictionary?["CFBundleShortVersionString"] as? String ?? "KuditFrameworks not loaded as bundle.") + " (" + (KuditFrameworksBundle?.infoDictionary?["CFBundleVersion"] as? String ?? "?.?") + ")"
     // use Bundle.kuditFrameworks.version instead
 
+    public static var iCloudSupported = true
+    
     /// Place `Application.track()` in `application(_:didFinishLaunchingWithOptions:)` or @main struct init() function to enable version tracking.
     public static func track(file: String = #file, function: String = #function, line: Int = #line, column: Int = #column) {
         debug("Kudit Application Tracking:\n\(Application.main)", level: .NOTICE, file: file, function: function, line: line, column: column)
@@ -59,6 +61,7 @@ public class Application: CustomStringConvertible {
     public let appIdentifier = Bundle.main.bundleIdentifier ?? "com.unknown.unknown"
 
     private init() {
+        // this actually does the tracking
         if isFirstRun { // make sure to call before tracking or this won't ever be false
             debug("First Run!", level: .NOTICE)
         }
@@ -77,12 +80,17 @@ public class Application: CustomStringConvertible {
             description += " **First Run!**"
         }
         if initial != version {
-            description += "\nPreviously run: \(versionsRun.filter{ $0 != version }.joined(separator: ", "))"
+            description += "\nPreviously run versions: \(versionsRun.filter{ $0 != version }.joined(separator: ", "))"
         }
+        description += "\nIdentifier: \(Application.main.appIdentifier)"
         if let kf = Bundle.kuditFrameworks {
             description += "\nKudit Framework Version: \(kf.version)"
+            description += "\nKuditConnect Version: \(KuditConnect.kuditConnectVersion)"
         }
-        description += "\niCloud Status: \(iCloudIsEnabled ? "enabled" : "unavailable")"
+        // so we can disable on simple apps and still do tracking without issues.
+        if Self.iCloudSupported {
+            description += "\niCloud Status: \(iCloudIsEnabled ? "enabled" : "unavailable")"
+        }
         return description
     }
     
@@ -145,6 +153,10 @@ public class Application: CustomStringConvertible {
     
     // MARK: - Entitlements Information
     public var iCloudIsEnabled: Bool {
+        guard Self.iCloudSupported else {
+            debug("iCloud is not supported by this app.", level: .SILENT)
+            return false
+        }
         guard let token = FileManager.default.ubiquityIdentityToken else {
             debug("iCloud not available", level: .SILENT)
             return false

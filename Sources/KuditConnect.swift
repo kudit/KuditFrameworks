@@ -285,11 +285,7 @@ public class KuditConnect: ObservableObject {
     public static var supportEmailSubject = "App Feedback for \(Application.main.name)"
     public var appInformation: String {
         var infostring = """
-  Application: \(Application.main.name)
-  Version: \(Application.main.version)
-  Previously run versions: \(Application.main.versionsRun.joined(separator: ", "))
-  Identifier: \(Application.main.appIdentifier)
-  iCloud: \(Application.main.iCloudIsEnabled ? "Enabled" : "Disabled")
+  Application: \(Application.main)
   Device: \(Device.current.description)\(Application.inPlayground ? " - PLAYGROUND" : "")
   Screen Ratio: \(Device.current.screenRatio)
   System: \(Device.current.systemName ?? "Unavailable") \(Device.current.systemVersion ?? "Unknown")
@@ -308,11 +304,6 @@ public class KuditConnect: ObservableObject {
 
   """
 #endif
-        infostring +=
-"""
-  KuditFrameworks version: \(Application.main.frameworkVersion)
-  KuditConnect version: \(Self.kuditConnectVersion)
-  """
         return infostring
     }
     

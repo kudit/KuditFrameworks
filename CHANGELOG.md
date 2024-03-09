@@ -2,6 +2,7 @@
 
 Additional components, simpler, and convenience code for Kudit projects.
 
+v4.2.4 3/8/2024 Changed from DeviceKit to new Device framework for easier maintenance and usage.  Improved KuditConnectMenu to work just like SwiftUI Menu.  Updated KuditConnect for use on visionOS.  Added ability to pass custom label to KuditConnectMenu.  Added visionOS Icon asset.
 v4.2.3 2/10/2024 Added Application.iCloudSupported = false as option to prevent hanging on simple visionOS apps that don't really care about iCloud.  Re-worked Application description to be more consistent with the support email.
 v4.2.2 2/4/2024 Consolidated Package.swift files so that we only need to maintain one version that works in both Playgrounds and as a package.  Changed framework color to Red.  Moved test files out of unnecessary wrapper folder.  Added Development folder for example app code.  Updated TestView to use standard Test list.  Moved CHANGELOG.md to root.
 v4.2.1 1/31/2024 Fixed shadow Package files to update swift version to 5.9. Updated colors to include named lightGray and darkGray and changed order from black to white to white to black.
@@ -97,6 +98,7 @@ v1 Realistically was the original Objective-C Kudit Frameworks
  #error("message")
 
 MARK: - Bugs to fix
+TODO: Remove KuditConnect linkage from Application to make more generic (move back to KuditConnect support email rather than Application.description)
  FIXME: In tracking checks, look for DebugLevel set to debug and if so, add #warning to ensure compiler warning? Is this even possible?  
  TODO: Update ShoutIt to use KuditFrameworks DataStore
 

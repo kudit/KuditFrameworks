@@ -11,26 +11,23 @@ import AppleProductTypes
 let package = Package(
     name: "KuditFrameworks",
     platforms: [
-	    // these versions required for Swift Playgrounds
         .iOS("15.2"),
         .macOS("14.3"),
-//        .visionOS("1.0"),
-//        .iOS(.v15),
-        .tvOS(.v15),
-        .watchOS(.v8),
-//        .macOS(.v14),
-        .visionOS(.v1),
+        .tvOS("15.0"),
+        .watchOS("8.0"),
+        .visionOS("1.0")
     ],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
             name: "KuditFrameworks",
-            targets: ["KuditFrameworks"]),
+            targets: ["KuditFrameworks"]
+        ),
         .iOSApplication(
             name: "KuditFrameworksTestApp",
             targets: ["KuditFrameworksAppModule"],
             teamIdentifier: "3QPV894C33",
-            displayVersion: "4.2.2",
+            displayVersion: "4.2.4",
             bundleVersion: "1",
             appIcon: .asset("AppIcon"),
             accentColor: .presetColor(.red),
@@ -52,48 +49,44 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
+
         // .package(url: /* package url */, from: "1.0.0"),
+
 //        .package(url: "https://github.com/GetStream/effects-library", "1.0.0"..<"2.0.0"),
         .package(url: "https://github.com/kudit/effects-library", "1.0.0"..<"2.0.0"),
 //        .package(url: "https://github.com/devicekit/DeviceKit.git", "5.1.0"..<"6.0.0"),
-        .package(url: "https://github.com/kudit/DeviceKit.git", "5.1.0"..<"6.0.0"),
+        .package(url: "https://github.com/kudit/Device.git", "1.0.0"..<"2.0.0"),
         .package(url: "https://github.com/johnsundell/ink.git", "0.6.0"..<"1.0.0")
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
+
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "KuditFrameworks",
             dependencies: [
                 .product(name: "EffectsLibrary", package: "effects-library"),
-                .product(name: "DeviceKit", package: "devicekit"),
+                .product(name: "Device", package: "device"),
                 .product(name: "Ink", package: "ink")
             ],
-            path: "Sources",
-            resources: [
-            ]
+            path: "Sources"
         ),
         .executableTarget(
             name: "KuditFrameworksAppModule",
             dependencies: [
-            	"KuditFrameworks",
-//                .product(name: "EffectsLibrary", package: "effects-library"),
-//                .product(name: "DeviceKit", package: "devicekit"),
-//                .product(name: "Ink", package: "ink")
+                "KuditFrameworks"
             ],
             path: "Development",
-            exclude: [], // "Sources/KuditFrameworks/KuditConnect/KuditConnectFAQs.xcdatamodeld"
-            resources: [
-//                .process("Resources")
-            ],
             swiftSettings: [
                 .enableUpcomingFeature("BareSlashRegexLiterals")
             ]
         ),
         .testTarget(
             name: "KuditFrameworkTests",
-            dependencies: ["KuditFrameworks"],
+            dependencies: [
+                "KuditFrameworks"
+            ],
             path: "Tests"
-            ),
+        )
     ]
 )

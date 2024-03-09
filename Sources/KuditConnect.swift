@@ -27,7 +27,7 @@ KuditConnectMenu {
 import SwiftUI
 import StoreKit
 // https://github.com/devicekit/DeviceKit
-import DeviceKit
+import Device
 // https://swiftuirecipes.com/blog/send-mail-in-swiftui
 
 // MARK: - FAQs
@@ -284,23 +284,28 @@ public class KuditConnect: ObservableObject {
     public static var supportEmail = "support+\(Application.main.appIdentifier)@kudit.com"
     public static var supportEmailSubject = "App Feedback for \(Application.main.name)"
     public var appInformation: String {
+        var screenResolution = "Screen Resolution: "
+        if let screen = Device.current.screen, let resolution = screen.resolution {
+            screenResolution += " \(resolution.0)x\(resolution.1)\n"
+        } else {
+            screenResolution = ""
+        }
         var infostring = """
   Application: \(Application.main)
   Device: \(Device.current.description)\(Application.inPlayground ? " - PLAYGROUND" : "")
-  Screen Ratio: \(Device.current.screenRatio)
-  System: \(Device.current.systemName ?? "Unavailable") \(Device.current.systemVersion ?? "Unknown")
+  \(screenResolution)System: \(Device.current.systemName ?? "Unavailable") \(Device.current.systemVersion ?? "Unknown")
 
   """
-#if canImport(UIKit) && !os(tvOS)
-    infostring +=
-"""
-  Battery Level: \(Device.current.batteryLevel?.description ?? "Unknown")%
+        if let battery = Device.current.battery {
+            infostring +=
+        """
+          Battery Level: \(battery.description)
 
-  """
-#endif
+          """
+        }
 #if canImport(UIKit) && !os(watchOS) && !os(tvOS)
     infostring += """
-  Available Storage: \(Device.volumeAvailableCapacityForOpportunisticUsage?.byteString ?? "Unknown")
+  Available Storage: \(Device.current.volumeAvailableCapacityForOpportunisticUsage?.byteString ?? "Unknown")
 
   """
 #endif
@@ -367,11 +372,13 @@ This section is to help us properly route your feedback and help troubleshoot an
 }
 
 #if !os(watchOS) && !os(tvOS)
-public struct KuditConnectMenu<Content: View>: View {
+public struct KuditConnectMenu<Content: View, LabelView: View>: View {
     public var additionalMenus: () -> Content
+    public var label: () -> LabelView
         
-    public init(@ViewBuilder additionalMenus: @escaping () -> Content = { EmptyView() }) {
+    public init(@ViewBuilder additionalMenus: @escaping () -> Content = { EmptyView() }, @ViewBuilder label: @escaping () -> LabelView = { Label("KuditConnect support menu", systemImage: "questionmark.bubble") }) {
         self.additionalMenus = additionalMenus
+        self.label = label
     }
             
     @Environment(\.openURL) var openURL
@@ -415,7 +422,7 @@ public struct KuditConnectMenu<Content: View>: View {
                  }) {
                  Label("Share App With Friends", systemImage: "square.and.arrow.up")
                  }*/
-#if canImport(UIKit)
+//#if canImport(UIKit)
                 Button(action: {
                     Vibration.light.vibrate()
                     
@@ -438,19 +445,18 @@ public struct KuditConnectMenu<Content: View>: View {
                 }) {
                     Label("Send Us Kudos", systemImage: "hands.sparkles") // hand.thumbsup
                 }
-#endif
+//#endif
                 //            Text("KuditFrameworks v\(Application.main.frameworkVersion)")
                 //Text("KuditConnect v\(KuditConnect.kuditConnectVersion)")
                 //                    Button("Add Passbook Pass", action: {})
             }
         } label: {
-            // TODO: Have a way to customize global default as well as customizing on a per menu basis
-            Label("KuditConnect support menu", systemImage: "questionmark.bubble")
+            label()
         }
         .sheet(isPresented: $showFAQs) {
             KuditConnectFAQs(connect: KuditConnect.shared)
         }
-#if canImport(UIKit)
+//#if canImport(UIKit)
         /// Kudos view
         .fullScreenCover(isPresented: $showKudos) {
             Group {
@@ -475,7 +481,7 @@ public struct KuditConnectMenu<Content: View>: View {
                 isKudosScreenVisible = true
             }
         }
-#endif
+//#endif
     }
 }
 // MARK: - Kudos

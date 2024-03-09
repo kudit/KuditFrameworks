@@ -92,11 +92,11 @@ public extension Int {
         return lhs.doubleValue + rhs
     }
     
-    /// multiple left hand side by the right hand side.  For easily multiplying by an `Int` since this is not suppported by the standard library for some reason.
+    /// multiply left hand side by the right hand side.  For easily multiplying by an `Int` since this is not suppported by the standard library for some reason.
     static func *<T: ExpressibleByFloatLiteral & DoubleConvertible>(lhs: T, rhs: Int) -> Double {
         return lhs.doubleValue * rhs.doubleValue
     }
-    /// multiple left hand side by the right hand side.  For easily multiplying by an `Int` since this is not suppported by the standard library for some reason.
+    /// multiply left hand side by the right hand side.  For easily multiplying by an `Int` since this is not suppported by the standard library for some reason.
     static func *<T: ExpressibleByFloatLiteral & DoubleConvertible>(lhs: Int, rhs: T) -> Double {
         return lhs.doubleValue * rhs.doubleValue
     }

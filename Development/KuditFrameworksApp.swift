@@ -9,7 +9,7 @@ struct KuditFrameworksApp: App {
     }
     var body: some Scene {
         WindowGroup {
-            #if os(watchOS) || os(tvOS)
+            #if os(watchOS) || os(tvOS) || os(visionOS)
             Text("Kudit Frameworks test")
             #else
             KuditFrameworksTestView()

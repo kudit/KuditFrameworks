@@ -75,7 +75,11 @@ public struct KuditFrameworksTestView: View {
             }
             .navigationTitle("Kudit Frameworks")
             .toolbar {
-                KuditConnectMenu()
+                KuditConnectMenu {
+                    Text("Test Text")
+                } label: {
+                    Label("Menu Test", systemImage: "star.fill")
+                }
             }
         }
 #if !os(macOS)

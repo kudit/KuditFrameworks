@@ -229,7 +229,9 @@ public extension UIImage {
                 if inputRadius - 2 < CGFloat(Float.ulpOfOne) {
                     inputRadius = 2
                 }
-                var radius = UInt32(floor((inputRadius * CGFloat(3) * CGFloat(sqrt(2 * Float.pi)) / 4 + 0.5) / 2))
+                let sqrt2pi = CGFloat(sqrt(2 * Float.pi))
+                let compoundMultiplication = inputRadius * CGFloat(3) * sqrt2pi
+                var radius = UInt32(floor((compoundMultiplication / 4 + 0.5) / 2))
                 radius |= 1
                 let flags = vImage_Flags(kvImageGetTempBufferSize) | vImage_Flags(kvImageEdgeExtend)
                 let tempBufferSize: Int = vImageBoxConvolve_ARGB8888(inputBuffer, outputBuffer, nil, 0, 0, radius, radius, nil, flags)

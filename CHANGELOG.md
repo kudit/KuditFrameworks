@@ -1,5 +1,6 @@
 # ChangeLog
 
+v4.2.6 3/11/2024 Fixed issue with blurred not being able to be type checked in reasonable time.
 v4.2.5 3/11/2024 Updated documentation.  Fixed so that KuditConnectMenu can be invoked without a label as before.  Updated debug so that we can add breakpoints in code.  Added color convenience for autocomplete from a color set.
 v4.2.4 3/8/2024 Changed from DeviceKit to new Device framework for easier maintenance and usage.  Improved KuditConnectMenu to work just like SwiftUI Menu.  Updated KuditConnect for use on visionOS.  Added ability to pass custom label to KuditConnectMenu.  Added visionOS Icon asset.
 v4.2.3 2/10/2024 Added Application.iCloudSupported = false as option to prevent hanging on simple visionOS apps that don't really care about iCloud.  Re-worked Application description to be more consistent with the support email.

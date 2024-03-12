@@ -75,6 +75,13 @@ public extension KuColor {
     }
 }
 
+public extension KuColor {
+    /// For quickly initializing a color using the nth item in a colorset.  Extension of KuColor so we can type . and start initializing for autocomplete.
+    static func nth(_ nth: Int, of colorset: [Self]) -> Self {
+        return colorset[nth: nth]
+    }
+}
+
 // adding equatable conformance for colors
 public extension KuColor {
     static func ==(lhs:Self, rhs:Self) -> Bool {

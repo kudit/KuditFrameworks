@@ -4,7 +4,10 @@ import KuditFrameworks
 @main
 struct KuditFrameworksApp: App {
     init() {
-//        DebugLevel.currentLevel = .WARNING
+        // Remove before launch.  This allows a warning to be generated during debugging to help remind the developer to remove before releasing.  Set to false during debugging and true for launch.
+        if true {
+            DebugLevel.currentLevel = .NOTICE
+        }
         debug("in App init()", level: DebugLevel.currentLevel)
     }
     var body: some Scene {

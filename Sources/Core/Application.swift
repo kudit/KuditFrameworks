@@ -8,6 +8,7 @@
 
 import Foundation
 
+// TODO: CHeck that these AppInfo itemes are supported and documented: https://stackoverflow.com/questions/24501288/getting-version-and-build-information-with-swift
 // TODO: add functions for sorting versions?  Major, Minor, Something?  Make enum or other struct that can be converted to/from String?
 // TODO: See if we can deprecate this if there are better swifty equivalents.  Doesn't seem to be currently.  Used in KuditConnect.
 public class Application: CustomStringConvertible {

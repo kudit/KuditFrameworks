@@ -144,6 +144,21 @@ public enum DebugLevel: Comparable, CustomStringConvertible, CaseIterable {
  - Parameter column: For bubbling down the #column number from a call site. (Not used currently but here for completeness).
  */
 public func debug(_ message: Any, level: DebugLevel = DebugLevel.defaultLevel, file: String = #file, function: String = #function, line: Int = #line, column: Int = #column) {
+    // Enable setting breakpoints for various debug levels.
+    switch level {
+    case .OFF:
+        break // for breakpoint
+    case .ERROR:
+        break // for breakpoint
+    case .WARNING:
+        break // for breakpoint
+    case .NOTICE:
+        break // for breakpoint
+    case .DEBUG:
+        break // for breakpoint
+    case .SILENT:
+        break // for breakpoint
+    }
     guard DebugLevel.isAtLeast(level) else {
         return
     }

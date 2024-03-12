@@ -1,7 +1,6 @@
-# KuditFrameworks
+# ChangeLog
 
-Additional components, simpler, and convenience code for Kudit projects.
-
+v4.2.5 3/11/2024 Updated documentation.  Fixed so that KuditConnectMenu can be invoked without a label as before.  Updated debug so that we can add breakpoints in code.  Added color convenience for autocomplete from a color set.
 v4.2.4 3/8/2024 Changed from DeviceKit to new Device framework for easier maintenance and usage.  Improved KuditConnectMenu to work just like SwiftUI Menu.  Updated KuditConnect for use on visionOS.  Added ability to pass custom label to KuditConnectMenu.  Added visionOS Icon asset.
 v4.2.3 2/10/2024 Added Application.iCloudSupported = false as option to prevent hanging on simple visionOS apps that don't really care about iCloud.  Re-worked Application description to be more consistent with the support email.
 v4.2.2 2/4/2024 Consolidated Package.swift files so that we only need to maintain one version that works in both Playgrounds and as a package.  Changed framework color to Red.  Moved test files out of unnecessary wrapper folder.  Added Development folder for example app code.  Updated TestView to use standard Test list.  Moved CHANGELOG.md to root.
@@ -93,27 +92,39 @@ v3 was the iOS 13 compatible version (listed as v1.0.x above)
 v2 was the original SwiftUI port
 v1 Realistically was the original Objective-C Kudit Frameworks
 
-  // Ways to generate compiler warnings in code:
- #warning("message")
- #error("message")
+## Ways to generate compiler warnings in code:
+```Swift
+#warning("message")
+#error("message")
+```
 
-MARK: - Bugs to fix
-TODO: Remove KuditConnect linkage from Application to make more generic (move back to KuditConnect support email rather than Application.description)
- FIXME: In tracking checks, look for DebugLevel set to debug and if so, add #warning to ensure compiler warning? Is this even possible?  
- TODO: Update ShoutIt to use KuditFrameworks DataStore
+NOTE: any lines like this need a blank line before it.
+```Swift
+#if os(visionOS)
+```
 
-MARK: - Features to add:
-// TODO: Completely re-write DeviceKit to be clearer and easier to maintain and update and simplify for various platforms.  Have device dependency code within the function so that the functions are always present and the usage just may return nil depending on the device if not supported.  Also make a simpler package for updating with Swift Playgrounds for more development support.
+## Bugs to fix:
+Known issues that need to be addressed.
 
-// TODO: See where we can use @autoclosure in Kudit Frameworks to delay execution (particularly in test frameworks!)
+[ ] Remove KuditConnect linkage from Application to make more generic (move back to KuditConnect support email rather than Application.description)
+[ ] Update ShoutIt to use KuditFrameworks DataStore
+[ ] Fix Kudos display to be larger and not crop when rating screen comes up in visionOS!  In visionOS, create particle effect outside of window in a reality view so can pop out of window?  ParticleEmitterComponent  Model3D?
 
-TODO: Add .rotated(n) function on arrays for cycling things like the .rainbow array.
-TODO: Updating KuditConnect documentation to include how to set the label (not currently possible - needs to be added).
- TODO: KuditConnect automatic screenshot when tapping menu
-// TODO: Go through and add more tests for better code coverage!
 
-Should failed parsing color throw rather than just returning `nil` so we can get the message if we want and ignore otherwise?
+## Roadmap:
+Planned features and anticipated API changes.  If you want to contribute, this is a great place to start.
 
-// TODO: Update this once Swift 5.9 is released for playgrounds support Swift Macros: https://www.avanderlee.com/swift/macros/
+[ ] See where we can use @autoclosure in Kudit Frameworks to delay execution (particularly in test frameworks!)
+[ ] Add .rotated(n) function on arrays for cycling things like the .rainbow array.
+[ ] Add screenshot functionality.
+[ ] KuditConnect automatic screenshot when tapping menu.
+[ ] Improve test app user interface/layout.
+[ ] Add tests to complete code coverage.
+[ ] Create tests in such a way that they can be run in Previews and in the example App (may require a project dependency).
 
-TODO: Package Debug, KuColor, Application & Version, Test Frameworks, Layouts, Foundation improvements, etc into separate packages that can be separate active open source projects like DeviceKit.  Submit some of the foundation packages to Foundation open source projects.
+## Proposals:
+This is where proposals can be discussed for potential movement to the roadmap.
+
+[ ] In tracking checks, look for DebugLevel set to debug and if so, add #warning to ensure compiler warning? Is this even possible?
+[ ] Should failed parsing color throw rather than just returning `nil` so we can get the message if we want and ignore otherwise?  
+[ ] Package Debug, KuColor, Application & Version, Test Frameworks, Layouts, Foundation improvements, etc into separate packages that can be separate active open source projects like Device?  Submit some of the foundation packages to Foundation open source projects.

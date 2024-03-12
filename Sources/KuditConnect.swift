@@ -372,11 +372,20 @@ This section is to help us properly route your feedback and help troubleshoot an
 }
 
 #if !os(watchOS) && !os(tvOS)
+extension KuditConnect {
+    public static let defaultKuditConnectLabel = { Label("KuditConnect support menu", systemImage: "questionmark.bubble")
+    }
+}
 public struct KuditConnectMenu<Content: View, LabelView: View>: View {
     public var additionalMenus: () -> Content
     public var label: () -> LabelView
-        
-    public init(@ViewBuilder additionalMenus: @escaping () -> Content = { EmptyView() }, @ViewBuilder label: @escaping () -> LabelView = { Label("KuditConnect support menu", systemImage: "questionmark.bubble") }) {
+            
+    // since label added and just like view, added single parameter init so existing trailing closure syntax will work.
+    public init(@ViewBuilder additionalMenus: @escaping () -> Content = { EmptyView() }) {
+        self.init(additionalMenus: additionalMenus, label: KuditConnect.defaultKuditConnectLabel as! () -> LabelView)
+    }
+
+    public init(@ViewBuilder additionalMenus: @escaping () -> Content = { EmptyView() }, @ViewBuilder label: @escaping () -> LabelView = KuditConnect.defaultKuditConnectLabel) {
         self.additionalMenus = additionalMenus
         self.label = label
     }

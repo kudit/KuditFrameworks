@@ -373,19 +373,30 @@ This section is to help us properly route your feedback and help troubleshoot an
 
 #if !os(watchOS) && !os(tvOS)
 extension KuditConnect {
-    public static let defaultKuditConnectLabel = { Label("KuditConnect support menu", systemImage: "questionmark.bubble")
+    public static let defaultKuditConnectLabel = Label("KuditConnect support menu", systemImage: "questionmark.bubble")
+}
+// additional initializers for single and zero arguments.
+public extension KuditConnectMenu where Content == EmptyView, LabelView == Label<Text, Image> {
+    init() {
+        self.init {
+            EmptyView()
+        }
+    }
+}
+public extension KuditConnectMenu where LabelView == Label<Text, Image> {
+    // since label added and just like view, added single parameter init so existing trailing closure syntax will work.
+    //  = { EmptyView() }
+    init(@ViewBuilder additionalMenus: @escaping () -> Content) {
+        self.init(additionalMenus: additionalMenus) {
+            KuditConnect.defaultKuditConnectLabel 
+        }
     }
 }
 public struct KuditConnectMenu<Content: View, LabelView: View>: View {
     public var additionalMenus: () -> Content
     public var label: () -> LabelView
             
-    // since label added and just like view, added single parameter init so existing trailing closure syntax will work.
-    public init(@ViewBuilder additionalMenus: @escaping () -> Content = { EmptyView() }) {
-        self.init(additionalMenus: additionalMenus, label: KuditConnect.defaultKuditConnectLabel as! () -> LabelView)
-    }
-
-    public init(@ViewBuilder additionalMenus: @escaping () -> Content = { EmptyView() }, @ViewBuilder label: @escaping () -> LabelView = KuditConnect.defaultKuditConnectLabel) {
+    public init(@ViewBuilder additionalMenus: @escaping () -> Content, @ViewBuilder label: @escaping () -> LabelView) {
         self.additionalMenus = additionalMenus
         self.label = label
     }
@@ -580,8 +591,11 @@ private struct KCTestView: View {
                     .foregroundStyle(toggleOn ? .green : .yellow)
             }
             .toolbar {
-                
                 // Add the menu button
+                KuditConnectMenu()
+                KuditConnectMenu {
+                    Text("Single item")
+                }
                 KuditConnectMenu(additionalMenus:  {
                     Section("Example Sub-section") {
                         Toggle("Toggle", isOn: $toggleOn)
@@ -589,6 +603,11 @@ private struct KCTestView: View {
                         Text("Additional stuff")
                     }
                 })
+                KuditConnectMenu {
+                    Text("Custom label call")
+                } label: {
+                    Label("Menu Test", systemImage: "star.fill")
+                }
             }
         }
 

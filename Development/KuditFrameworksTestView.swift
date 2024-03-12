@@ -75,8 +75,17 @@ public struct KuditFrameworksTestView: View {
             }
             .navigationTitle("Kudit Frameworks")
             .toolbar {
+                KuditConnectMenu()
                 KuditConnectMenu {
-                    Text("Test Text")
+                    Text("Single item")
+                }
+                KuditConnectMenu(additionalMenus:  {
+                    Section("Example Sub-section") {
+                        Text("Additional stuff")
+                    }
+                })
+                KuditConnectMenu {
+                    Text("Custom label call")
                 } label: {
                     Label("Menu Test", systemImage: "star.fill")
                 }

@@ -48,9 +48,7 @@ public extension Date {
     
     /// return the integer value of the year component.
     var year:Int {
-        // TODO: cast necessary?
-        let components = (Calendar.current as NSCalendar).components([.year], from: self)
-        return components.year!
+        return Calendar.current.component(.year, from: self)
     }
     
     // NEXT: add month and day values?

@@ -8,7 +8,7 @@
 
 // TODO: See if this is actually used anywhere and delete if not!
 
-#if canImport(UIKit) && !os(watchOS) && !os(tvOS)
+#if canImport(UIKit) && !os(watchOS) && !os(tvOS) && canImport(SwiftUI)
 import SwiftUI
 import UIKit
 

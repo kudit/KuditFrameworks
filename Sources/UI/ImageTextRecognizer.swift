@@ -145,6 +145,7 @@ public extension [RecognizedText] {
 
 #if canImport(UIKit)
 // iOS, tvOS, and watchOS – use UIImage
+// TODO: Collapse better?
 import UIKit
 import CoreGraphics
 public extension Data {
@@ -172,6 +173,7 @@ public extension Data {
 // all other platforms - Can't convert to CGImage
 #endif
 
+#if canImport(SwiftUI)
 import SwiftUI
 @available(iOS 15, macCatalyst 15.0, *)
 public class RecognizedImageModel: ObservableObject {
@@ -240,4 +242,5 @@ struct ImageRecognizer_Previews: PreviewProvider {
         }
     }
 }
+#endif
 #endif

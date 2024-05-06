@@ -1,10 +1,15 @@
 import SwiftUI
+#if canImport(KuditFrameworks) // since this is needed in XCode but is unavailable in Playgrounds.
 import KuditFrameworks
-#if !os(watchOS) && !os(tvOS)
+#endif
+#if canImport(Device)
+import Device
+#endif
 
 struct TimeClockView: View {
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     @State var time = -1
+    @ObservedObject var debugLevel = ObservableDebugLevel()
     var body: some View {
         VStack {
             Text("Unix time: \(time)")
@@ -12,9 +17,9 @@ struct TimeClockView: View {
                 DebugLevel.currentLevel++
             } label: {
                 HStack {
-                    Text("DEBUG LEVEL: \(DebugLevel.currentLevel.emoji)")
-                    Text(DebugLevel.currentLevel.description)
-                        .foregroundStyle(Color(color: DebugLevel.currentLevel.color))
+                    Text("DEBUG LEVEL: \(debugLevel.value.emoji)")
+                    Text(debugLevel.value.description)
+                        .foregroundStyle(Color(color: debugLevel.value.color))
                 }
             }
             .buttonStyle(.bordered)
@@ -37,63 +42,95 @@ public struct KuditFrameworksTestView: View {
     var tests: [Test] {
         Version.tests + CharacterSet.tests + String.tests + Date.tests + PHP.tests
     }
-
+    
+    @ViewBuilder
+    var menus: some View {
+        KuditConnectMenu()
+        KuditConnectMenu {
+            Text("Single item")
+        }
+        KuditConnectMenu(additionalMenus:  {
+            Section("Example Sub-section") {
+                Text("Additional stuff")
+            }
+        })
+        KuditConnectMenu {
+            Text("Custom label call")
+        } label: {
+            Label("Menu Test", systemImage: "star.fill")
+        }
+    }
+    
     public var body: some View {
-        NavigationView {
-            VStack {
-                ColorBarView(colors: .rainbow)
-                    .mask {
-                        KuditLogo()
-                            .padding(2)
-                    }
-                    .frame(size: 44)
-                Text("Hello, Kudit world!")
-//                let encoded = KuditConnect.shared.faqs.asJSON()
-  //              Text(encoded)
-                //let decode = try! JSONDecoder().decode([KuditFAQ].self, from: encoded.asData())
-//                Text("\(.decod("12") < Version("2") ? "true" : "false")")
-                TimeClockView()
-                Text(KuditConnect.shared.appInformation)
-                    .padding()
-//                ColorPrettyTests()
-                Button {
-                    testIsPresented = true
-                } label: {
-                    ColorBarView(text: "Test", colors: .rainbow)
-                        .frame(height: 10)
-                }
-            }
-            .sheet(isPresented: $testIsPresented) {
-                NavigationView {
-                    TestsListView(tests: tests)
-                        .toolbar {
-                            Button("Dismiss") {
-                                testIsPresented = false
-                            }
+        VStack {
+            Button {
+                testIsPresented = true
+            } label: {
+                HStack {
+                    ColorBarTestView(colors: .rainbow)
+                        .mask {
+                            KuditLogo()
                         }
+                        .frame(size: 44)
+                    Text("Run Tests")
+                        .font(.title)
                 }
+                .frame(height: 60)
             }
-            .navigationTitle("Kudit Frameworks")
-            .toolbar {
-                KuditConnectMenu()
-                KuditConnectMenu {
-                    Text("Single item")
-                }
-                KuditConnectMenu(additionalMenus:  {
-                    Section("Example Sub-section") {
-                        Text("Additional stuff")
+            Text("Hello, Kudit world!")
+            TimeClockView()
+            ApplicationInfoView()
+            Group {
+                CurrentDeviceInfoView(device: Device.current, includeStorage: false, debug: true)
+                    .padding()
+            }.background {
+                RoundedRectangle(cornerRadius: 15)
+                    .fill(.quaternary)
+            }
+            NavigationLink {
+                ColorTestView()
+            } label: {
+                ColorBarTestView(text: "Color Tests", colors: .rainbow)
+                    .mask {
+                        RoundedRectangle(cornerRadius: 15)
+                            .fill(.green)
                     }
-                })
-                KuditConnectMenu {
-                    Text("Custom label call")
-                } label: {
-                    Label("Menu Test", systemImage: "star.fill")
-                }
+            }
+            .frame(maxHeight: 44)
+            NavigationLink {
+                VibrationTestsView()
+                    .scrollWrapper()
+            } label: {
+                Text("Vibration Tests")
             }
         }
-#if !os(macOS)
-        .navigationViewStyle(.stack)
-#endif
+        .padding()
+        .sheet(isPresented: $testIsPresented) {
+            NavigationView {
+                TestsListView(tests: tests)
+                    .toolbar {
+                        Button("Dismiss") {
+                            testIsPresented = false
+                        }
+                    }
+            }
+        }
+        .navigationTitle("Kudit Frameworks")
+        .toolbar {
+            #if os(watchOS)
+            Menu {
+                menus
+            } label: { KuditConnect.defaultKuditConnectLabel
+            }
+            #else
+            menus
+            #endif
+        }
+        .scrollWrapper()
+        .navigationWrapper()
     }
 }
-#endif
+
+#Preview("KuditFrameworks") {
+    KuditFrameworksTestView()
+}

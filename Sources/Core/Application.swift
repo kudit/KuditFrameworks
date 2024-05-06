@@ -8,16 +8,42 @@
 
 import Foundation
 
-// TODO: CHeck that these AppInfo itemes are supported and documented: https://stackoverflow.com/questions/24501288/getting-version-and-build-information-with-swift
-// TODO: add functions for sorting versions?  Major, Minor, Something?  Make enum or other struct that can be converted to/from String?
-// TODO: See if we can deprecate this if there are better swifty equivalents.  Doesn't seem to be currently.  Used in KuditConnect.
+public enum CloudStatus: CustomStringConvertible {
+    case notSupported, available, unavailable
+    public var description: String {
+        switch self {
+        case .notSupported:
+            "Not Supported"
+        case .available:
+            "Available"
+        case .unavailable:
+            "Unavailable"
+        }
+    }
+}
+
 public class Application: CustomStringConvertible {
 //    public static let KuditFrameworksBundle = Bundle(identifier: "com.kudit.KuditFrameworks")
 // use Bundle.kuditFrameworks instead
 //    public static let KuditFrameworksVersion = (KuditFrameworksBundle?.infoDictionary?["CFBundleShortVersionString"] as? String ?? "KuditFrameworks not loaded as bundle.") + " (" + (KuditFrameworksBundle?.infoDictionary?["CFBundleVersion"] as? String ?? "?.?") + ")"
     // use Bundle.kuditFrameworks.version instead
 
+    /// Use before tracking to disable iCloud checks to prevent crashes if we don't want to check for iCloud.
     public static var iCloudSupported = true
+    
+    /**
+     Defaults to true so application will need to call a function during init/launch:
+     
+     ```swift
+     if false { // this will generate a warning if left as false
+         DebugLevel.currentLevel = .NOTICE
+     }
+     Application.track()
+     ```
+     */
+    public static var DEBUG: Bool {
+        return DebugLevel.currentLevel == .DEBUG
+    }
     
     /// Place `Application.track()` in `application(_:didFinishLaunchingWithOptions:)` or @main struct init() function to enable version tracking.
     public static func track(file: String = #file, function: String = #function, line: Int = #line, column: Int = #column) {
@@ -44,22 +70,25 @@ public class Application: CustomStringConvertible {
     // MARK: - Application information
     public static let main = Application()
     /// Human readable display name for the application.
-    public let name = {
-        var name = Bundle.main.name
-        if Application.inPlayground {
-            name += " (Playground)"
-        }
-        if Application.inPreview {
-            name += " (#Preview)"
-        }
-        return name
-    }()
+    public let name = Bundle.main.name
 
     /// Name that appears on the Home Screen
     public let appName = Bundle.main.appName
 
+    public static let unknownAppIdentifier = "com.unknown.unknown"
     /// The fully qualified reverse dot notation from Bundle.main.bundleIdentifier like com.kudit.frameworks
-    public let appIdentifier = Bundle.main.bundleIdentifier ?? "com.unknown.unknown"
+    public let appIdentifier = {
+        guard let identifier = Bundle.main.bundleIdentifier else {
+            return Application.unknownAppIdentifier
+        }
+        // when running in preview, identifier may be: swift-playgrounds-dev-previews.swift-playgrounds-app.hdqfptjlmwifrrakcettacbhdkhn.501.KuditFramework
+        // for testing, if this is KuditFrameworks, we should pull the unknown identifier FAQs
+        let lastComponent = identifier.components(separatedBy: ".").last
+        if lastComponent == "KuditFramework" || identifier.contains("com.kudit.KuditFrameworksTest") {
+            return Application.unknownAppIdentifier
+        }
+        return identifier
+    }()
 
     private init() {
         // this actually does the tracking
@@ -75,54 +104,28 @@ public class Application: CustomStringConvertible {
     }
     
     public var description: String {
-        let initial = versionsRun.first!
         var description = "\(name) (v\(version))"
         if isFirstRun {
             description += " **First Run!**"
         }
-        if initial != version {
-            description += "\nPreviously run versions: \(versionsRun.filter{ $0 != version }.joined(separator: ", "))"
+        if versionsRun.count > 1 { // don't count on this being ordered
+            description += "\nPreviously run versions: \(versionsRun.filter{ $0 != version }.map { "v\($0)" }.joined(separator: ", "))"
         }
         description += "\nIdentifier: \(Application.main.appIdentifier)"
+        // TODO: Is there a point to this check?  Won't it always be true here?
         if let kf = Bundle.kuditFrameworks {
             description += "\nKudit Framework Version: \(kf.version)"
-            description += "\nKuditConnect Version: \(KuditConnect.kuditConnectVersion)"
+            description += "\nKuditConnect Version: \(KuditConnect.version)"
         }
         // so we can disable on simple apps and still do tracking without issues.
-        if Self.iCloudSupported {
-            description += "\niCloud Status: \(iCloudIsEnabled ? "enabled" : "unavailable")"
-        }
+        description += "\niCloud Status: \(iCloudStatus)"
         return description
     }
-    
-    // MARK: - Environment information
-    // In macOS Playgrounds Preview: swift-playgrounds-dev-previews.swift-playgrounds-app.hdqfptjlmwifrrakcettacbhdkhn.501.KuditFramework
-    // In macOS Playgrounds Running: swift-playgrounds-dev-run.swift-playgrounds-app.hdqfptjlmwifrrakcettacbhdkhn.501.KuditFrameworksApp
-    // In iPad Playgrounds Preview: swift-playgrounds-dev-previews.swift-playgrounds-app.agxhnwfqkxciovauscbmuhqswxkm.501.KuditFramework
-    // In iPad Playgrounds Running: swift-playgrounds-dev-run.swift-playgrounds-app.agxhnwfqkxciovauscbmuhqswxkm.501.KuditFrameworksApp
-    public static var inPlayground: Bool {
-        debug("Testing inPlayground: Bundles: \(Bundle.allBundles.map { $0.bundleIdentifier }.description)", level: .SILENT)
-        if Bundle.allBundles.contains(where: { ($0.bundleIdentifier ?? "").contains("swift-playgrounds") }) {
-            //print("in playground")
-            return true
-        } else {
-            //print("not in playground")
-            return false
-        }
-    }
-    
-    public static var inPreview: Bool {
-        ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1"
-    }
-    
+        
     // MARK: - Version information
     // NOTE: in Objective C, the key was kCFBundleVersionKey, but that returns the build number in Swift.
     /// Current app version string (not including build)
     public let version = Bundle.main.version
-
-    // TODO: this gets the APP version, not the current APP version.  Use Bundle.main. for app version, but need to do something different for XCTests since there is no main bundle in that case
-/// Current framework version string (not including build)
-    public let frameworkVersion = Bundle(for: Application.self).version
     
     /// `true`  if this is the first time the app has been run, `false` otherwise
     // NOTE: should only be mutable by the reset function above.
@@ -143,6 +146,13 @@ public class Application: CustomStringConvertible {
         return versionsRun.map { Version(rawValue: $0) }
     }
     
+    /// List of all versions that have been run since install (in order of running).  Local only and doesn't count versions run on other devices.  Perhaps in the future that will change?
+    public var previouslyRunVersions: [Version] {
+        var versionsRun = versionsRun
+        versionsRun.remove(version)
+        return versionsRun
+    }
+
     public func hasRunVersion(before testVersion: Version) -> Bool {
         for versionRun in versionsRun {
             if versionRun < testVersion {
@@ -162,10 +172,19 @@ public class Application: CustomStringConvertible {
             debug("iCloud not available", level: .SILENT)
             return false
         }
-        _ = token // suppress unused warning
-        debug("iCloud logged in", level: .SILENT)
-        debug("iCloud token: `\(token)`", level: .SILENT)
+        debug("iCloud logged in with token `\(token)`", level: .SILENT)
         return true
+    }
+    
+    public var iCloudStatus: CloudStatus {
+        guard Self.iCloudSupported else {
+            return .notSupported
+        }
+        if iCloudIsEnabled {
+            return .available
+        } else {
+            return .unavailable
+        }
     }
 
     /// Vendor ID (may not be used anywhere since not very helpful)
@@ -209,16 +228,8 @@ public extension Bundle {
 
 #if canImport(SwiftUI)
 import SwiftUI
-#Preview("Preview Check") {
-    VStack {
-        Text("Application: \(Application.main.name)")
-        if Application.inPlayground {
-            Text("In Playground")
-        }
-        if Application.inPreview {
-            Text("In Preview")
-        }
-        Spacer()
-    }
+#Preview("Application View") {
+    ApplicationInfoView()
+        .padding()
 }
 #endif

@@ -1,3 +1,4 @@
+#if canImport(SwiftUI)
 import SwiftUI
 
 struct EmbossedModifier: ViewModifier {
@@ -29,3 +30,4 @@ public extension View {
             .padding()
     }
 }
+#endif

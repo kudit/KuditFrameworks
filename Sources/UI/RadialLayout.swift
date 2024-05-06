@@ -1,3 +1,4 @@
+#if canImport(SwiftUI)
 import SwiftUI
 
 // Used in Monetization
@@ -20,7 +21,7 @@ public struct RadialStack<Content:View>: View {
         self.content = content
     }
     public var body: some View {
-        if #available(macOS 13.0, iOS 16.0, tvOS 20.0, *) {
+        if #available(macOS 13.0, iOS 16.0, tvOS 20.0, watchOS 9.0, *) {
             RadialLayout {
                 content()
             }
@@ -32,13 +33,12 @@ public struct RadialStack<Content:View>: View {
     }
 }
 
+@available(macOS 13.0, iOS 16.0, tvOS 20.0, watchOS 9.0, *)
 public struct RadialLayout: Layout {
-    @available(macOS 13.0, iOS 16.0, tvOS 20.0, *)
     public func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
         proposal.replacingUnspecifiedDimensions()
     }
     
-    @available(macOS 13.0, iOS 16.0, tvOS 20.0, *)
     public func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
         let radius = bounds.width / 3.0
         let angle = Angle.degrees(360.0 / Double(subviews.count)).radians
@@ -55,10 +55,11 @@ public struct RadialLayout: Layout {
             subview.place(at: point, anchor: .center, proposal: .unspecified)
         }
         // TODO: Figure out how to duplicate half of the 0 index subview so in case of overlap it doesn't double overlap at top
+        // TODO: Add a mask to the last image with the first image 
     }
 }
 
-@available(macOS 13.0, iOS 16.0, tvOS 20.0, *)
+@available(macOS 13.0, iOS 16.0, tvOS 20.0, watchOS 9.0, *)
 #Preview("Radial") {
     RadialLayout {
         ForEach(0 ..< 20) { item in
@@ -72,7 +73,7 @@ public struct RadialLayout: Layout {
     }
 }
 
-@available(macOS 13.0, iOS 16.0, tvOS 20.0, *)
+@available(macOS 13.0, iOS 16.0, tvOS 20.0, watchOS 9.0, *)
 #Preview("Colors") {
     RadialStack {
         Group {
@@ -91,3 +92,5 @@ public struct RadialLayout: Layout {
         .frame(size: 80)
     }
 }
+
+#endif

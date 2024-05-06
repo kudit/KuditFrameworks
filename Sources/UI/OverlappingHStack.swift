@@ -1,3 +1,4 @@
+#if canImport(SwiftUI)
 import SwiftUI
 // from https://www.sgade.de/blog/2023-02-28-swift-layout-overlapping-hstack/
 
@@ -80,7 +81,7 @@ private struct OverlappingStackContainer<StackContent:View>: View {
         self.content = content
     }
     public var body: some View {
-        if #available(macOS 13.0, iOS 16.0, tvOS 20.0, *) {
+        if #available(macOS 13.0, iOS 16.0, tvOS 20.0, watchOS 9.0, *) {
             OverlappingStack(orientation: alignment) {
                 content()
             }
@@ -121,7 +122,7 @@ public struct OverlappingVStack<Content:View>: View {
     }
 }
 
-@available(macOS 13.0, iOS 16.0, tvOS 20.0, *)
+@available(macOS 13.0, iOS 16.0, tvOS 20.0, watchOS 9.0, *)
 private struct OverlappingStack: Layout {
     var orientation: OrientationAlignment
     
@@ -269,3 +270,4 @@ private struct OverlappingStack: Layout {
     }
 }
 
+#endif

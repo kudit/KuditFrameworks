@@ -5,6 +5,7 @@
 //  Copyright © 2016 Kudit. All rights reserved.
 //
 // TODO: fix torch button tinting
+// TODO: Deprecate and make SwiftUI version??
 
 // usage: assign torch button if you want to control the flash.  Will use the title color to tint the image.  Selected = torch on, default = torch off
 

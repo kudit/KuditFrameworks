@@ -6,8 +6,8 @@ import Foundation
 //]
 
 
-@available(*, deprecated, renamed: "CustomError")
-public typealias KuError = CustomError 
+//@available(*, deprecated, renamed: "CustomError")
+//public typealias KuError = CustomError 
 
 // TODO: see if there's a way to add interpolation as a parameter to customize the output format.  Perhaps using a debug output formatter object that can be set?
 // Documentation Template:
@@ -29,7 +29,7 @@ public typealias KuError = CustomError
 // , file: String = #file, function: String = #function, line: Int = #line, column: Int = #column
 // debug call site additions:
 // , file: file, function: function, line: line, column: column
-// Formerly KuError but this seems more applicable and memorable
+// Formerly KuError but this seems more applicable and memorable and less specific.
 public enum CustomError: Error {
     case custom(String)
     public init(_ message: String, level: DebugLevel = DebugLevel.defaultLevel, file: String = #file, function: String = #function, line: Int = #line, column: Int = #column) {
@@ -38,6 +38,20 @@ public enum CustomError: Error {
     }
 }
 
+extension Notification.Name {
+    static let currentDebugLevelChanged = Notification.Name("currentDebugLevelChanged")
+}
+
+public class ObservableDebugLevel: ObservableObject {
+    @Published public var value = DebugLevel.currentLevel
+    public init() { // use shared
+        // subscribe to debuglevel changes
+        NotificationCenter.default.addObserver(forName: .currentDebugLevelChanged, object: nil, queue: nil) { _ in
+            debug("Notification of level change!", level: .currentLevel)
+            self.value = DebugLevel.currentLevel
+        }
+    }
+}
 
 public enum DebugLevel: Comparable, CustomStringConvertible, CaseIterable {
     /// Only use .OFF for setting the current debug level so nothing is printed.  If you wish to disable a debug message, use .SILENT
@@ -49,7 +63,14 @@ public enum DebugLevel: Comparable, CustomStringConvertible, CaseIterable {
     case SILENT
     /// Change this value in production to DebugLevvel.ERROR to minimize logging.
     // set default debugging level to .DEBUG (use manual controls to turn OFF if not debug during app tracking since previews do not have app tracking set up nor does it have compiler flags or app init.
-    public static var currentLevel = DebugLevel.DEBUG
+    public static var currentLevel: DebugLevel = DebugLevel.DEBUG
+    /// Allow monitoring by subscribing to `.currentDebugLevelChanged` notification.
+    {
+        didSet {
+            debug("Changed current debug level to \(DebugLevel.currentLevel)", level: .NOTICE)
+            NotificationCenter.default.post(name: .currentDebugLevelChanged, object: nil)
+        }
+    }
     
     public static var defaultLevel = DebugLevel.ERROR
     

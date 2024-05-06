@@ -11,7 +11,7 @@ public struct Version: ExpressibleByStringLiteral, RawRepresentable, Hashable, C
         self.init(rawValue: rawValue)
     }
     public init(stringLiteral: String) {
-        self = Version(rawValue: stringLiteral)
+        self.init(rawValue: stringLiteral)
     }
     /*public init?(_ description: String) {
         self.init(rawValue: description)
@@ -21,6 +21,15 @@ public struct Version: ExpressibleByStringLiteral, RawRepresentable, Hashable, C
             }
         }
     }*/
+    public init(operatingSystemVersion osv: OperatingSystemVersion) {
+        self.init(rawValue: "\(osv.majorVersion).\(osv.minorVersion).\(osv.patchVersion)")
+    }
+    
+    public var operatingSystemVersion: OperatingSystemVersion {
+        return OperatingSystemVersion(majorVersion: major, minorVersion: minor, patchVersion: patch)
+    }
+    
+    
     public var description: String {
         return rawValue
     }

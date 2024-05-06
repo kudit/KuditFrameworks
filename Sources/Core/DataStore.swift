@@ -189,6 +189,7 @@ public class DataStoreObserver {
             migrateLocal(UserDefaults.standard)
             store = NSUbiquitousKeyValueStore.default
         } else {
+            // just use local store and ignore any iCloud syncing.
             store = UserDefaults.standard
         }
         

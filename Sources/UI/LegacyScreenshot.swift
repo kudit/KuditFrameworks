@@ -6,6 +6,7 @@
 //  Copyright © 2016 Kudit. All rights reserved.
 //
 // TODO: perhaps remove from code since not available in visionOS?
+// TODO: Perhaps make a SwiftUI method that is `.screenshottable()` that would allow KuditFrameworks to get screenshot.  Do at Window level??
 
 #if canImport(UIScreen)
 import UIKit

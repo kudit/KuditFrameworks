@@ -1,4 +1,4 @@
-#if canImport(WebKit) && canImport(UIKit)
+#if canImport(WebKit) && canImport(UIKit) && canImport(SwiftUI)
 import SwiftUI
 import WebKit
 // https://alexpaul.dev/2023/01/19/rendering-web-content-in-swiftui-using-uiviewrepresentable-html-and-css/
@@ -10,7 +10,7 @@ class HTMLViewDelegate: NSObject, ObservableObject, WKNavigationDelegate {
         decidePolicyFor navigationAction: WKNavigationAction,
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
     ) {
-		debug("WebView decision handler for navigation action: \(navigationAction)", level: .DEBUG)
+        debug("WebView decision handler for navigation action: \(navigationAction)", level: .DEBUG)
         guard let url = navigationAction.request.url else {
             debug("No request url in navigation action: \(navigationAction)", level: .NOTICE)
             return
@@ -47,8 +47,8 @@ class HTMLViewDelegate: NSObject, ObservableObject, WKNavigationDelegate {
 
 // Create a custom `UIViewRepresentable` that will render web content.
 public struct HTMLView: UIViewRepresentable {
-	@Environment(\.openURL) var openURL
-	static var testHTML = """
+    @Environment(\.openURL) var openURL
+    static var testHTML = """
 <html>
     <head>
 <style type="text/css">

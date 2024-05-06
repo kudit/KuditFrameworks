@@ -1,4 +1,4 @@
-#if canImport(UIKit)
+#if canImport(UIKit) && canImport(SwiftUI)
 import SwiftUI
 /**
  Usage:
@@ -53,7 +53,7 @@ public enum ExternalDisplayOrientation: Int, CaseIterable, Identifiable, CustomS
         // end hacks
             .rotationEffect(-rotation)
         
-		if #available(iOS 16.0, watchOS 9.0, tvOS 20.0, macCatalyst 16.0, *) {
+        if #available(iOS 16.0, watchOS 9.0, tvOS 20.0, macCatalyst 16.0, *) {
             // begin renderer (must be run on main thread so switch in case we're not)
             DispatchQueue.main.async {
                 // finish up on main thread

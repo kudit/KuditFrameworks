@@ -1,12 +1,38 @@
-
+import Foundation
 
 public struct KuditFrameworks {
-    public private(set) var text = "Hello, World!"
+    /// The version of the Device Library (must be hard coded because inaccessible from the bundle for included packages)
+    public static var version = Version("4.3.0")
 
     public init() {
     }
 }
 
+public extension Bool {
+    static var watchOS: Bool {
+#if os(watchOS)
+        return true
+#else
+        return false
+#endif
+    }
+    static var visionOS: Bool {
+#if os(visionOS)
+        return true
+#else
+        return false
+#endif
+    }
+    static var tvOS: Bool {
+#if os(tvOS)
+        return true
+#else
+        return false
+#endif
+    }
+}
+
+/*
 public extension Bool {
      static var iOS16_4: Bool {
          guard #available(iOS 16.4, *) else {
@@ -15,6 +41,7 @@ public extension Bool {
          return true
      }
  }
+ */
 
 
 /** Possible additions to Device Kit

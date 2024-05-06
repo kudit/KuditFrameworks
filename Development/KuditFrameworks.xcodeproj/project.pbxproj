@@ -1,0 +1,598 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B543C09F2BE82C7000C75B6C /* KuditFrameworks Library in Frameworks */ = {isa = PBXBuildFile; productRef = B543C09E2BE82C7000C75B6C /* KuditFrameworks Library */; };
+		B543C0A12BE82C8700C75B6C /* KuditFrameworks Library in Frameworks */ = {isa = PBXBuildFile; productRef = B543C0A02BE82C8700C75B6C /* KuditFrameworks Library */; };
+		B56332112BC839DF006DDB84 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5F374FB2BBCFA020068CD88 /* Assets.xcassets */; };
+		B5F0340C2BABA93700CA6396 /* KuditFrameworksWatchTest Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = B5F033FF2BABA93500CA6396 /* KuditFrameworksWatchTest Watch App.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		B5F375D52BBCFE8B0068CD88 /* KuditFrameworksTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F374FE2BBCFA020068CD88 /* KuditFrameworksTestView.swift */; };
+		B5F375D62BBCFE8B0068CD88 /* KuditFrameworksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F374FD2BBCFA020068CD88 /* KuditFrameworksApp.swift */; };
+		B5F375D72BBCFE8B0068CD88 /* KuditFrameworksTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F374FE2BBCFA020068CD88 /* KuditFrameworksTestView.swift */; };
+		B5F375D82BBCFE8B0068CD88 /* KuditFrameworksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F374FD2BBCFA020068CD88 /* KuditFrameworksApp.swift */; };
+		B5F375E62BBD0FB80068CD88 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5F374FB2BBCFA020068CD88 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B5F0340A2BABA93700CA6396 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B5C1B6152BAB7997001D5CFA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B5F033FE2BABA93500CA6396;
+			remoteInfo = "KuditFrameworksWatchTest Watch App";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B5F0340D2BABA93700CA6396 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				B5F0340C2BABA93700CA6396 /* KuditFrameworksWatchTest Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		B52ED1D52BAB7F7400056A62 /* Package.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Package.swift; sourceTree = "<group>"; };
+		B52ED1D82BAB7F7400056A62 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		B53F69552BE7F54A00F55A8B /* KuditFrameworks.swiftpm */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = KuditFrameworks.swiftpm; path = ..; sourceTree = "<group>"; };
+		B56A31C22BC972640077FBE9 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
+		B5C1B61D2BAB7997001D5CFA /* KuditFrameworksTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KuditFrameworksTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B5F033FF2BABA93500CA6396 /* KuditFrameworksWatchTest Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "KuditFrameworksWatchTest Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B5F374FB2BBCFA020068CD88 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B5F374FD2BBCFA020068CD88 /* KuditFrameworksApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KuditFrameworksApp.swift; sourceTree = "<group>"; };
+		B5F374FE2BBCFA020068CD88 /* KuditFrameworksTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KuditFrameworksTestView.swift; sourceTree = "<group>"; };
+		B5F3755A2BBCFA020068CD88 /* KuditFrameworksTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KuditFrameworksTests.swift; sourceTree = "<group>"; };
+		B5F375DC2BBD05570068CD88 /* KuditFrameworksTest.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = KuditFrameworksTest.entitlements; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B5C1B61A2BAB7997001D5CFA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B543C09F2BE82C7000C75B6C /* KuditFrameworks Library in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B5F033FC2BABA93500CA6396 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B543C0A12BE82C8700C75B6C /* KuditFrameworks Library in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B543C09D2BE82C7000C75B6C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B5C1B6142BAB7997001D5CFA = {
+			isa = PBXGroup;
+			children = (
+				B56A31C22BC972640077FBE9 /* CHANGELOG.md */,
+				B52ED1D82BAB7F7400056A62 /* README.md */,
+				B52ED1D52BAB7F7400056A62 /* Package.swift */,
+				B5F374FF2BBCFA020068CD88 /* Development */,
+				B53F69552BE7F54A00F55A8B /* KuditFrameworks.swiftpm */,
+				B5F3755B2BBCFA020068CD88 /* Tests */,
+				B5C1B61E2BAB7997001D5CFA /* Products */,
+				B543C09D2BE82C7000C75B6C /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		B5C1B61E2BAB7997001D5CFA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B5C1B61D2BAB7997001D5CFA /* KuditFrameworksTest.app */,
+				B5F033FF2BABA93500CA6396 /* KuditFrameworksWatchTest Watch App.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B5F374FF2BBCFA020068CD88 /* Development */ = {
+			isa = PBXGroup;
+			children = (
+				B5F375732BBCFA020068CD88 /* Resources */,
+				B5F374FD2BBCFA020068CD88 /* KuditFrameworksApp.swift */,
+				B5F374FE2BBCFA020068CD88 /* KuditFrameworksTestView.swift */,
+			);
+			name = Development;
+			sourceTree = "<group>";
+		};
+		B5F3755B2BBCFA020068CD88 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				B5F3755A2BBCFA020068CD88 /* KuditFrameworksTests.swift */,
+			);
+			name = Tests;
+			path = ../Tests;
+			sourceTree = "<group>";
+		};
+		B5F375732BBCFA020068CD88 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B5F375DC2BBD05570068CD88 /* KuditFrameworksTest.entitlements */,
+				B5F374FB2BBCFA020068CD88 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B5C1B61C2BAB7997001D5CFA /* KuditFrameworksTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B5C1B62B2BAB7999001D5CFA /* Build configuration list for PBXNativeTarget "KuditFrameworksTest" */;
+			buildPhases = (
+				B5C1B6192BAB7997001D5CFA /* Sources */,
+				B5C1B61A2BAB7997001D5CFA /* Frameworks */,
+				B5C1B61B2BAB7997001D5CFA /* Resources */,
+				B5F0340D2BABA93700CA6396 /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B56E66EE2BC255AA001D6CC6 /* PBXTargetDependency */,
+				B5F0340B2BABA93700CA6396 /* PBXTargetDependency */,
+			);
+			name = KuditFrameworksTest;
+			packageProductDependencies = (
+				B543C09E2BE82C7000C75B6C /* KuditFrameworks Library */,
+			);
+			productName = KuditFrameworksVisionTest;
+			productReference = B5C1B61D2BAB7997001D5CFA /* KuditFrameworksTest.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B5F033FE2BABA93500CA6396 /* KuditFrameworksWatchTest Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B5F034102BABA93700CA6396 /* Build configuration list for PBXNativeTarget "KuditFrameworksWatchTest Watch App" */;
+			buildPhases = (
+				B5F033FB2BABA93500CA6396 /* Sources */,
+				B5F033FC2BABA93500CA6396 /* Frameworks */,
+				B5F033FD2BABA93500CA6396 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B56E66F02BC255B2001D6CC6 /* PBXTargetDependency */,
+			);
+			name = "KuditFrameworksWatchTest Watch App";
+			packageProductDependencies = (
+				B543C0A02BE82C8700C75B6C /* KuditFrameworks Library */,
+			);
+			productName = "KuditFrameworksWatchTest Watch App";
+			productReference = B5F033FF2BABA93500CA6396 /* KuditFrameworksWatchTest Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B5C1B6152BAB7997001D5CFA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1530;
+				LastUpgradeCheck = 1530;
+				TargetAttributes = {
+					B5C1B61C2BAB7997001D5CFA = {
+						CreatedOnToolsVersion = 15.3;
+						LastSwiftMigration = 1530;
+					};
+					B5F033FE2BABA93500CA6396 = {
+						CreatedOnToolsVersion = 15.3;
+					};
+				};
+			};
+			buildConfigurationList = B5C1B6182BAB7997001D5CFA /* Build configuration list for PBXProject "KuditFrameworks" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = B5C1B6142BAB7997001D5CFA;
+			packageReferences = (
+			);
+			productRefGroup = B5C1B61E2BAB7997001D5CFA /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B5C1B61C2BAB7997001D5CFA /* KuditFrameworksTest */,
+				B5F033FE2BABA93500CA6396 /* KuditFrameworksWatchTest Watch App */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B5C1B61B2BAB7997001D5CFA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5F375E62BBD0FB80068CD88 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B5F033FD2BABA93500CA6396 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B56332112BC839DF006DDB84 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B5C1B6192BAB7997001D5CFA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5F375D52BBCFE8B0068CD88 /* KuditFrameworksTestView.swift in Sources */,
+				B5F375D62BBCFE8B0068CD88 /* KuditFrameworksApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B5F033FB2BABA93500CA6396 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5F375D72BBCFE8B0068CD88 /* KuditFrameworksTestView.swift in Sources */,
+				B5F375D82BBCFE8B0068CD88 /* KuditFrameworksApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B56E66EE2BC255AA001D6CC6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = B56E66ED2BC255AA001D6CC6 /* KuditFrameworks Library */;
+		};
+		B56E66F02BC255B2001D6CC6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = B56E66EF2BC255B2001D6CC6 /* KuditFrameworks Library */;
+		};
+		B5F0340B2BABA93700CA6396 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			platformFilter = ios;
+			target = B5F033FE2BABA93500CA6396 /* KuditFrameworksWatchTest Watch App */;
+			targetProxy = B5F0340A2BABA93700CA6396 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		B5C1B6292BAB7999001D5CFA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TVOS_DEPLOYMENT_TARGET = 17.0;
+				WATCHOS_DEPLOYMENT_TARGET = 6.0;
+				XROS_DEPLOYMENT_TARGET = 1.0;
+			};
+			name = Debug;
+		};
+		B5C1B62A2BAB7999001D5CFA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				TVOS_DEPLOYMENT_TARGET = 17.0;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 6.0;
+				XROS_DEPLOYMENT_TARGET = 1.0;
+			};
+			name = Release;
+		};
+		B5C1B62C2BAB7999001D5CFA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Resources/KuditFrameworksTest.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3QPV894C33;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 4.3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kudit.KuditFrameworksTest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,3,6,7";
+				TVOS_DEPLOYMENT_TARGET = 17.0;
+				XROS_DEPLOYMENT_TARGET = 1.0;
+			};
+			name = Debug;
+		};
+		B5C1B62D2BAB7999001D5CFA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Resources/KuditFrameworksTest.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3QPV894C33;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 4.3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kudit.KuditFrameworksTest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,3,6,7";
+				TVOS_DEPLOYMENT_TARGET = 17.0;
+				XROS_DEPLOYMENT_TARGET = 1.0;
+			};
+			name = Release;
+		};
+		B5F0340E2BABA93700CA6396 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3QPV894C33;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = KuditFrameworksWatchTest;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.kudit.KuditFrameworksTest;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 4.3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kudit.KuditFrameworksTest.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.4;
+			};
+			name = Debug;
+		};
+		B5F0340F2BABA93700CA6396 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 3QPV894C33;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = KuditFrameworksWatchTest;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.kudit.KuditFrameworksTest;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 4.3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kudit.KuditFrameworksTest.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.4;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B5C1B6182BAB7997001D5CFA /* Build configuration list for PBXProject "KuditFrameworks" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B5C1B6292BAB7999001D5CFA /* Debug */,
+				B5C1B62A2BAB7999001D5CFA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B5C1B62B2BAB7999001D5CFA /* Build configuration list for PBXNativeTarget "KuditFrameworksTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B5C1B62C2BAB7999001D5CFA /* Debug */,
+				B5C1B62D2BAB7999001D5CFA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B5F034102BABA93700CA6396 /* Build configuration list for PBXNativeTarget "KuditFrameworksWatchTest Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B5F0340E2BABA93700CA6396 /* Debug */,
+				B5F0340F2BABA93700CA6396 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B543C09E2BE82C7000C75B6C /* KuditFrameworks Library */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "KuditFrameworks Library";
+		};
+		B543C0A02BE82C8700C75B6C /* KuditFrameworks Library */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "KuditFrameworks Library";
+		};
+		B56E66ED2BC255AA001D6CC6 /* KuditFrameworks Library */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "KuditFrameworks Library";
+		};
+		B56E66EF2BC255B2001D6CC6 /* KuditFrameworks Library */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "KuditFrameworks Library";
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = B5C1B6152BAB7997001D5CFA /* Project object */;
+}

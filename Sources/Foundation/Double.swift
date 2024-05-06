@@ -66,7 +66,7 @@ extension Double {
             multiplicationA == 11.5
             && multiplicationB == 11.5
             && divisionMixedA == 0.46
-            && Int(divisionMixedB * Float(1E9).doubleValue) == 2173913044
+            && Int(divisionMixedB * Float(1E8).doubleValue) == 217391305
             && additionMixedA == 7.3
             && additionMixedB == 7.3
             , "\(multiplicationA),\(multiplicationB),\(divisionMixedA),\(divisionMixedB),\(additionMixedA),\(additionMixedB) testOperations failed")

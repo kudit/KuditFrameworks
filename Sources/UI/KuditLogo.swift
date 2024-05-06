@@ -17,6 +17,9 @@
     }
 }*/
 
+#if canImport(SwiftUI)
+import SwiftUI
+
 public struct KuditLogoShape: Shape {
     public var ballsOnly = false
     private struct Ball {
@@ -70,8 +73,6 @@ public struct KuditLogoShape: Shape {
     }
 }
 
-#if canImport(SwiftUI)
-import SwiftUI
 public struct KuditLogo: View {
     public var weight: CGFloat
     public var color: Color
@@ -100,7 +101,7 @@ struct TestPreview: View {
                 KuditLogo(weight: 4)
                     .accentColor(.blue)
                 //.stroke(lineWidth: 7)
-                ColorBarView(colors: .rainbow)
+                ColorBarTestView(colors: .rainbow)
                     .mask {
                         KuditLogo(weight: 4)
                             .padding(2)

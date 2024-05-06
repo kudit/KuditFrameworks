@@ -8,7 +8,6 @@
 
 // http://arstechnica.com/apple/2009/02/iphone-development-accessing-uicolor-components/
 
-// TODO: Change from CGFloat to Double and alpha to opacity?
 public protocol KuColor: Codable, Equatable {
     /// usually 0-1 double values but SwiftUI supports extended colors beyond 0-1
     init(red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat)
@@ -41,24 +40,6 @@ public protocol KuColor: Codable, Equatable {
     static var darkGray: UnderlyingColorType { get }
 }
 
-// MARK: - color groups
-// doesn't really make sense directly on color since it's not a color, it's a set of colors
-//public extension KuColor where UnderlyingColorType == Self {
-//    static var rainbow: [UnderlyingColorType] { [Self].rainbow }
-//    static var prioritized: [Self] { [Self].prioritized }
-//    static var named: [UnderlyingColorType] { [Self].named }
-//    static var grayscale: [UnderlyingColorType] { [Self].grayscale }
-//}
-public extension Array where Element: KuColor, Element.UnderlyingColorType == Element {
-    /// ROYGBIV(purple for violet)
-    static var rainbow: [Element] { [.red, .orange, .yellow, .green, .blue, .indigo, .purple] }
-    /// Primary colors, secondary colors, tertiary colors
-    static var prioritized: [Element] { [.red, .green, .blue, .yellow, .magenta, .cyan, .orange, .purple, .mint, .indigo, .brown] }
-    /// All Apple named colors (adds cyan and magenta)
-    static var named: [Element] { [.red, .orange, .yellow, .green, .mint, .teal, .cyan, .blue, .indigo, .purple, .magenta, .pink, .brown, .clear, .gray, .black, .white] }
-    /// Grayscale colors from white to black
-    static var grayscale: [Element] { [.white, .lightGray, .gray, .darkGray, .black] }
-}
 
 // the LosslessStringConvertible extension does not work for KuColor since a color may be initialized by a string but the corresponding unlabelled init function is not the one we want.
 public extension KuColor {
@@ -75,40 +56,43 @@ public extension KuColor {
     }
 }
 
-public extension KuColor {
-    /// For quickly initializing a color using the nth item in a colorset.  Extension of KuColor so we can type . and start initializing for autocomplete.
-    static func nth(_ nth: Int, of colorset: [Self]) -> Self {
-        return colorset[nth: nth]
-    }
-}
-
-// adding equatable conformance for colors
-public extension KuColor {
-    static func ==(lhs:Self, rhs:Self) -> Bool {
-        return lhs.redComponent == rhs.redComponent
-        && lhs.greenComponent == rhs.greenComponent
-        && lhs.blueComponent == rhs.blueComponent
-        && lhs.alphaComponent == rhs.alphaComponent
-    }
-}
 
 #if canImport(UIKit)
 import UIKit
 extension UIColor: KuColor {
     public static var indigo: UIColor {
+#if os(watchOS)
+        return UIColor(red: 88/255, green: 86/255, blue: 214/255, alpha: 1)
+#else
         return .systemPurple
+#endif
     }
 
     public static var mint: UIColor {
+#if os(watchOS)
+        return UIColor(red: 0/255, green: 199/255, blue: 190/255, alpha: 1)
+
+#else
         return .systemMint
+#endif
     }
 
     public static var pink: UIColor {
+#if os(watchOS)
+        return UIColor(red: 255/255, green: 45/255, blue: 85/255, alpha: 1)
+
+#else
         return .systemPink
+#endif
     }
 
     public static var teal: UIColor {
+#if os(watchOS)
+        return UIColor(red: 48/255, green: 176/255, blue: 199/255, alpha: 1)
+
+#else
         return .systemTeal
+#endif
     }
 }
 public extension KuColor {
@@ -314,7 +298,7 @@ public struct Color: KuColor {
 public extension KuColor {
     // TODO: Standardize 255
     //    static let eightBitDenominator = 255.0
-    // MARK: - Get RGB Colors
+    // MARK: Get RGB Colors
     /// returns the RGBA values of the color if it can be determined and black-clear if not.
     var rgbaComponents: (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
         get {
@@ -405,7 +389,240 @@ public extension KuColor {
         return hsbComponents.brightness
     }
     
-    // MARK: - Codable
+    /// can use to convert between KuColor protocol objects like UIColor or SwiftUI Color.
+    init(color: any KuColor) {
+        self.init(red: color.redComponent, green: color.greenComponent, blue: color.blueComponent, alpha: color.alphaComponent)
+    }
+}
+
+#if canImport(SwiftUI)
+import SwiftUI
+
+let DEFAULT_CONTENT = EmptyView()
+struct Swatch: View {
+    var color: Color
+    var logo: Bool = false
+    init(color: Color, logo: Bool = false) {
+        self.color = color
+        self.logo = logo
+    }
+    var body: some View {
+        RoundedRectangle(cornerRadius: 15)
+            .frame(size: 50)
+            .foregroundColor(color)
+            .overlay {
+                ZStack {
+                    if logo {
+                        Image(systemName: "applelogo")
+                            .imageScale(.large)
+                    } else {
+                        Text("\(self.color.hexString)")
+                            .bold()
+                    }
+                }
+                .foregroundColor(color.contrastingColor) // isDark ? .white : .black
+            }
+    }
+}
+struct SwatchTest: View {
+    var color: Color
+    var body: some View {
+        Swatch(color: color, logo: true)
+    }
+}
+struct HSVConversionTestView: View {
+    public var body: some View {
+        VStack {
+            Text("HSV Conversion")
+            ForEach([Color].rainbow, id: \.self) { color in
+                HStack(spacing: 0) {
+                    // primary named colors
+                    SwatchTest(color: color)
+                    // css conversion tests
+                    SwatchTest(color: color.rgbConverted)
+                    // hsv conversion tests
+                    SwatchTest(color: color.hsvConverted)
+                    // rgb converted tests
+                    SwatchTest(color: color.cssConverted)
+                }
+            }
+        }
+    }
+}
+
+#Preview("HSV Conversion") {
+    HSVConversionTestView()
+}
+#endif
+
+
+// MARK: - Comparisons
+
+// adding equatable conformance for colors
+public extension KuColor {
+    static func ==(lhs:Self, rhs:Self) -> Bool {
+        return lhs.redComponent == rhs.redComponent
+        && lhs.greenComponent == rhs.greenComponent
+        && lhs.blueComponent == rhs.blueComponent
+        && lhs.alphaComponent == rhs.alphaComponent
+    }
+    
+    // Converted values for testing/comparing
+    var hsvConverted: Self {
+        let hsb = self.hsbComponents
+        return Self(hue: hsb.hue, saturation: hsb.saturation, brightness: hsb.brightness, alpha: self.alphaComponent)
+    }
+    var rgbConverted: Self {
+        let rgba = self.rgbaComponents
+        return Self(red: rgba.red, green: rgba.green, blue: rgba.blue, alpha: rgba.alpha)
+    }
+    var cssConverted: Self {
+        return Self(string: self.cssString, defaultColor: Self(red: 0, green: 0, blue: 0, alpha: 0))
+    }
+}
+
+#if canImport(SwiftUI)
+import SwiftUI
+
+public extension KuColor {
+    
+    // MARK: brightness qualifiers
+    var isDark: Bool {
+        if hueComponent == 0 && saturationComponent == 1 {
+            return brightnessComponent < 0.5
+        } else {
+            return brightnessComponent < 0.5 || redComponent + greenComponent + blueComponent < 1.5 // handle "pure" colors
+        }
+    }
+    var isLight: Bool {
+        return !isDark
+    }
+    
+    // MARK: Highlighting Colors
+    private func _colorWithBrightness(multiplier: CGFloat) -> Self {
+        var hsb = hsbComponents
+        //print("HSB: \(hsb)")
+        hsb.brightness *= multiplier
+        return Self(hue: hsb.hue, saturation: hsb.saturation, brightness: hsb.brightness, alpha: alphaComponent)
+    }
+    
+    var darkerColor: Self {
+        return _colorWithBrightness(multiplier: 0.5)
+    }
+    
+    var lighterColor: Self {
+        return _colorWithBrightness(multiplier: 2)
+    }
+    // https://dallinjared.medium.com/swiftui-tutorial-contrasting-text-over-background-color-2e7af57c1b20
+    /// Returns the luminance value which is `0.2126*red + 0.7152*green + 0.0722*blue`
+    var luminance: Double {
+        return 0.2126 * self.redComponent + 0.7152 * self.greenComponent + 0.0722 * self.blueComponent
+    }
+    /// returns either white or black depending on the base color to make sure it's visible against the background.  In the future we may want to change this to some sort of vibrancy.
+    var contrastingColor: Color {
+#if canImport(UIKit) && !os(watchOS) && !os(tvOS)
+        // Fix so primary color - dark mode shows black
+        if let color = self as? Color, color == .primary || color == .secondary {
+            return Color(UIColor.systemBackground)
+        }
+#endif
+        //        return isDark ? .white : .black
+        return luminance < 0.6 ? .white : .black
+    }
+}
+
+struct ColorTintingTestView: View {
+    public var body: some View {
+        VStack {
+            Text("Color Tinting")
+            HStack {
+                ForEach([Color].rainbow, id: \.self) { color in
+                    VStack {
+                        Swatch(color: color.lighterColor)
+                        Swatch(color: color)
+                        Swatch(color: color.darkerColor)
+                    }
+                }
+            }
+        }
+    }
+}
+#Preview("Color Tinting") {
+    ColorTintingTestView()
+}
+
+struct LightnessTestView: View {
+    var body: some View {
+        VStack {
+            Text("Lightness Tests")
+                .bold()
+            HStack(spacing: 0) {
+                VStack(spacing: 0) {
+                    SwatchTest(color: .red)
+                    SwatchTest(color: .orange)
+                    SwatchTest(color: .yellow)
+                    SwatchTest(color: .green)
+                    SwatchTest(color: .blue)
+                    SwatchTest(color: .purple)
+                }
+                VStack(spacing: 0) {
+                    SwatchTest(color: Color(string:Color.red.hexString) ?? .black)
+                    SwatchTest(color: Color(string:Color.orange.hexString) ?? .black)
+                    SwatchTest(color: Color(string:Color.yellow.hexString) ?? .black)
+                    SwatchTest(color: Color(string:Color.green.hexString) ?? .black)
+                    SwatchTest(color: Color(string:Color.blue.hexString) ?? .black)
+                    SwatchTest(color: Color(string:Color.purple.hexString) ?? .black)
+                }
+                VStack(spacing: 0) {
+                    SwatchTest(color: .white)
+                    SwatchTest(color: .lightGray)
+                    SwatchTest(color: Color(string: "Gray") ?? .white)
+                    SwatchTest(color: .gray)
+                    SwatchTest(color: .darkGray)
+                    SwatchTest(color: .black)
+                }
+                VStack(spacing: 0) {
+                    
+                    SwatchTest(color: .accentColor)
+                    SwatchTest(color: .primary)
+                    SwatchTest(color: .secondary)
+                    SwatchTest(color: Color(string:"SkyBlue") ?? .black)
+                    SwatchTest(color: Color(string:"Beige") ?? .black)
+                    SwatchTest(color: Color(string:"LightGray") ?? .black)
+                }
+                VStack(spacing: 0) {
+                    SwatchTest(color: Color(string:Color.pink.hexString) ?? .black)
+                    SwatchTest(color: Color(string:Color.brown.hexString) ?? .black)
+                    SwatchTest(color: Color(string:Color.mint.hexString) ?? .black)
+                    SwatchTest(color: Color(string:Color.teal.hexString) ?? .black)
+                    SwatchTest(color: Color(string:Color.cyan.hexString) ?? .black)
+                    SwatchTest(color: Color(string:Color.indigo.hexString) ?? .black)
+                }
+                VStack(spacing: 0) {
+                    SwatchTest(color: .pink)
+                    SwatchTest(color: .brown)
+                    SwatchTest(color: .mint)
+                    SwatchTest(color: .teal)
+                    SwatchTest(color: .cyan)
+                    SwatchTest(color: .indigo)
+                }
+            }
+            
+        }.padding().background(.gray)
+    }
+}
+
+#Preview("Lightness Tests") {
+    LightnessTestView()
+}
+
+
+#endif
+
+// MARK: - CSS/String intialization
+
+public extension KuColor {
+    // MARK: Codable
     // Kudit Codable conformance (simplified) based off of
     //https://gist.github.com/ConfusedVorlon/276bd7ac6c41a99ea0514a34ee9afc3d?permalink_comment_id=4096859#gistcomment-4096859
     init(from decoder: Decoder) throws {
@@ -465,7 +682,7 @@ public extension KuColor {
     }
     
     
-    // MARK: - Parsing and Rendering
+    // MARK: Parsing and Rendering
     static var namedColorMap: [String:String] {[
         "AliceBlue":"#F0F8FF",
         "AntiqueWhite":"#FAEBD7",
@@ -609,10 +826,6 @@ public extension KuColor {
         "Yellow":"#FFFF00",
         "YellowGreen":"#9ACD32"]}
     
-    /// can use to convert between KuColor protocol objects like UIColor or SwiftUI Color.
-    init(color: any KuColor) {
-        self.init(red: color.redComponent, green: color.greenComponent, blue: color.blueComponent, alpha: color.alphaComponent)
-    }
     /**
      KF: Creates a Color from the given string in #HEX format, named CSS string, rgb(), or rgba() format.  Important to have named parameter string: to differentiate from SwiftUI Color(_:String) init from a named color in an asset bundle.
      
@@ -768,60 +981,142 @@ public extension KuColor {
             return hexString
         }
     }
-    
-    // MARK: - brightness qualifiers
-    var isDark: Bool {
-        if hueComponent == 0 && saturationComponent == 1 {
-            return brightnessComponent < 0.5
-        } else {
-            return brightnessComponent < 0.5 || redComponent + greenComponent + blueComponent < 1.5 // handle "pure" colors
+}
+
+#if canImport(SwiftUI)
+import SwiftUI
+
+struct NamedColorsListTestView: View {
+    public var body: some View {
+        List {
+            ForEach(Color.namedColorMap.sorted(by: <), id: \.key) { key, value in
+                let color = Color(string: key, defaultColor: .black)
+                HStack {
+                    Text(key)
+                    Spacer()
+                    Text(value)
+                }
+                .padding()
+                .background {
+                    RoundedRectangle(cornerRadius: 25)
+                        .fill(color)
+                }
+                .foregroundStyle(color.contrastingColor)
+            }
         }
     }
-    var isLight: Bool {
-        return !isDark
+}
+
+#Preview("Named Colors") {
+    NamedColorsListTestView()
+}
+
+struct ColorPrettyTestView: View {
+    public var body: some View {
+        VStack {
+            Text("Pretty output of various colors.")
+                .font(.title)
+            Text("red -> \"\(Color(string: "red", defaultColor: .black).pretty)\"")
+            Text("red rgb -> \"\(Color(red: 1, green: 0, blue: 0, alpha: 1).pretty)\"")
+            Text("red alpha color -> \"\(Color(red: 1, green: 0, blue: 0, alpha: 0.5).pretty)\"")
+            Text("red rgba -> \"\(Color(string: "rgba(255,0,0,0.5)", defaultColor: .black).pretty)\"")
+            Text("red hex -> \"\(Color(string: "#F00", defaultColor: .black).pretty)\"")
+            Text("red rgb expanded -> \"\(Color(red: 1.1, green: 0, blue: 0, alpha: 1).pretty)\"")
+            Text("white -> \"\(Color.white.pretty)\"")
+            Text("black -> \"\(Color.black.pretty)\"")
+        }
     }
+}
+
+#Preview("Pretty Text") {
+    ColorPrettyTestView()
+}
+
+#endif
+
+
+// MARK: - Colorsets/groups
+// doesn't really make sense directly on color since it's not a color, it's a set of colors
+//public extension KuColor where UnderlyingColorType == Self {
+//    static var rainbow: [UnderlyingColorType] { [Self].rainbow }
+//    static var prioritized: [Self] { [Self].prioritized }
+//    static var named: [UnderlyingColorType] { [Self].named }
+//    static var grayscale: [UnderlyingColorType] { [Self].grayscale }
+//}
+public extension Array where Element: KuColor, Element.UnderlyingColorType == Element {
+    /// ROYGBIV(purple for violet)
+    static var rainbow: [Element] { [.red, .orange, .yellow, .green, .blue, .indigo, .purple] }
+    /// Primary colors, secondary colors, tertiary colors
+    static var prioritized: [Element] { [.red, .green, .blue, .yellow, .magenta, .cyan, .orange, .purple, .mint, .indigo, .brown] }
+    /// All Apple named colors (adds cyan and magenta)
+    static var named: [Element] { [.red, .orange, .yellow, .green, .mint, .teal, .cyan, .blue, .indigo, .purple, .magenta, .pink, .brown, .clear, .gray, .black, .white] }
+    /// Grayscale colors from white to black
+    static var grayscale: [Element] { [.white, .lightGray, .gray, .darkGray, .black] }
+}
+// MARK: DOT Colors
+extension KuColor where UnderlyingColorType == Self {
+    //     Blue - 294
+    /// Services
+    static var dotBlue: Self { .init(string: "rgb(0,63,135)", defaultColor: .black ) }
+    //     Brown - 469
+    /// Recreational
+    static var dotBrown: Self { .init(string: "rgb(96,51,17)", defaultColor: .black ) }
+    //     Green - 342
+    /// Location guide, direction guidance
+    static var dotGreen: Self { .init(string: "rgb(0,107,84)", defaultColor: .black ) }
+    //     Green-Colored Pavement - 802
+    /// Bicycle Lanes
+    static var dotGreenPavement: Self { .init(string: "rgb(96,221,73)", defaultColor: .black ) }
+    //     Orange - 152
+    /// temporary traffic control
+    static var dotOrange: Self { .init(string: "rgb(221,117,0)", defaultColor: .black ) }
+    //     Pink - 198
+    /// Incident Management
+    static var dotPink: Self { .init(string: "rgb(119,45,53)", defaultColor: .black ) }
+    //     Purple - 259
+    /// Toll collection
+    static var dotPurple: Self { .init(string: "rgb(114,22,107)", defaultColor: .black ) }
+    //     Red - 187
+    /// stop or prohibition
+    static var dotRed: Self { .init(string: "rgb(175,30,45)", defaultColor: .black ) }
+    //     Red-Colored Pavement - 485
+    /// Transit Only
+    static var dotRedPavement: Self { .init(string: "rgb(216,30,5)", defaultColor: .black ) }
+    //     Yellow - 116
+    /// Warning
+    static var dotYellow: Self { .init(string: "rgb(252,209,22)", defaultColor: .black ) }
+    //     Yellow-Green - 382
+    /// Pedestrian warning
+    static var dotYellowGreen: Self { .init(string: "rgb(186,216,10)", defaultColor: .black ) }
+}
+
+public extension Array where Element: KuColor, Element.UnderlyingColorType == Element {
+    /// DOT Colors
+    static var dotColors: [Element] { [.dotBlue, .dotBrown, .dotGreen, .dotGreenPavement, .dotOrange, .dotPink, .dotPurple, .dotRed, .dotRedPavement, .dotYellow, .dotYellowGreen] }
     
-    // MARK: - Highlighting Colors
-    private func _colorWithBrightness(multiplier: CGFloat) -> Self {
-        var hsb = hsbComponents
-        //print("HSB: \(hsb)")
-        hsb.brightness *= multiplier
-        return Self(hue: hsb.hue, saturation: hsb.saturation, brightness: hsb.brightness, alpha: alphaComponent)
+    /// A list of named color sets for debugging/picking.  Can't just use dictionary since we care about the order.
+    static var namedColorsets: [(String, [Element])] {
+        return [
+            ("Rainbow", [Element].rainbow),
+            ("Prioritized", .prioritized),
+            ("Named", .named),
+            ("Grayscale", .grayscale),
+            ("DOT", .dotColors),
+        ]
     }
-    
-    var darkerColor: Self {
-        return _colorWithBrightness(multiplier: 0.5)
-    }
-    
-    var lighterColor: Self {
-        return _colorWithBrightness(multiplier: 2)
-    }
-    // https://dallinjared.medium.com/swiftui-tutorial-contrasting-text-over-background-color-2e7af57c1b20
-    /// Returns the luminance value which is `0.2126*red + 0.7152*green + 0.0722*blue`
-    var luminance: Double {
-        return 0.2126 * self.redComponent + 0.7152 * self.greenComponent + 0.0722 * self.blueComponent
-    }
-    /// returns either white or black depending on the base color to make sure it's visible against the background.  In the future we may want to change this to some sort of vibrancy.
-    var contrastingColor: Color {
-        // TODO: Fix so primary color - dark mode shows black
-        //        return isDark ? .white : .black
-        return luminance < 0.6 ? .white : .black
-    }
-    
-    // TESTS
-    fileprivate var hsvTest: Color {
-        let hsb = self.hsbComponents
-        return Color(hue: hsb.hue, saturation: hsb.saturation, brightness: hsb.brightness, alpha: self.alphaComponent)
-    }
-    fileprivate var rgbTest: Color {
-        return Color(string: self.cssString) ?? .black
+}
+
+public extension KuColor {
+    /// For quickly initializing a color using the nth item in a colorset.  Extension of KuColor so we can type . and start initializing for autocomplete.
+    static func nth(_ nth: Int, of colorset: [Self]) -> Self {
+        return colorset[nth: nth]
     }
 }
 
 #if canImport(SwiftUI)
 import SwiftUI
 
-public struct ColorBarView: View {
+public struct ColorBarTestView: View {
     public var text: String?
     public var colors: [Color]
     // auto-generated doesn't work externally.  need to explicitly define so can be public.
@@ -846,172 +1141,44 @@ public struct ColorBarView: View {
     }
 }
 
-#Preview("Colors") {
-    VStack {
-        ColorBarView(text: "Rainbow", colors: .rainbow)
-        ColorBarView(text: "Prioritized", colors: .prioritized)
-        ColorBarView(text: "Named", colors: .named)
-        ColorBarView(text: "Grayscale", colors: .grayscale)
-    }
-}
-
-struct ColorPrettyTests: View {
-    var body: some View {
+struct ColorsetsTestView: View {
+    var colorsets = [Color].namedColorsets
+    public var body: some View {
         VStack {
-            Text("red -> \(Color(string: "red", defaultColor: .black).pretty)")
-            Text("red rgb -> \(Color(red: 1, green: 0, blue: 0, alpha: 1).pretty)")
-            Text("red alpha color -> \(Color(red: 1, green: 0, blue: 0, alpha: 0.5).pretty)")
-            Text("red rgba -> \(Color(string: "rgba(255,0,0,0.5)", defaultColor: .black).pretty)")
-            Text("red hex -> \(Color(string: "#F00", defaultColor: .black).pretty)")
-            Text("red rgb expanded -> \(Color(red: 1.1, green: 0, blue: 0, alpha: 1).pretty)")
-            Text("white -> \(Color.white.pretty)")
-            Text("black -> \(Color.black.pretty)")
+            ForEach(colorsets.indices, id: \.self) { index in
+                let (label, colorset) = colorsets[index]
+                ColorBarTestView(text: label, colors: colorset)
+            }
         }
     }
 }
 
-#Preview("Pretty Text") {
-    ColorPrettyTests()
+#Preview("Colorsets") {
+    ColorsetsTestView()
 }
 
-let DEFAULT_CONTENT = EmptyView()
-struct Swatch: View {
-    var color: Color
-    var logo: Bool = false
-    init(color: Color, logo: Bool = false) {
-        self.color = color
-        self.logo = logo
-    }
-    var body: some View {
-        RoundedRectangle(cornerRadius: 15)
-            .frame(size: 50)
-            .foregroundColor(color)
-            .overlay {
-                ZStack {
-                    if logo {
-                        Image(systemName: "applelogo")
-                            .imageScale(.large)
-                    } else {
-                        Text("\(self.color.hexString)")
-                            .bold()
-                    }
-                }
-                .foregroundColor(color.contrastingColor) // isDark ? .white : .black
-            }
-    }
-}
-struct SwatchTest: View {
-    var color: Color
-    var body: some View {
-        Swatch(color: color, logo: true)
-    }
-}
-#Preview("Color Tinting") {
-    VStack {
-        Text("Color Tinting")
-        Swatch(color: .red.lighterColor)
-        Swatch(color: .red)
-        Swatch(color: .red.darkerColor)
-        Swatch(color: .green.lighterColor)
-        Swatch(color: .green)
-        Swatch(color: .green.darkerColor)
-    }
-}
-#Preview("HSV Conversion") {
-    VStack {
-        Text("HSV Conversion")
-        HStack {
-            VStack(spacing: 0) {
-                SwatchTest(color: .red)
-                SwatchTest(color: .orange)
-                SwatchTest(color: .yellow)
-                SwatchTest(color: .green)
-                SwatchTest(color: .blue)
-                SwatchTest(color: .purple)
-            }
-            VStack(spacing: 0) {
-                SwatchTest(color: .red.rgbTest)
-                SwatchTest(color: .orange.rgbTest)
-                SwatchTest(color: .yellow.rgbTest)
-                SwatchTest(color: .green.rgbTest)
-                SwatchTest(color: .blue.rgbTest)
-                SwatchTest(color: .purple.rgbTest)
-            }
-            VStack(spacing: 0) {
-                SwatchTest(color: .red.hsvTest)
-                SwatchTest(color: .orange.hsvTest)
-                SwatchTest(color: .yellow.hsvTest)
-                SwatchTest(color: .green.hsvTest)
-                SwatchTest(color: .blue.hsvTest)
-                SwatchTest(color: .purple.hsvTest)
-            }
-            VStack(spacing: 0) {
-                SwatchTest(color: .red.hsvTest.rgbTest)
-                SwatchTest(color: .orange.hsvTest.rgbTest)
-                SwatchTest(color: .yellow.hsvTest.rgbTest)
-                SwatchTest(color: .green.hsvTest.rgbTest)
-                SwatchTest(color: .blue.hsvTest.rgbTest)
-                SwatchTest(color: .purple.hsvTest.rgbTest)
-            }
+#endif
+
+#if canImport(SwiftUI)
+import SwiftUI
+
+public struct ColorTestView: View {
+    public init() {}
+    public var body: some View {
+        TabView {
+            ColorsetsTestView()
+            HSVConversionTestView()
+            LightnessTestView()
+            ColorPrettyTestView()
+            NamedColorsListTestView()
+            ColorTintingTestView()
         }
+        .tabViewStyle(.pageBackport)
     }
 }
-#Preview("Lightness Tests") {
-    VStack {
-        Text("Lightness Tests")
-            .bold()
-        HStack(spacing: 0) {
-            VStack(spacing: 0) {
-                SwatchTest(color: .red)
-                SwatchTest(color: .orange)
-                SwatchTest(color: .yellow)
-                SwatchTest(color: .green)
-                SwatchTest(color: .blue)
-                SwatchTest(color: .purple)
-            }
-            VStack(spacing: 0) {
-                SwatchTest(color: Color(string:Color.red.hexString) ?? .black)
-                SwatchTest(color: Color(string:Color.orange.hexString) ?? .black)
-                SwatchTest(color: Color(string:Color.yellow.hexString) ?? .black)
-                SwatchTest(color: Color(string:Color.green.hexString) ?? .black)
-                SwatchTest(color: Color(string:Color.blue.hexString) ?? .black)
-                SwatchTest(color: Color(string:Color.purple.hexString) ?? .black)
-            }
-            VStack(spacing: 0) {
-                SwatchTest(color: .white)
-                SwatchTest(color: .lightGray)
-                SwatchTest(color: Color(string: "Gray") ?? .white)
-                SwatchTest(color: .gray)
-                SwatchTest(color: .darkGray)
-                SwatchTest(color: .black)
-            }
-            VStack(spacing: 0) {
-                
-                SwatchTest(color: .accentColor)
-                SwatchTest(color: .primary)
-                SwatchTest(color: .secondary)
-                SwatchTest(color: Color(string:"SkyBlue") ?? .black)
-                SwatchTest(color: Color(string:"Beige") ?? .black)
-                SwatchTest(color: Color(string:"LightGray") ?? .black)
-            }
-            VStack(spacing: 0) {
-                SwatchTest(color: Color(string:Color.pink.hexString) ?? .black)
-                SwatchTest(color: Color(string:Color.brown.hexString) ?? .black)
-                SwatchTest(color: Color(string:Color.mint.hexString) ?? .black)
-                SwatchTest(color: Color(string:Color.teal.hexString) ?? .black)
-                SwatchTest(color: Color(string:Color.cyan.hexString) ?? .black)
-                SwatchTest(color: Color(string:Color.indigo.hexString) ?? .black)
-            }
-            VStack(spacing: 0) {
-                SwatchTest(color: .pink)
-                SwatchTest(color: .brown)
-                SwatchTest(color: .mint)
-                SwatchTest(color: .teal)
-                SwatchTest(color: .cyan)
-                SwatchTest(color: .indigo)
-            }
-        }
-        
-    }.padding().background(.gray)
+
+#Preview("All Tests") {
+    ColorTestView()
 }
+
 #endif

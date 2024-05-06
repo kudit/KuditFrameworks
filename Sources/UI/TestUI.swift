@@ -1,3 +1,4 @@
+#if canImport(SwiftUI)
 import SwiftUI
 
 // MARK: - Test UI
@@ -60,5 +61,18 @@ public struct TestsListView: View {
  }*/
 
 #Preview("Tests") {
-	TestsListView(tests: CharacterSet.tests + String.tests + PHP.tests)
+    TestsListView(tests: CharacterSet.tests + String.tests + PHP.tests)
 }
+
+/// For KuditConnect for testing
+public extension View {
+    func testBackground() -> some View {
+        ZStack {
+            Color.clear
+            self
+        }
+        .background(.conicGradient(colors: .rainbow, center: .center))
+        .ignoresSafeArea()
+    }
+}
+#endif

@@ -5,6 +5,8 @@
 //  Created by Ben Ku on 10/4/23.
 //
 
+// TODO: Move to Foundation or KuditConnect
+
 import Foundation
 // Currently this struct is only thing used here for Kudit Connect
 public struct ComposeMailData {

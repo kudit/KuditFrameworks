@@ -213,9 +213,6 @@ This section is to help us properly route your feedback and help troubleshoot an
 ------------- App Information -------------
 
 """
-/*
- NSString *emailBody = [NSString stringWithFormat:@"%@<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />Please provide your feedback above.<hr />This section is to help us properly route your feedback and help troubbleshoot any issues.  Please do not modify or remove.<br /><br /><blockquote>%@</blockquote>", firstProperty, [properties componentsJoinedByString:@"<br />"]];
-*/
         return customizeMessageBody(body)
     }
     

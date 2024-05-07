@@ -78,12 +78,16 @@ public class Application: CustomStringConvertible {
     public static let unknownAppIdentifier = "com.unknown.unknown"
     /// The fully qualified reverse dot notation from Bundle.main.bundleIdentifier like com.kudit.frameworks
     public let appIdentifier = {
-        guard let identifier = Bundle.main.bundleIdentifier else {
+        guard var identifier = Bundle.main.bundleIdentifier else {
             return Application.unknownAppIdentifier
         }
         // when running in preview, identifier may be: swift-playgrounds-dev-previews.swift-playgrounds-app.hdqfptjlmwifrrakcettacbhdkhn.501.KuditFramework
+        // convert to normal identifier (assumes com.kudit.lastcomponent
         // for testing, if this is KuditFrameworks, we should pull the unknown identifier FAQs
-        let lastComponent = identifier.components(separatedBy: ".").last
+        let lastComponent = identifier.components(separatedBy: ".").last // should never really be nil
+        if let lastComponent, identifier.contains("swift-playgrounds-dev-previews.swift-playgrounds-app") {
+            identifier = "com.kudit.\(lastComponent)"
+        }
         if lastComponent == "KuditFramework" || identifier.contains("com.kudit.KuditFrameworksTest") {
             return Application.unknownAppIdentifier
         }

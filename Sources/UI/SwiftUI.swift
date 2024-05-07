@@ -49,7 +49,7 @@ public extension View {
         Text("Normal")
         Text("conditional inclusion")
             .closure { content in
-                if #available(iOS 1, *) {
+                if #available(iOS 999, *) {
                     AnyView(erasing: content.background(.green).border(.pink, width: 4))
                 } else {
                     AnyView(erasing: content.background(.blue))

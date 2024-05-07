@@ -1054,7 +1054,7 @@ public extension Array where Element: KuColor, Element.UnderlyingColorType == El
     static var grayscale: [Element] { [.white, .lightGray, .gray, .darkGray, .black] }
 }
 // MARK: DOT Colors
-extension KuColor where UnderlyingColorType == Self {
+public extension KuColor where UnderlyingColorType == Self {
     //     Blue - 294
     /// Services
     static var dotBlue: Self { .init(string: "rgb(0,63,135)", defaultColor: .black ) }

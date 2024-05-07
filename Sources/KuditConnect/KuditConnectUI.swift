@@ -96,12 +96,12 @@ public struct KuditConnectMenu<Content: View, LabelView: View>: View {
         } label: {
             label()
         }
-        .sheet(isPresented: $showFAQs) {
-            KuditConnectFAQs(connect: KuditConnect.shared)
-        }
         /// Kudos view
         .fullScreenFadeCover(isPresented: $showKudos, isVisible: $kudosVisible) {
             KudosView(messageText: $kudosMessageText, isKudosScreenVisible: $kudosVisible)
+        } // have before FAQ sheet or it will inherit transcation clause.
+        .sheet(isPresented: $showFAQs) {
+            KuditConnectFAQs(connect: KuditConnect.shared)
         }
     }
 }

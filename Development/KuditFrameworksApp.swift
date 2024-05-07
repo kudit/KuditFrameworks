@@ -12,6 +12,15 @@ struct KuditFrameworksApp: App {
         }
         Application.track()
         debug("in App init()", level: DebugLevel.currentLevel)
+        
+        KuditConnect.shared.customizeMessageBody = {
+            original in original.replacingOccurrences(of: "\n\nEnter your feedback", with: """
+This was generated with the Kudit Frameworks Test App.
+This is just for testing so NO ACTION IS REQUIRED.
+
+Enter your feedback
+""")
+        }
     }
     var body: some Scene {
         WindowGroup {

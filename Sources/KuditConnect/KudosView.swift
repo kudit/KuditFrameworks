@@ -37,6 +37,7 @@ public struct KudosView: View {
     public var body: some View {
         ZStack {
             FancyView()
+                .ignoresSafeArea()
             VStack {
                 // This is dynamic so we can change after confirming the kudos were sent.  Set to "Sending kudos..." and then change to this message once sent and have option to show error message which automatically generates a bug report.
                 Text(messageText)

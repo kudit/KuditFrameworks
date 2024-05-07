@@ -518,13 +518,19 @@ public extension KuColor {
     var luminance: Double {
         return 0.2126 * self.redComponent + 0.7152 * self.greenComponent + 0.0722 * self.blueComponent
     }
-    /// returns either white or black depending on the base color to make sure it's visible against the background.  In the future we may want to change this to some sort of vibrancy.
+    /// returns either white or black depending on the base color to make sure it's visible against the background.  In the future we may want to change this to some sort of vibrancy.  Note, if you're using this on accentColor on a view that has changed the tint, will give a contrassting color for the Asset color named "AccentColor" and not the actual color value since actual color values can't be read.
     var contrastingColor: Color {
 #if canImport(UIKit) && !os(watchOS) && !os(tvOS)
         // Fix so primary color - dark mode shows black
         if let color = self as? Color, color == .primary || color == .secondary {
             return Color(UIColor.systemBackground)
         }
+        if let color = self as? Color, color == .accentColor {
+            // pull from assets rather than from the color which will just return a blue color
+            if let uiColor = UIColor(named: "AccentColor") {
+                return uiColor.contrastingColor
+            }
+        } 
 #endif
         //        return isDark ? .white : .black
         return luminance < 0.6 ? .white : .black

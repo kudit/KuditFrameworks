@@ -92,7 +92,7 @@ public struct ApplicationInfoView: View {
             }
             ZStack(alignment: .centerFirstTextBaseline) {
                 HStack(spacing: 0) {
-                    KuditLogo(weight: 0.5, color: .primary).frame(size: 14)
+                    KuditLogo(weight: 0.5, color: .accentColor.contrastingColor).frame(size: 14)
                     Text(" v").opacity(0.5)
                     Text("\(KuditFrameworks.version)")
                     Spacer()
@@ -113,7 +113,8 @@ public struct ApplicationInfoView: View {
         }
         .font(.footnote)
         .padding()
-        .foregroundStyle(.primary)
+        .foregroundStyle(Color.accentColor.contrastingColor) // since background is tint color, choose a contrasting color for this view regardless of dark mode.
+//        .foregroundStyle(.primary)
         .background {
             RoundedRectangle(cornerRadius: 15)
                 .fill(.tint)

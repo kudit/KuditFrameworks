@@ -27,7 +27,7 @@ let package = Package(
             name: "KuditFrameworks", // needs to match package name to open properly in Swift Playgrounds
             targets: ["KuditFrameworksTestAppModule"],
             teamIdentifier: "3QPV894C33",
-            displayVersion: "4.3.1",
+            displayVersion: "4.3.2",
             bundleVersion: "1",
             appIcon: .asset("AppIcon"),
             accentColor: .presetColor(.red),

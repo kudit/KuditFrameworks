@@ -20,7 +20,7 @@ Several bits of universal code used in Kudit apps.
 - iOS 15.2+ (minimum required for Swift Playgrounds support but able to be run on iPhone 7)
 - tvOS 17.0+ (minimum required for Menu)
 - watchOS 6.0+ (7.0 minimum required for Label, but may not need)
-- macOS 12.0+ (minimum for foregroundStyle (Touchbook running Monterey), also minimum for MotionEffects)
+- macOS 12.0+ (minimum for foregroundStyle (Touchbook running Monterey), also minimum for ParticleEffects)
 - macCatalyst 14.0+
 - visionOS 1.0+
 

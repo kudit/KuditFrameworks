@@ -1,5 +1,7 @@
 # ChangeLog
 
+v4.3.3 5/7/2024 Renamed MotionEffects to ParticleEffects.
+
 v4.3.2 5/7/2024 Fixed so ApplicationInfoView always uses a color contrasting to the tint/accentColor rather than the foreground color.
  
 v4.3.1 5/6/2024 Added example for customizing additional info in support message body.  Fixed so swift playgrounds `swift-playgrounds-dev-previews.swift-playgrounds-app.dqnnutikhtqnaqgtggnjkzxvotue.501.Road-Trip` identifier is converted to `com.kudit` identifier.  Fixed issue with DOT colors not being public.  Fixed issue where Kudos view background did not extend into safe area.  Fixed so that animation to present Kudit Connect FAQs doesn't jump (because of transaction code for Kudos view).  Updated app icon template to be simple gradient on middle layer with circle hole, darker color for "background", and icon for foreground.
@@ -185,8 +187,11 @@ v1.0.2 8/8/2022 fixing compile
 v1.0.1 8/8/2022 initial commit
 
 v4 iOS 15+ Swift Playground version.
+
 v3 was the iOS 13 compatible version (listed as v1.0.x above)
+
 v2 was the original SwiftUI port
+
 v1 Realistically was the original Objective-C Kudit Frameworks
 
 ## Ways to generate compiler warnings in code:

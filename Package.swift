@@ -12,7 +12,7 @@ let package = Package(
     name: "KuditFrameworks",
     platforms: [
         .iOS("15.2"),
-        .macOS("12.0"), // minimum for foregroundStyle (Touchbook running Monterey), also minimum for MotionEffects
+        .macOS("12.0"), // minimum for foregroundStyle (Touchbook running Monterey), also minimum for ParticleEffects
         .tvOS("17.0"), // Menu is only available after tvOS 17 (and we don't have any apps we're supporting for earlier tvOS)
         .watchOS("8.0"),
         .visionOS("1.0"), // unavailable in Swift Playgrounds
@@ -27,7 +27,7 @@ let package = Package(
             name: "KuditFrameworks", // needs to match package name to open properly in Swift Playgrounds
             targets: ["KuditFrameworksTestAppModule"],
             teamIdentifier: "3QPV894C33",
-            displayVersion: "4.3.2",
+            displayVersion: "4.3.3",
             bundleVersion: "1",
             appIcon: .asset("AppIcon"),
             accentColor: .presetColor(.red),
@@ -50,7 +50,7 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
 //        .package(url: "https://github.com/GetStream/effects-library", "1.0.0"..<"2.0.0"),
-        .package(url: "https://github.com/kudit/MotionEffects", "1.0.0"..<"2.0.0"),
+        .package(url: "https://github.com/kudit/ParticleEffects", "1.0.0"..<"2.0.0"),
         .package(url: "https://github.com/johnsundell/ink.git", "0.6.0"..<"1.0.0"),
         .package(url: "https://github.com/kudit/Device", "2.1.4"..<"3.0.0")
     ],
@@ -60,7 +60,7 @@ let package = Package(
         .target(
             name: "KuditFrameworks",
             dependencies: [
-                .product(name: "MotionEffects Library", package: "motioneffects"),
+                .product(name: "ParticleEffects Library", package: "particleeffects"),
                 // Should this be moved to the executable dependency?
                 .product(name: "Device Library", package: "device"), // apparently needs to be lowercase.  Also note this is "Device Library" not "Device"
                 .product(name: "Ink", package: "ink"),

@@ -4,12 +4,12 @@
 #if canImport(SwiftUI)
 import SwiftUI
 
-#if canImport(MotionEffects)
-import MotionEffects
+#if canImport(ParticleEffects)
+import ParticleEffects
 #endif
 private struct FancyView: View {
     var body: some View {
-#if canImport(MotionEffects)
+#if canImport(ParticleEffects)
         let behavior = ParticleBehavior(
             birthRate: .frequent,
             lifetime: .long,

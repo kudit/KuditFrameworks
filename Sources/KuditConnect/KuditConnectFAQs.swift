@@ -24,7 +24,7 @@ struct KuditConnectFAQ: View {
     }
 }
 
-import MotionEffects // for version string
+import ParticleEffects // for version string
 import Device
 
 // TODO: Add searching and pull to refresh to FAQs
@@ -59,7 +59,7 @@ struct KuditConnectFAQs: View {
                     }
                 }
                 // TODO: add in section to contact support
-                Text("\(Application.main.name) v\(Application.main.version) © \(String(Date().year)) Kudit LLC All Rights Reserved.\nRead our [Privacy Policy](https://kudit.com/privacy.php) or [Terms of Use](https://kudit.com/terms.php).\n\nOpen Source projects used include [Device](https://github.com/kudit/Device) v\(Device.version), [MotionEffects](https://github.com/kudit/MotionEffects) v\(MotionEffects.version), and [Ink](https://github.com/JohnSundell/Ink).\(connect.additionalLegalInfo)")
+                Text("\(Application.main.name) v\(Application.main.version) © \(String(Date().year)) Kudit LLC All Rights Reserved.\nRead our [Privacy Policy](https://kudit.com/privacy.php) or [Terms of Use](https://kudit.com/terms.php).\n\nOpen Source projects used include [Device](https://github.com/kudit/Device) v\(Device.version), [ParticleEffects](https://github.com/kudit/ParticleEffects) v\(ParticleEffects.version), and [Ink](https://github.com/JohnSundell/Ink).\(connect.additionalLegalInfo)")
                     .font(.footnote)
             }
             .refreshable {

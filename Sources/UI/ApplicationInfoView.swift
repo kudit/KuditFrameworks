@@ -39,7 +39,7 @@ public struct ApplicationInfoView: View {
     @State var includeDebugInformation: Bool
     
     // binding so that we can observe changes
-    @ObservedObject fileprivate var debugLevel = ObservableDebugLevel()
+    @ObservedObject fileprivate var debugLevel = ObservableDebugLevel.shared
     public init(application: ApplicationViewPresentable = Application.main, includeDebugInformation: Bool = false) {
         self.application = application
         self.includeDebugInformation = includeDebugInformation

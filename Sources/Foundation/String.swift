@@ -192,6 +192,22 @@ public extension String {
     var isURL: Bool {
         return matchesDataDetector(type: .link)
     }
+    /// Returns a URL if the String can be converted to URL.  `nil` otherwise.
+    var asURL: URL? {
+        // make sure data matches detector so "world.json" isn't seen as a valid URL.  must be fully qualified.
+        guard isURL else {
+            return nil
+        }
+        return URL(string: self)
+    }
+
+    /// Get last "path" component of a string (basically everything from the last `/` to the end)
+    var lastPathComponent: String {
+        let parts = self.components(separatedBy: "/")
+        let last = parts.last ?? self
+        return last
+    }
+
     /// `true` iff the `String` is an address in the proper form.
     var isAddress: Bool {
         return matchesDataDetector(type: .address)

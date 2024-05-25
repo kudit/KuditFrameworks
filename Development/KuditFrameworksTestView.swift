@@ -9,7 +9,7 @@ import Device
 struct TimeClockView: View {
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     @State var time = -1
-    @ObservedObject var debugLevel = ObservableDebugLevel()
+    @ObservedObject var debugLevel = ObservableDebugLevel.shared
     var body: some View {
         VStack {
             Text("Unix time: \(time)")
@@ -32,11 +32,6 @@ struct TimeClockView: View {
 }
 
 public struct KuditFrameworksTestView: View {
-    public init() {
-        //debug("Test View Init")
-        Application.track()
-    }
-    
     @State var testIsPresented = false
     
     var tests: [Test] {
@@ -123,7 +118,9 @@ public struct KuditFrameworksTestView: View {
             } label: { KuditConnect.defaultKuditConnectLabel
             }
             #else
-            menus
+            ToolbarItemGroup(placement: .automatic) {
+                menus
+            }
             #endif
         }
         .scrollWrapper()

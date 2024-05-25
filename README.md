@@ -25,7 +25,9 @@ Several bits of universal code used in Kudit apps.
 - visionOS 1.0+
 
 ## Known Issues
-Known Issues with Device Library.
+Known Issues with KuditFrameworks Library.
+
+*See CHANGELOG for known issues and roadmap*
 
 ## Usage
 

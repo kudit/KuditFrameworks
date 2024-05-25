@@ -179,7 +179,7 @@ public class DataStoreObserver {
     /// Return a data store and provide callbacks to run on notifications like update.  `resetLocal` is called when a store needs to be reset, for example, when migrating local data to iCloud, the local store should be reset after loading local data.  A cloud `load` will be called after.  `load` should load data from the store and throw a DataStoreError.load if we have some fatal error that means we should NOT attempt to synchronize with the online store.  `load` will be called twice if iCloud is enabled, once to check the local store for data and again for the online data.  You can tell if it will be called twice if the Bool value is true (iCloud is enabled). `onUpdate` is called when the online store changes. Make sure if we weren't logged in and then switch to iCloud, that we migrate over data from local store and delete (onReset) and if iCloud goes away, user defaults will be reset so that would be expected to no longer have that synced data.
     public static func getObservedStore(
         /// pull data from the local data source and reset.  Future call to load will be coming.
-        migrateLocal: (DataStore) -> Void,
+        migrateLocal: (DataStore) -> Void = { _ in },
         load: (DataStore) throws -> Void, // if error, don't synchronize.  DataStore passed will indicate if local or not in case needed.
         onUpdate: @escaping (DataStore) -> Void
     ) -> DataStore {

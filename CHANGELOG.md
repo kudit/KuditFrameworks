@@ -1,5 +1,15 @@
 # ChangeLog
 
+Fixed compatibility with macOS (non-catalyst).
+    Kudos doesn't work.
+    Toolbar is smooshed.
+    FAQ Sheet layout is wonky.
+
+Create a Cache<Key,Type> which will automatically use Device to check for memory pressure and automatically trim old items from cache
+
+
+v4.3.4 5/25/2024 Updated Device dependency.  Updated ParticleEffects dependency.  Added compatibility for iPhone 7 for showing at least one toolbar button menu in test app.  Fixed so can be included in Swift Playgrounds projects without throwing "The product type, "executable", is not supported.".  Added default for DataStoreObserver.getObservedStore migrateLocal since this may not be needed.  Re-worked Package.swift to be cleaner and support `swift package dump-package` for swiftpackageindex.com and enhanced for code re-use.  Added asURL and lastPathComponent computed properties on String.  Added setting to enable debug context only a specified debug levels for clarity.  Moved to shared ObservableDebugLevel so that we don't have multiple objects floating around.
+
 v4.3.3 5/7/2024 Renamed MotionEffects to ParticleEffects.
 
 v4.3.2 5/7/2024 Fixed so ApplicationInfoView always uses a color contrasting to the tint/accentColor rather than the foreground color.
@@ -193,6 +203,20 @@ v3 was the iOS 13 compatible version (listed as v1.0.x above)
 v2 was the original SwiftUI port
 
 v1 Realistically was the original Objective-C Kudit Frameworks
+
+## App Store rejection responses:
+• Does your app include third-party analytics? If so, please provide details about what data is collected for this purpose.
+We do not use any third-party frameworks nor do we collect any analytics.
+
+• Does your app include third-party advertising? If so, please provide a link to the ad network's publicly-documented practices and policies for kids apps.
+We do not include any third-party advertising.
+
+• Will the data be shared with any third parties? If so, for what purposes and where will this information be stored?
+No data is shared with any third parties.
+
+• Is your app collecting any user or device data for purposes beyond third-party analytics or third-party advertising? If so, please provide a complete and clear explanation of all planned uses of this data.
+We do display some device information to the user for their information but none of that data is identifying information and nothing is transmitted unless the user sends us Kudos or a support email.  The only data transmitted is user-initiated for first-party awareness or support.  No user-identifiable data is collected (unless the user chooses to email us and include personal information for support).  Nothing is shared outside of our internal support team.
+
 
 ## Ways to generate compiler warnings in code:
 ```Swift

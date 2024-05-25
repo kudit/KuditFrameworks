@@ -128,6 +128,15 @@ public extension Shape {
     }
 }
 
+#Preview("Fill & Stroke") {
+    VStack {
+        Circle()
+            .fill(.green, strokeBorder: .blue, lineWidth: 20)
+        RoundedRectangle(cornerRadius: 25)
+            .fill(.tertiary, strokeBorder: .tint, lineWidth: 5)
+    }.padding()
+}
+
 public extension InsettableShape {
     func fill<Fill: ShapeStyle, Stroke: ShapeStyle>(_ fillStyle: Fill, strokeBorder strokeStyle: Stroke, lineWidth: Double = 1) -> some View {
         self

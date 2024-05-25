@@ -47,6 +47,7 @@ public class Application: CustomStringConvertible {
     
     /// Place `Application.track()` in `application(_:didFinishLaunchingWithOptions:)` or @main struct init() function to enable version tracking.
     public static func track(file: String = #file, function: String = #function, line: Int = #line, column: Int = #column) {
+        // Calling Application.main is what initializes the application and does the tracking.  This really should only be called once.  TODO: Should we check to make sure this isn't called twice??  Application.main singleton should only be inited once.
         debug("Kudit Application Tracking:\n\(Application.main)", level: .NOTICE, file: file, function: function, line: line, column: column)
     }
     

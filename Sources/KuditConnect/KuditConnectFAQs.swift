@@ -6,7 +6,7 @@ struct KuditConnectFAQ: View {
     var faq: KuditFAQ
     var body: some View {
         let html = faq.answerHTML(textColor: colorScheme == .dark ? .white : .black)
-#if canImport(WebKit) && !os(watchOS) && !os(tvOS)
+#if canImport(WebKit) && canImport(UIKit) && !os(watchOS) && !os(tvOS)
         HTMLView(htmlString: html)
             .navigationTitle(faq.question)
 #else

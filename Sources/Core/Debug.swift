@@ -43,6 +43,7 @@ extension Notification.Name {
 }
 
 public class ObservableDebugLevel: ObservableObject {
+    public static var shared = ObservableDebugLevel()
     @Published public var value = DebugLevel.currentLevel
     public init() { // use shared
         // subscribe to debuglevel changes
@@ -51,6 +52,12 @@ public class ObservableDebugLevel: ObservableObject {
             self.value = DebugLevel.currentLevel
         }
     }
+}
+
+public extension Set<DebugLevel> {
+    static var all: Self = [.ERROR, .WARNING, .NOTICE, .DEBUG]
+    static var important: Self = [.ERROR, .WARNING]
+    static var informational: Self = [.NOTICE, .WARNING]
 }
 
 public enum DebugLevel: Comparable, CustomStringConvertible, CaseIterable {
@@ -74,10 +81,13 @@ public enum DebugLevel: Comparable, CustomStringConvertible, CaseIterable {
     
     public static var defaultLevel = DebugLevel.ERROR
     
+    /// Set this to a set of levels where we should include the context info.  Defaults to `.important` so that Notices and Debug messages are less noisy and easier to see.
+    public static var levelsToIncludeContext: Set<DebugLevel> = .important
+    
     /// Set this to `true` to log failed color parsing notices when returning `nil`
     public static var colorLogging = false
     
-    /// setting this to false will make debug( act exactly like print(
+    /// setting this to false will make debug() act exactly like print()
     public static var includeContext = true
     public var emoji: String {
         switch self {
@@ -188,7 +198,8 @@ public func debug(_ message: Any, level: DebugLevel = DebugLevel.defaultLevel, f
     let threadInfo = Thread.isMainThread ? "" : "^"
     if DebugLevel.includeContext {
         // TODO: Add timestamps to debug calls so we can see how long things take?  Have a debug format static string so we can propertly interleave?
-        print("\(simplerFile)(\(line)) : \(simplerFunction)\(threadInfo)\n\(level.emoji) \(message)")
+        let context = "\(simplerFile)(\(line)) : \(simplerFunction)\(threadInfo)\n"
+        print("\(DebugLevel.levelsToIncludeContext.contains(level) ? context : "")\(level.emoji) \(message)")
     } else {
         print(message)
     }

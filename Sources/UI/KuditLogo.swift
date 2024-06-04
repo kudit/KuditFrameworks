@@ -23,9 +23,9 @@ import SwiftUI
 public struct KuditLogoShape: Shape {
     public var ballsOnly = false
     private struct Ball {
-        var x: CGFloat
-        var y: CGFloat
-        var radius: CGFloat
+        var x: Double
+        var y: Double
+        var radius: Double
         func center(for rect: CGRect) -> CGPoint {
             rect.squaring(UnitPoint(x: x, y: y))
         }
@@ -74,7 +74,7 @@ public struct KuditLogoShape: Shape {
 }
 
 public struct KuditLogo: View {
-    public var weight: CGFloat
+    public var weight: Double
     public var color: Color
     public var body: some View {
         ZStack {
@@ -85,7 +85,7 @@ public struct KuditLogo: View {
                 .fill(color)
         }
     }
-    public init(weight: CGFloat = 1, color: Color = .accentColor) {
+    public init(weight: Double = 1, color: Color = .accentColor) {
         self.weight = weight
         self.color = color
     }

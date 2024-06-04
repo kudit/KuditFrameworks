@@ -1,48 +1,13 @@
 import Foundation
+@_exported import Device // make available outside this framework by simply importing KuditFrameworks
 
 public struct KuditFrameworks {
     /// The version of the Device Library (must be hard coded because inaccessible from the bundle for included packages)
-    public static var version = Version("4.3.4")
+    public static var version = Version("4.3.5")
 
     public init() {
     }
 }
-
-public extension Bool {
-    static var watchOS: Bool {
-#if os(watchOS)
-        return true
-#else
-        return false
-#endif
-    }
-    static var visionOS: Bool {
-#if os(visionOS)
-        return true
-#else
-        return false
-#endif
-    }
-    static var tvOS: Bool {
-#if os(tvOS)
-        return true
-#else
-        return false
-#endif
-    }
-}
-
-/*
-public extension Bool {
-     static var iOS16_4: Bool {
-         guard #available(iOS 16.4, *) else {
-             return false
-         }
-         return true
-     }
- }
- */
-
 
 /** Possible additions to Device Kit
 /// Gets the identifier from the system, such as "iPhone7,1".

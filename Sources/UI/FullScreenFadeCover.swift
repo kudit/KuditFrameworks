@@ -12,7 +12,7 @@ struct FullScreenFadeCoverModifier<ViewContent: View>: ViewModifier {
     var content: () -> ViewContent
     
     var visibilityHack: Bool {
-        return .watchOS
+        .isOS(.watchOS)
     }
     
     var overlayContent: some View {
@@ -109,7 +109,7 @@ struct TestView: View {
                 Color.clear
                 VStack {
                     Text("Full screen view.  Lots of text can go here.")
-                    if !.watchOS {
+                    if !.isOS(.watchOS) {
                         Button("Dismiss") {
                             visible = false
                         }

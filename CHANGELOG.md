@@ -1,12 +1,17 @@
 # ChangeLog
 
-Fixed compatibility with macOS (non-catalyst).
+NOTE: Version needs to be updated in the following places:
+- [ ] Xcode project version (in build settings - normal and watch targets should inherit)
+- [ ] Package.swift iOSApplication product displayVersion.
+- [ ] ParticleEffects.version constant (must be hard coded since inaccessible in code)
+- [ ] Tag with matching version in GitHub.
+
+TODO: Fixed compatibility with macOS (non-catalyst).
     Kudos doesn't work.
     Toolbar is smooshed.
     FAQ Sheet layout is wonky.
 
-Create a Cache<Key,Type> which will automatically use Device to check for memory pressure and automatically trim old items from cache
-
+v4.3.5 6/3/2024 Fixed project so only one version check is needed not per target.  Update Device package for better BatteryView and StorageInfo views.  Made sure ParticleEffects is updated as well.  Tweaked ApplicationInfoView so KuditFrameworks info is hidden behind the tap.  Added Swift version to info.  Replaced CGFloat values in framework with Double since toll-free bridged and CGFloat is less swifty...  Added Particle Framework version to support details.  Fixed toolbar on iPhone 7.  Improved checks for various OSes with booleans to make it easier to conditionally run code (that compiles in either).  Added Bool extensions.  tvOS fixed ApplicationInfoView and ability to show KuditConnect menu (toolbars don't seem well supported).
 
 v4.3.4 5/25/2024 Updated Device dependency.  Updated ParticleEffects dependency.  Added compatibility for iPhone 7 for showing at least one toolbar button menu in test app.  Fixed so can be included in Swift Playgrounds projects without throwing "The product type, "executable", is not supported.".  Added default for DataStoreObserver.getObservedStore migrateLocal since this may not be needed.  Re-worked Package.swift to be cleaner and support `swift package dump-package` for swiftpackageindex.com and enhanced for code re-use.  Added asURL and lastPathComponent computed properties on String.  Added setting to enable debug context only a specified debug levels for clarity.  Moved to shared ObservableDebugLevel so that we don't have multiple objects floating around.
 
@@ -234,7 +239,6 @@ Known issues that need to be addressed.
 
 - [ ] Fix so errors when loading FAQs is reported in FAQ list rather than staying blank.
         example: {"success":false,"errorMessage":"Identifier com.kudit.Foobar not found."}
-- [ ] Figure out why Kudit Connect menus don't show up on iPhone 7 (probably toolbar compatibility issue?).
 - [ ] Emoji not showing up in FAQ on watchOS (probably nsattributedstring not supporting emoji).
 - [ ] Rework for better tvOS support. (Menus should work better).
 - [ ] Update ShoutIt to use KuditFrameworks DataStore for settings (and data?)
@@ -244,7 +248,6 @@ Known issues that need to be addressed.
 ## Roadmap:
 Planned features and anticipated API changes.  If you want to contribute, this is a great place to start.
 
-- [ ] Instead of time clock, have animating view (rainbow cycling?  Perhaps particles moving back and forth on a line Sparkling)
 - [ ] Add toggle to color tests CSS Named Colors list to order Alphabetically vs ordering .sort { $0.hue < $1.hue }
 - [ ] Add screenshot functionality.  Make `.screenshottable()` and include screenshot in support emails (trigger when tapping KuditConnect menu before menu is shown?)
 - [ ] KuditConnect automatic screenshot when tapping menu.
@@ -259,6 +262,7 @@ Planned features and anticipated API changes.  If you want to contribute, this i
 ## Proposals:
 This is where proposals can be discussed for potential movement to the roadmap.
 
+- [ ] Create a Cache<Key,Type> which will automatically use Device to check for memory pressure and automatically trim old items from cache
 - [ ] In tracking checks, look for DebugLevel set to debug and if so, add #warning to ensure compiler warning? Is this even possible?
 - [ ] Should failed parsing color throw rather than just returning `nil` so we can get the message if we want and ignore otherwise?  
 - [ ] Package Debug, KuColor, Application & Version, Test Frameworks, Layouts, Foundation improvements, etc into separate packages that can be separate active open source projects like Device?  Submit some of the foundation packages to Foundation open source projects.

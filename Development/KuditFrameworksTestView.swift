@@ -5,24 +5,51 @@ import KuditFrameworks
 #if canImport(Device)
 import Device
 #endif
+#if canImport(ParticleEffects)
+import ParticleEffects
+#endif
 
 struct TimeClockView: View {
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     @State var time = -1
     @ObservedObject var debugLevel = ObservableDebugLevel.shared
+    @State var particleSystem = ParticleSystem<StringConfiguration>(center: .init(x: 0, y: 0.4), behavior: ParticleBehavior(
+        birthRate: .frequent,
+        lifetime: .brief,
+        fadeOut: .lengthy,
+        emissionAngle: 360.0,
+        spread: .complete,
+        initialVelocity: .slow,
+        acceleration: .sun,
+        blur: .none
+    ))
     var body: some View {
-        VStack {
-            Text("Unix time: \(time)")
-            Button {
-                DebugLevel.currentLevel++
-            } label: {
-                HStack {
-                    Text("DEBUG LEVEL: \(debugLevel.value.emoji)")
-                    Text(debugLevel.value.description)
-                        .foregroundStyle(Color(color: debugLevel.value.color))
+        TimelineView(.animation) { context in
+            VStack {
+                Text("Unix time: \(time)")
+                Button {
+                    DebugLevel.currentLevel++
+                } label: {
+                    HStack {
+                        Text("DEBUG LEVEL: \(debugLevel.value.emoji)")
+                        Text(debugLevel.value.description)
+                            .foregroundStyle(Color(color: debugLevel.value.color))
+                    }
                 }
+                .buttonStyle(.bordered)
             }
-            .buttonStyle(.bordered)
+            .overlay {
+                let _ = {
+                    let pos = (sin(context.date.timeIntervalSinceReferenceDate) + 1) / 2
+                    self.particleSystem.center.x = pos
+                }()
+                ParticleSystemView(particleSystem: particleSystem) {
+                    StringConfiguration(string: "k", coloring: .rainbow)
+                }
+                .font(.caption.bold())
+                .frame(size: 400)
+                .background(.clear)
+            }
         }
         .onReceive(timer, perform: { _ in
             //debug("updating \(time)")
@@ -58,6 +85,9 @@ public struct KuditFrameworksTestView: View {
     
     public var body: some View {
         VStack {
+            if .isOS(.tvOS) {
+                KuditConnectMenu()
+            }
             Button {
                 testIsPresented = true
             } label: {
@@ -112,16 +142,23 @@ public struct KuditFrameworksTestView: View {
         }
         .navigationTitle("Kudit Frameworks")
         .toolbar {
-            #if os(watchOS)
+#if os(watchOS)
             Menu {
                 menus
-            } label: { KuditConnect.defaultKuditConnectLabel
+            } label: {
+                KuditConnect.defaultKuditConnectLabel
             }
-            #else
+#elseif os(tvOS)
+            // show as inline menu rather than menu bar
+#elseif os(macOS)
             ToolbarItemGroup(placement: .automatic) {
                 menus
             }
-            #endif
+#else
+            ToolbarItemGroup(placement: .topBarTrailing) { // .automatic doesn't work on iPhone 7
+                menus
+            }
+#endif
         }
         .scrollWrapper()
         .navigationWrapper()

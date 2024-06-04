@@ -61,12 +61,12 @@ public extension Set<DebugLevel> {
 }
 
 public enum DebugLevel: Comparable, CustomStringConvertible, CaseIterable {
-    /// Only use .OFF for setting the current debug level so nothing is printed.  If you wish to disable a debug message, use .SILENT
+    /// Only use .OFF for setting the current debug level so *nothing* is printed.  If you wish to disable a debug message, use .SILENT
     case OFF
-    case ERROR
-    case WARNING
-    case NOTICE
-    case DEBUG
+    case ERROR // Should not be possible.  Will lead to undefined behavior.
+    case WARNING // Unlikely but could be possible error if there is bad user data or network corruption.
+    case NOTICE // Informational
+    case DEBUG // Lots of detailed info for debugging.  Unnecessary in production.
     case SILENT
     /// Change this value in production to DebugLevvel.ERROR to minimize logging.
     // set default debugging level to .DEBUG (use manual controls to turn OFF if not debug during app tracking since previews do not have app tracking set up nor does it have compiler flags or app init.

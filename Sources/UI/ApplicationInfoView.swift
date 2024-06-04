@@ -26,12 +26,30 @@ public protocol ApplicationViewPresentable {
 }
 extension Application: ApplicationViewPresentable {}
 struct MockApplication: ApplicationViewPresentable {
+    static var globalVersionCount = 0
     var name = "Test Application Name"
     var isFirstRun = true
     var version = Version("4.0.0")
-    var previouslyRunVersions = [Version("1.0.0"), "1.1.1", "1.2.2", "1.3", "2.0", "3.0.1", "3.1.1", "3.2.1", "3.3", "3.3.1", "3.3.4", "3.3.5", "3.3.6", "3.4", "3.4.1", "3.4.2", "3.4.4", "3.4.5"]
+    var previouslyRunVersions: [Version]
     var appIdentifier = "com.kudit.test.TestApplication"
     var iCloudStatus = CloudStatus.notSupported
+    init(name: String = "Test Application Name", isFirstRun: Bool = true, version: Version? = nil, previouslyRunVersions: [Version]? = nil, appIdentifier: String = "com.kudit.test.TestApplication", iCloudStatus: CloudStatus = CloudStatus.notSupported) {
+        self.name = name
+        self.isFirstRun = isFirstRun
+        if let version {
+            self.version = version
+        } else {
+            self.version = Version("4.\(Self.globalVersionCount).0")
+            Self.globalVersionCount++
+        }
+        if let previouslyRunVersions {
+            self.previouslyRunVersions = previouslyRunVersions
+        } else {
+            self.previouslyRunVersions = [Version("1.0.0"), "1.1.1", "1.2.2", "1.3", "2.0", "3.0.1", "3.1.1", "3.2.1", "3.3", "3.3.1", "3.3.4", "3.3.5", "3.3.6", "3.4", "3.4.1", "3.4.2", "3.4.4", "3.4.5"]
+        }
+        self.appIdentifier = appIdentifier
+        self.iCloudStatus = iCloudStatus
+    }
 }
 
 public struct ApplicationInfoView: View {
@@ -83,26 +101,26 @@ public struct ApplicationInfoView: View {
                     }
                 }
             }.font(.headline)
-            Divider()
-            if application.previouslyRunVersions.count > 0 && includeDebugInformation {
-                Text("Previously Run Versions: \(application.previouslyRunVersions.map { "v\($0)" }.joined(separator: ", "))")
-                .opacity(0.5)
-                .font(.caption2)
-                .multilineTextAlignment(.center)
-            }
-            ZStack(alignment: .centerFirstTextBaseline) {
-                HStack(spacing: 0) {
-                    KuditLogo(weight: 0.5, color: .accentColor.contrastingColor).frame(size: 14)
-                    Text(" v").opacity(0.5)
-                    Text("\(KuditFrameworks.version)")
-                    Spacer()
-                    if includeDebugInformation {
-                        Text("v").opacity(0.5)   
-                        Text("\(KuditConnect.version) ")   
-                        Image(symbolName: "questionmark.circle.fill")
-                    }
+            if includeDebugInformation {
+                Divider()
+                if application.previouslyRunVersions.count > 0 {
+                    Text("Previously Run Versions: \(application.previouslyRunVersions.map { "v\($0)" }.joined(separator: ", "))")
+                        .opacity(0.5)
+                        .font(.caption2)
+                        .multilineTextAlignment(.center)
                 }
-                if application.iCloudStatus != .notSupported || includeDebugInformation {
+                ZStack(alignment: .centerFirstTextBaseline) {
+                    HStack(spacing: 0) {
+                        KuditLogo(weight: 0.5, color: .accentColor.contrastingColor).frame(size: 14)
+                        Text(" v").opacity(0.5)
+                        Text("\(KuditFrameworks.version) (\(KuditConnect.version))")
+                        Spacer()
+                        if includeDebugInformation {
+                            Text("Swift ").opacity(0.5)
+                            Text("\(Device.current.swiftVersion)")   
+                            Image(symbolName: "swift")
+                        }
+                    }
                     HStack(alignment: .firstTextBaseline) {
                         Text("iCloud:").opacity(0.5)
                         Image(application.iCloudStatus)
@@ -117,7 +135,7 @@ public struct ApplicationInfoView: View {
 //        .foregroundStyle(.primary)
         .background {
             RoundedRectangle(cornerRadius: 15)
-                .fill(.tint)
+                .fill(.isOS(.tvOS) ? AnyShapeStyle(.black) : AnyShapeStyle(.tint))
         }
         .onTapGesture {
             includeDebugInformation.toggle()

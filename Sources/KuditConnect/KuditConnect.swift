@@ -26,7 +26,9 @@ KuditConnectMenu {
 #if canImport(SwiftUI)
 import SwiftUI
 import StoreKit
+// include below for info for appInformation
 import Device
+import ParticleEffects
 
 // https://swiftuirecipes.com/blog/send-mail-in-swiftui
 
@@ -196,6 +198,7 @@ public class KuditConnect: ObservableObject {
         let infostring = """
             Application: \(Application.main.description)
             \(Device.current.description)
+            Particle Effects Version: v\(ParticleEffects.version)
             Kudit Frameworks Version: v\(KuditFrameworks.version)
             Kudit Connect Version: v\(KuditConnect.version)
             """

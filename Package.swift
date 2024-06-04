@@ -7,7 +7,7 @@
 
 import PackageDescription
 
-var version = "4.3.4"
+var version = "4.3.5"
 var packageLibraryName = "KuditFrameworks"
 
 // Products define the executables and libraries a package produces, making them visible to other packages.

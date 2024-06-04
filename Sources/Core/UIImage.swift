@@ -97,9 +97,9 @@ public extension UIImage {
     
     /// center square crop image
     var squareCropped: UIImage {
-        var startX:CGFloat = 0
-        var startY:CGFloat = 0
-        let size: CGFloat
+        var startX: Double = 0
+        var startY: Double = 0
+        let size: Double
         if self.size.width > self.size.height {
             size = self.size.height
             startX = (self.size.width - size) / 2

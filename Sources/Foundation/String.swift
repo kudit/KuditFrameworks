@@ -6,7 +6,7 @@
 //  Copyright © 2016 Kudit. All rights reserved.
 //
 
-import Foundation
+@_exported import Foundation
 
 /// TODO: Make note of how to convert a string to markdown?
 
@@ -45,7 +45,7 @@ public extension LosslessStringConvertible {
 }
 
 extension CharacterSet: Testable {
-    public static var tests = [
+    public static let tests = [
         Test("character strings", testCharacterStrings),
     ]
 }
@@ -255,6 +255,9 @@ public extension String {
     /// Returns a new string made by removing from both ends of the `String` instances of the given string.
     // Fixed to use Substrings so we don't have to do length or indexing.
     func trimming(_ trimString: String) -> String {
+        guard trimString.count > 0 else { // if we try to trim an empty string, infinite loop will happen below so just return.
+            return self
+        }
         var returnString = Substring(self)
         while returnString.hasPrefix(trimString) {
             //returnString = returnString.substring(from: returnString.characters.index(returnString.startIndex, offsetBy: trimString.length))
@@ -262,9 +265,9 @@ public extension String {
             returnString = returnString.suffix(from: index)
         }
         while returnString.hasSuffix(trimString) {
-            let index = returnString.index(returnString.endIndex, offsetBy: -trimString.count)
-            print("Trimming suffix \(trimString) from \(returnString) offset: \(-trimString.count)")
-            returnString = returnString.prefix(through: index)
+            let index = returnString.index(returnString.endIndex, offsetBy: -(trimString.count + 1)) // NOTE: Needs the +1 since the endIndex is one AFTER the position and we're using the "through:" syntax which includes the last index.
+//            print("Trimming suffix \(trimString) from \(returnString) offset: \(-trimString.count)")
+            returnString = returnString.prefix(through: index) // since through, need to be -1 to not be inclusive
             //returnString = returnString.substring(to: returnString.characters.index(returnString.endIndex, offsetBy: -trimString.length))
         }
         return String(returnString)
@@ -290,6 +293,22 @@ public extension String {
         let badSet = CharacterSet(charactersIn: string)
         return self.trimmingCharacters(in: badSet)
     }
+    
+    internal static let testTriming: TestClosure = {
+        let long = "ExampleWorld/world.json"
+        let trim = "world.json"
+        let trimmed = long.trimming(trim)
+        // assert
+        return (trimmed == "ExampleWorld/", "Trimmed: \(trimmed)")
+    }
+    internal static let testTrimingEmpty: TestClosure = {
+        let long = "ExampleWorld/world.json"
+        let trim = ""
+        let trimmed = long.trimming(trim)
+        // assert
+        return (trimmed == long, "Trimmed should match long: \(trimmed)")
+    }
+
     
     // MARK: - Replacements
     func replacingCharacters(in range: NSRange, with string: String) -> String {
@@ -644,9 +663,12 @@ public extension String {
         }
     }
     
-    static var tests = [
+    @MainActor
+    static let tests = [
         Test("sentence capitalized", testSentenceCapitalized),
         Test("substring", testSubstring),
+        Test("trimming", testTriming),
+        Test("trimming empty", testTrimingEmpty),
         Test("extract tags", testExtractTags),
         Test("extract nil start", testExtractNilStart),
         Test("extract nil end", testExtractNilEnd),

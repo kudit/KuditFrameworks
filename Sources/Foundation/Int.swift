@@ -122,6 +122,8 @@ extension Int {
             && additionMixedB == 7.3
             , "\(multiplicationA),\(multiplicationB),\(divisionInts),\(divisionMixed),\(additionMixedA),\(additionMixedB) testOperations failed")
     }
+    
+    @MainActor
     public static var tests = [
         Test("Operations with Ints & Doubles", testOperations),
     ]

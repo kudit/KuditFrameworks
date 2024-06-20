@@ -70,7 +70,11 @@ public struct ApplicationInfoView: View {
 //                        .antialiased(true) //for smooth edges for scale to fill
                         .interpolation(.high)
                         .resizable()
+                    #if os(tvOS)
+                        .frame(width: 80, height: 48)
+                    #else
                         .frame(size: 44)
+                    #endif
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                 }
                 VStack(alignment: .leading, spacing: 2) {

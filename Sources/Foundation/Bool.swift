@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum OS {
+public enum OS: CaseIterable, Sendable {
     case iOS
     case macOS
     case macCatalyst

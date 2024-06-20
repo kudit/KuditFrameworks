@@ -3,7 +3,7 @@ import Foundation
 
 public struct KuditFrameworks {
     /// The version of the Device Library (must be hard coded because inaccessible from the bundle for included packages)
-    public static var version = Version("4.3.5")
+    public static let version = Version("4.3.6")
 
     public init() {
     }

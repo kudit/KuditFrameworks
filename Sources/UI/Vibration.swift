@@ -18,7 +18,7 @@ import UIKit
 import WatchKit
 #endif
 
-public enum Vibration: CaseIterable {
+public enum Vibration: CaseIterable, Sendable {
     case system
     case heavy
     case light

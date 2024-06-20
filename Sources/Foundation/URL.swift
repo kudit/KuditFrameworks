@@ -19,7 +19,11 @@ public extension URL {
     var fileBasename: String {
         return self.deletingPathExtension().lastPathComponent
     }
+    var fileExists: Bool {
+        FileManager.default.fileExists(atPath: self.path)
+    }
 }
+
 
 extension URL: Comparable {
     public static func < (lhs: URL, rhs: URL) -> Bool {

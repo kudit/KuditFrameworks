@@ -5,10 +5,6 @@
 //
 
 /**
- https://getstream.io/blog/using-swiftui-effects-library-how-to-add-particle-effects-to-ios-apps/
- 
- https://github.com/GetStream/effects-library
- 
  Example usage with additional menu items:
  
 KuditConnectMenu {
@@ -22,76 +18,31 @@ KuditConnectMenu {
 }
  */
 
-
 #if canImport(SwiftUI)
 import SwiftUI
 import StoreKit
 // include below for info for appInformation
-import Device
+import Device // TODO: Do we want @_exported to expose Device automatically when importing KuditFrameworks?
 import ParticleEffects
-
-// https://swiftuirecipes.com/blog/send-mail-in-swiftui
-
-// MARK: - FAQs
-import Ink
-public struct KuditFAQ: Codable, Identifiable {
-    public typealias MySQLDate = String // in the future, convert to actual date?  Support conversion to Date object?
-    public var question: String
-    public var answer: HTML
-    public var category: String
-    public var minversion: Version? // could be null
-    public var maxversion: Version? // could be null
-    public var updated: MySQLDate
-    public var key: String { // TODO: Is this still needed?
-        return "kuditConnectAlertShown:\(question)"
-    }
-    public var id: String {
-        question
-    }
-    public func visible(in version: Version) -> Bool {
-        if let minversion, minversion > version {
-            return false
-        }
-        if let maxversion, maxversion < version {
-            return false
-        }
-        return true
-    }
-    public func answerHTML(textColor: Color) -> HTML {
-        var debugHTML = """
- <footer>(\(minversion?.rawValue ?? "n/a"),\(maxversion?.rawValue ?? "n/a")) \(updated) text: \(textColor.cssString)</footer>
-"""
-//        debug(debugHTML, level: .DEBUG)
-        if DebugLevel.currentLevel != .DEBUG {
-            debugHTML = ""
-        }
-        let parser = MarkdownParser()
-        let answerHTML = parser.html(from: answer)
-        // use web style so that we can update without updating code.
-        return """
- <html><head><meta name="viewport" content="width=device-width" /><link rel="stylesheet" type="text/css" href="\(KuditConnect.kuditAPIURL)/styles.css?version=\(KuditFrameworks.version)&lastUpdate=\(updated)" /></head><body style="font-family: -apple-system;color: \(textColor.cssString);">\(answerHTML)\(debugHTML)</body></html>
-"""
-    }
-}
-public extension [KuditFAQ] {
-    var categories: [String] {
-        var categories = [String]()
-        for faq in self {
-            if !categories.contains(faq.category) {
-                categories.append(faq.category)
-            }
-        }
-        return categories.sorted()
-    }
-}
 
 /// For presenting KuditConnect menu information.  Usually won't need, but if you want to customize the email message, modify this shared object.  Example to append data:
 ///  KuditConnect.shared.customizeMessageBody = { original in original + "\nMy New Data" }
 // TODO: Have option to include data as file attachment (for Shout It, Score, Halloween Tracker)
 // MARK: - KuditConnect model
+@MainActor
 public class KuditConnect: ObservableObject {
     public static var shared = KuditConnect()
+
+    nonisolated public static let kuditAPIURL = "https://www.kudit.com/api"
+    /// KuditConnect version number for API changes.
+    nonisolated public static let version: Version = "3.0"
+//    @available(*, deprecated, renamed: "version")
+//    public static let kuditConnectVersion = KuditConnect.version
+
     
+    // https://www.kudit.com/api/kudos.php?identifier=com.kudit.BROWSERTEST&version=1.2.3&kcVersion=3.2.1
+    // Returns "SUCCESS"
+
     public init() {
         // TODO: Load FAQs
         self.faqs = [KuditFAQ(question: "Loading FAQs…", answer: "Please connect to the internet to make sure the most current FAQs can load from the server.", category: "Standby", minversion: nil, maxversion: nil, updated: Date().mysqlDateTime)]
@@ -231,16 +182,6 @@ This section is to help us properly route your feedback and help troubleshoot an
     public func contactSupport(_ openURL: OpenURLAction) {
         openURL(generateSupportEmailLink())
     }
-
-    public static let kuditAPIURL = "https://www.kudit.com/api"
-    /// KuditConnect version number for API changes.
-    public static let version: Version = "3.0"
-//    @available(*, deprecated, renamed: "version")
-//    public static let kuditConnectVersion = KuditConnect.version
-
-    
-    // https://www.kudit.com/api/kudos.php?identifier=com.kudit.BROWSERTEST&version=1.2.3&kcVersion=3.2.1
-    // Returns "SUCCESS"
     
     /// Send Kudos to server for this app
     public func sendKudos() async -> String {
@@ -257,6 +198,5 @@ This section is to help us properly route your feedback and help troubleshoot an
         }
     }
 }
-
 
 #endif

@@ -1,7 +1,7 @@
 import Foundation
 
 /// Version in dot notation
-public struct Version: ExpressibleByStringLiteral, RawRepresentable, Hashable, Comparable, Codable, CustomStringConvertible, LosslessStringConvertible, Testable {
+public struct Version: ExpressibleByStringLiteral, RawRepresentable, Hashable, Comparable, Codable, CustomStringConvertible, LosslessStringConvertible, Testable, Sendable {
     public var rawValue: String
     
     public init(rawValue: String) {
@@ -87,7 +87,7 @@ public struct Version: ExpressibleByStringLiteral, RawRepresentable, Hashable, C
         var check = first < second && third > first && fourth == second && third < fourth
         return (check, "\(first) < \(second) && \(third) > \(first) && \(fourth) == \(second) && \(third) < \(fourth)")
     }
-    public static var tests = [
+    public static let tests = [
         Test("Version comparisons", Version.testVersion),
     ]
 }

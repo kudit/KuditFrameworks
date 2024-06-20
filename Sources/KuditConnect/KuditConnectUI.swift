@@ -20,6 +20,7 @@ public extension KuditConnectMenu where Content == EmptyView, LabelView == Label
         }
     }
 }
+@MainActor
 public extension KuditConnectMenu where LabelView == Label<Text, Image> {
     // since label added and just like view, added single parameter init so existing trailing closure syntax will work.
     //  = { EmptyView() }
@@ -29,6 +30,7 @@ public extension KuditConnectMenu where LabelView == Label<Text, Image> {
         }
     }
 }
+@MainActor // will be redundant in Swift 6?
 public struct KuditConnectMenu<Content: View, LabelView: View>: View {
     public var additionalMenus: () -> Content
     public var label: () -> LabelView
@@ -54,6 +56,7 @@ public struct KuditConnectMenu<Content: View, LabelView: View>: View {
                 }) {
                     Label("Help & FAQs", systemImage: "questionmark.circle")
                 }
+                #if !os(tvOS) // tvOS doesn't support email
                 Button(action: {
                     Vibration.light.vibrate()
                     // Generate support email when button pressed but not before
@@ -62,6 +65,7 @@ public struct KuditConnectMenu<Content: View, LabelView: View>: View {
                 }) {
                     Label("Contact Support", systemImage: "envelope")
                 }
+                #endif
                 //            .disabled(!MailView.canSendMail)
                 //            .sheet(isPresented: $showMailView) {
                 //                MailView(data: $supportEmailData) {_ in

@@ -121,7 +121,7 @@ public extension UserDefaults {
     var isLocal: Bool { true }
 }
 @available(watchOS 9.0, *)
-public enum DataStoreError: Error {
+public enum DataStoreError: Error, Sendable {
     // Throw when data cannot be initialized from a store
     case load
 }

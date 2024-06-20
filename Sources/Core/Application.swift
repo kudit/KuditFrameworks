@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum CloudStatus: CustomStringConvertible {
+public enum CloudStatus: CustomStringConvertible, Sendable {
     case notSupported, available, unavailable
     public var description: String {
         switch self {
@@ -41,6 +41,7 @@ public class Application: CustomStringConvertible {
      Application.track()
      ```
      */
+    @MainActor
     public static var DEBUG: Bool {
         return DebugLevel.currentLevel == .DEBUG
     }
@@ -229,6 +230,24 @@ public extension Bundle {
     //public var appVersionShort: String { getInfo("CFBundleShortVersion") }
     
     fileprivate func getInfo(_ str: String) -> String? { infoDictionary?[str] as? String }
+}
+
+public extension String {
+    static var defaultAppIconName = "AppIcon"
+    /// Fetch the app icon name from the bundle.  Should work regardless of platform.  If no app icon found, will return `.defaultAppIconName`
+    static var appIconName: String {
+        if let icons = Bundle.main.infoDictionary?["CFBundleIcons"] as? [String: Any],
+            let primaryIcon = icons["CFBundlePrimaryIcon"] {
+            if let primaryIcon = primaryIcon as? String {
+                return primaryIcon
+            } else if let primaryIcon = primaryIcon as? [String: Any],
+                let iconFiles = primaryIcon["CFBundleIconFiles"] as? [String],
+                      let lastIcon = iconFiles.last {
+                return lastIcon
+            }
+        }
+        return .defaultAppIconName
+    }
 }
 
 #if canImport(SwiftUI)

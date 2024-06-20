@@ -153,21 +153,11 @@ import AppKit
 public extension Image {
     static var appIcon: Image? {
         #if canImport(UIKit)
-        if let image = UIImage(named: "AppIcon") {
+        if let image = UIImage(named: .appIconName) {
             return Image(uiImage: image)
         }
-//        // for visionOS, may have different images
-//        if let icons = Bundle.main.infoDictionary?["CFBundleIcons"] as? [String: Any],
-//           let primary = icons["CFBundlePrimaryIcon"] as? [String: Any],
-//           let files = primary["CFBundleIconFiles"] as? [String],
-//           let icon = files.last,
-//            let image = UIImage(named: icon)
-//        {
-//            debug("Icons: \(icons), Primary: \(primary), Files: \(files)", level: .DEBUG)
-//            return Image(uiImage: image)
-//        }
         #elseif canImport(AppKit)
-        if let image = NSImage(named: "AppIcon") {
+        if let image = NSImage(named: .appIconName) {
             return Image(nsImage: image)
         }
         #endif
@@ -228,6 +218,10 @@ public extension View {
 #endif
             }
         }
+#if os(macOS)
+        // default to the parent window size on macOS
+        .frame(idealWidth: NSApp.keyWindow?.contentView?.bounds.width ?? 500, idealHeight: NSApp.keyWindow?.contentView?.bounds.height ?? 500)
+#endif
     }
 }
 

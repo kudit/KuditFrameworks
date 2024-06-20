@@ -11,7 +11,7 @@ import SwiftUI
  
  */
 
-public enum ExternalDisplayOrientation: Int, CaseIterable, Identifiable, CustomStringConvertible {
+public enum ExternalDisplayOrientation: Int, CaseIterable, Identifiable, CustomStringConvertible, Sendable {
     case upright, bottomAtLeft, bottomAtRight, upsideDown
     
     public var description: String {

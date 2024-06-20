@@ -61,10 +61,12 @@ struct TimeClockView: View {
 public struct KuditFrameworksTestView: View {
     @State var testIsPresented = false
     
+    @MainActor
     var tests: [Test] {
         Version.tests + CharacterSet.tests + String.tests + Date.tests + PHP.tests
     }
     
+    @MainActor
     @ViewBuilder
     var menus: some View {
         KuditConnectMenu()

@@ -7,9 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B5009C8E2C23C53300D9A961 /* KuditFrameworksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F3755A2BBCFA020068CD88 /* KuditFrameworksTests.swift */; };
 		B543C09F2BE82C7000C75B6C /* KuditFrameworks Library in Frameworks */ = {isa = PBXBuildFile; productRef = B543C09E2BE82C7000C75B6C /* KuditFrameworks Library */; };
 		B543C0A12BE82C8700C75B6C /* KuditFrameworks Library in Frameworks */ = {isa = PBXBuildFile; productRef = B543C0A02BE82C8700C75B6C /* KuditFrameworks Library */; };
 		B56332112BC839DF006DDB84 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B5F374FB2BBCFA020068CD88 /* Assets.xcassets */; };
+		B596B26A2C23C91900E5F174 /* Testing in Frameworks */ = {isa = PBXBuildFile; productRef = B596B2692C23C91900E5F174 /* Testing */; };
 		B5F0340C2BABA93700CA6396 /* KuditFrameworksWatchTest Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = B5F033FF2BABA93500CA6396 /* KuditFrameworksWatchTest Watch App.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		B5F375D52BBCFE8B0068CD88 /* KuditFrameworksTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F374FE2BBCFA020068CD88 /* KuditFrameworksTestView.swift */; };
 		B5F375D62BBCFE8B0068CD88 /* KuditFrameworksApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F374FD2BBCFA020068CD88 /* KuditFrameworksApp.swift */; };
@@ -19,6 +21,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		B59CD03F2C23C44600741C8B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B5C1B6152BAB7997001D5CFA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B5C1B61C2BAB7997001D5CFA;
+			remoteInfo = KuditFrameworksTest;
+		};
 		B5F0340A2BABA93700CA6396 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = B5C1B6152BAB7997001D5CFA /* Project object */;
@@ -47,6 +56,8 @@
 		B52ED1D82BAB7F7400056A62 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		B53F69552BE7F54A00F55A8B /* KuditFrameworks.swiftpm */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = KuditFrameworks.swiftpm; path = ..; sourceTree = "<group>"; };
 		B56A31C22BC972640077FBE9 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
+		B59CD0362C23BD3900741C8B /* KuditFrameworksTest.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = KuditFrameworksTest.xctestplan; sourceTree = "<group>"; };
+		B59CD03B2C23C44600741C8B /* KuditFrameworksTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KuditFrameworksTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5C1B61D2BAB7997001D5CFA /* KuditFrameworksTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KuditFrameworksTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5F033FF2BABA93500CA6396 /* KuditFrameworksWatchTest Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "KuditFrameworksWatchTest Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5F374FB2BBCFA020068CD88 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -57,6 +68,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		B59CD0382C23C44600741C8B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B596B26A2C23C91900E5F174 /* Testing in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B5C1B61A2BAB7997001D5CFA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -102,6 +121,7 @@
 			children = (
 				B5C1B61D2BAB7997001D5CFA /* KuditFrameworksTest.app */,
 				B5F033FF2BABA93500CA6396 /* KuditFrameworksWatchTest Watch App.app */,
+				B59CD03B2C23C44600741C8B /* KuditFrameworksTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -119,6 +139,7 @@
 		B5F3755B2BBCFA020068CD88 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				B59CD0362C23BD3900741C8B /* KuditFrameworksTest.xctestplan */,
 				B5F3755A2BBCFA020068CD88 /* KuditFrameworksTests.swift */,
 			);
 			name = Tests;
@@ -137,6 +158,27 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		B59CD03A2C23C44600741C8B /* KuditFrameworksTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B59CD0412C23C44600741C8B /* Build configuration list for PBXNativeTarget "KuditFrameworksTests" */;
+			buildPhases = (
+				B59CD0372C23C44600741C8B /* Sources */,
+				B59CD0382C23C44600741C8B /* Frameworks */,
+				B59CD0392C23C44600741C8B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B59CD0402C23C44600741C8B /* PBXTargetDependency */,
+			);
+			name = KuditFrameworksTests;
+			packageProductDependencies = (
+				B596B2692C23C91900E5F174 /* Testing */,
+			);
+			productName = KuditFrameworksTests;
+			productReference = B59CD03B2C23C44600741C8B /* KuditFrameworksTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		B5C1B61C2BAB7997001D5CFA /* KuditFrameworksTest */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B5C1B62B2BAB7999001D5CFA /* Build configuration list for PBXNativeTarget "KuditFrameworksTest" */;
@@ -188,9 +230,13 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1530;
-				LastUpgradeCheck = 1530;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
 				TargetAttributes = {
+					B59CD03A2C23C44600741C8B = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = B5C1B61C2BAB7997001D5CFA;
+					};
 					B5C1B61C2BAB7997001D5CFA = {
 						CreatedOnToolsVersion = 15.3;
 						LastSwiftMigration = 1530;
@@ -210,6 +256,7 @@
 			);
 			mainGroup = B5C1B6142BAB7997001D5CFA;
 			packageReferences = (
+				B596B2682C23C91900E5F174 /* XCRemoteSwiftPackageReference "swift-testing" */,
 			);
 			productRefGroup = B5C1B61E2BAB7997001D5CFA /* Products */;
 			projectDirPath = "";
@@ -217,11 +264,19 @@
 			targets = (
 				B5C1B61C2BAB7997001D5CFA /* KuditFrameworksTest */,
 				B5F033FE2BABA93500CA6396 /* KuditFrameworksWatchTest Watch App */,
+				B59CD03A2C23C44600741C8B /* KuditFrameworksTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		B59CD0392C23C44600741C8B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B5C1B61B2BAB7997001D5CFA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -241,6 +296,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		B59CD0372C23C44600741C8B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5009C8E2C23C53300D9A961 /* KuditFrameworksTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B5C1B6192BAB7997001D5CFA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -270,6 +333,11 @@
 			isa = PBXTargetDependency;
 			productRef = B56E66EF2BC255B2001D6CC6 /* KuditFrameworks Library */;
 		};
+		B59CD0402C23C44600741C8B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B5C1B61C2BAB7997001D5CFA /* KuditFrameworksTest */;
+			targetProxy = B59CD03F2C23C44600741C8B /* PBXContainerItemProxy */;
+		};
 		B5F0340B2BABA93700CA6396 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			platformFilter = ios;
@@ -279,6 +347,54 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		B59CD0422C23C44600741C8B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 3QPV894C33;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kudit.KuditFrameworksTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KuditFrameworksTest.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/KuditFrameworksTest";
+				XROS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		B59CD0432C23C44600741C8B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = 3QPV894C33;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kudit.KuditFrameworksTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KuditFrameworksTest.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/KuditFrameworksTest";
+				XROS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
 		B5C1B6292BAB7999001D5CFA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -334,13 +450,14 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 4.3.5;
+				MARKETING_VERSION = 4.3.6;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
 				TVOS_DEPLOYMENT_TARGET = 17.0;
 				WATCHOS_DEPLOYMENT_TARGET = 6.0;
 				XROS_DEPLOYMENT_TARGET = 1.0;
@@ -396,11 +513,12 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 4.3.5;
+				MARKETING_VERSION = 4.3.6;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_STRICT_CONCURRENCY = complete;
 				TVOS_DEPLOYMENT_TARGET = 17.0;
 				VALIDATE_PRODUCT = YES;
 				WATCHOS_DEPLOYMENT_TARGET = 6.0;
@@ -411,7 +529,6 @@
 		B5C1B62C2BAB7999001D5CFA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
@@ -449,7 +566,6 @@
 		B5C1B62D2BAB7999001D5CFA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
@@ -546,6 +662,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		B59CD0412C23C44600741C8B /* Build configuration list for PBXNativeTarget "KuditFrameworksTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B59CD0422C23C44600741C8B /* Debug */,
+				B59CD0432C23C44600741C8B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		B5C1B6182BAB7997001D5CFA /* Build configuration list for PBXProject "KuditFrameworks" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -575,6 +700,17 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		B596B2682C23C91900E5F174 /* XCRemoteSwiftPackageReference "swift-testing" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-testing";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.10.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		B543C09E2BE82C7000C75B6C /* KuditFrameworks Library */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -591,6 +727,11 @@
 		B56E66EF2BC255B2001D6CC6 /* KuditFrameworks Library */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = "KuditFrameworks Library";
+		};
+		B596B2692C23C91900E5F174 /* Testing */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B596B2682C23C91900E5F174 /* XCRemoteSwiftPackageReference "swift-testing" */;
+			productName = Testing;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -6,10 +6,15 @@ NOTE: Version needs to be updated in the following places:
 - [ ] ParticleEffects.version constant (must be hard coded since inaccessible in code)
 - [ ] Tag with matching version in GitHub.
 
+TODO: improve UI on macOS for FAQs.
+TODO: Improve KuditConnect on tvOS.
+TODO: Figure out why icon in ApplicationInfoView missing in tvOS and visionOS.
 TODO: Fixed compatibility with macOS (non-catalyst).
     Kudos doesn't work.
     Toolbar is smooshed.
     FAQ Sheet layout is wonky.
+    
+v4.3.6 6/19/2024 Fixed warnings when running testUI with asynchronous functions (make sure updating happens on main thread).  Fixed trimming code that was broken.  Added additional trimming tests.  Fixed NSAttributedString fallback emoji support by adding <meta charset="utf-8" /> to HTML!  Switched version to let.  Updated `background {` and `main {` to use Task and MainActor rather than dispatch queues.  Fixed to guarantee `main {` content is run on the MainActor.  Set up for Swift Testing rather than custom Testing framework.  Added additional KuditFrameworks features from Viewer.  Removed Contact Support button from tvOS (since not possible).  Removed WebCache code and `synchronized {}` and `background {}` since they did not appear to be used anywhere.
 
 v4.3.5 6/3/2024 Fixed project so only one version check is needed not per target.  Update Device package for better BatteryView and StorageInfo views.  Made sure ParticleEffects is updated as well.  Tweaked ApplicationInfoView so KuditFrameworks info is hidden behind the tap.  Added Swift version to info.  Replaced CGFloat values in framework with Double since toll-free bridged and CGFloat is less swifty...  Added Particle Framework version to support details.  Fixed toolbar on iPhone 7.  Improved checks for various OSes with booleans to make it easier to conditionally run code (that compiles in either).  Added Bool extensions.  tvOS fixed ApplicationInfoView and ability to show KuditConnect menu (toolbars don't seem well supported).
 
@@ -253,6 +258,7 @@ Planned features and anticipated API changes.  If you want to contribute, this i
 - [ ] KuditConnect automatic screenshot when tapping menu.
 - [ ] Optimize text sizing and layout for watchOS and iPhone 7.
 - [ ] Fix so KuditConnect menu is available on tvOS and watchOS but using simplified info.
+- [ ] tvOS: Contact Support: Have this bring up a sheet where the user can enter their email and then send message.  Also make navigation and buttons feel more at home in tvOS.
 - [ ] Move compatibility code into KuditFrameworks.
 - [ ] See where we can use @autoclosure in Kudit Frameworks to delay execution (particularly in test frameworks!)
 - [ ] Add .rotated(n) function on arrays for cycling things like the .rainbow array.
@@ -267,3 +273,8 @@ This is where proposals can be discussed for potential movement to the roadmap.
 - [ ] Should failed parsing color throw rather than just returning `nil` so we can get the message if we want and ignore otherwise?  
 - [ ] Package Debug, KuColor, Application & Version, Test Frameworks, Layouts, Foundation improvements, etc into separate packages that can be separate active open source projects like Device?  Submit some of the foundation packages to Foundation open source projects.
 - [ ] Extract KuditConnect into separate project and leave this project for the core frameworks (possibly open source this core stuff for compatibility, shared collaboration?).  Don't do so it's easier to just include KuditFrameworks as opposed to having to include multiple modules like Compatibility (already have to include MotionEffects and Device).
+
+
+Note: If get error of duplicate imports, try removing Package Dependency and then re-adding.  Or replace KuditFrameworks in Frameworks, Libraries, and Embedded Content under target General with KuditFrameworks Library.
+Multiple commands produce '/Users/ben/Library/Developer/Xcode/DerivedData/Score-gwokxkoiawdcydctlgfumbqxojxw/Build/Intermediates.noindex/KuditFrameworks.build/Debug-iphoneos/KuditFrameworks.build/Objects-normal/arm64/KuditFrameworks_dependency_info.dat'
+

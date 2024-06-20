@@ -6,12 +6,13 @@ public typealias TestClosure = () async throws -> TestTuple
 
 // don't make this public to avoid compiling test stuff into framework, however, do make public so apps can add in their own tests.
 public protocol Testable {
-    static var tests: [Test] { get }
+    @MainActor static var tests: [Test] { get }
 }
 
 // Test Handlers
-public class Test: CustomStringConvertible, ObservableObject {
-    public enum TestProgress: CustomStringConvertible {
+@MainActor
+public final class Test: ObservableObject {
+    public enum TestProgress: CustomStringConvertible, Sendable {
         case notStarted
         case running
         case pass
@@ -29,7 +30,7 @@ public class Test: CustomStringConvertible, ObservableObject {
             }
         }
     }
-    public var title: String
+    public let title: String
     public var task: TestClosure
     @Published public var progress: TestProgress = .notStarted
     @Published public var errorMessage: String? = nil
@@ -46,14 +47,18 @@ public class Test: CustomStringConvertible, ObservableObject {
             do {
                 //await PHP.sleep(2)
                 let (result, debugString) = try await task()
-                progress = result ? .pass : .fail
+                main {
+                    self.progress = result ? .pass : .fail
+                }
                 if !result {
                     print("•\(title) Failed:\n\(debugString)")
                 }
                 //debug("Complete \(self)")
             } catch {
                 errorMessage = "Error: \(error)"
-                progress = .fail
+                main {
+                    self.progress = .fail
+                }
                 print("•\(title) Errored:\n\(self)")
             }
         }

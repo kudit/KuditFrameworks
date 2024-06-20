@@ -7,8 +7,8 @@
 
 import PackageDescription
 
-var version = "4.3.5"
-var packageLibraryName = "KuditFrameworks"
+let version = "4.3.6"
+let packageLibraryName = "KuditFrameworks"
 
 // Products define the executables and libraries a package produces, making them visible to other packages.
 var products = [
@@ -88,13 +88,13 @@ targets += [
 			.enableUpcomingFeature("BareSlashRegexLiterals")
 		]
 	),
-	.testTarget(
-		name: "\(packageLibraryName)Tests",
-		dependencies: [
-			.init(stringLiteral: packageLibraryName), // have to use init since normally would be assignable by string literal
-		],
-		path: "Tests"
-	),
+//	.testTarget(
+//		name: "\(packageLibraryName)Tests",
+//		dependencies: [
+//			.init(stringLiteral: packageLibraryName), // have to use init since normally would be assignable by string literal
+//		],
+//		path: "Tests"
+//	),
 ]
 
 #endif // for Swift Package compiling for https://swiftpackageindex.com/add-a-package

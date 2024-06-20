@@ -30,7 +30,7 @@ import Foundation
 // debug call site additions:
 // , file: file, function: function, line: line, column: column
 // Formerly KuError but this seems more applicable and memorable and less specific.
-public enum CustomError: Error {
+public enum CustomError: Error, Sendable {
     case custom(String)
     public init(_ message: String, level: DebugLevel = DebugLevel.defaultLevel, file: String = #file, function: String = #function, line: Int = #line, column: Int = #column) {
         debug(message, level: level, file: file, function: function, line: line, column: column)
@@ -42,14 +42,17 @@ extension Notification.Name {
     static let currentDebugLevelChanged = Notification.Name("currentDebugLevelChanged")
 }
 
+@MainActor
 public class ObservableDebugLevel: ObservableObject {
     public static var shared = ObservableDebugLevel()
     @Published public var value = DebugLevel.currentLevel
     public init() { // use shared
         // subscribe to debuglevel changes
         NotificationCenter.default.addObserver(forName: .currentDebugLevelChanged, object: nil, queue: nil) { _ in
-            debug("Notification of level change!", level: .currentLevel)
-            self.value = DebugLevel.currentLevel
+            main {
+                debug("Notification of level change!", level: .currentLevel)
+                self.value = DebugLevel.currentLevel
+            }
         }
     }
 }
@@ -60,7 +63,7 @@ public extension Set<DebugLevel> {
     static var informational: Self = [.NOTICE, .WARNING]
 }
 
-public enum DebugLevel: Comparable, CustomStringConvertible, CaseIterable {
+public enum DebugLevel: Comparable, CustomStringConvertible, CaseIterable, Sendable {
     /// Only use .OFF for setting the current debug level so *nothing* is printed.  If you wish to disable a debug message, use .SILENT
     case OFF
     case ERROR // Should not be possible.  Will lead to undefined behavior.
@@ -70,6 +73,7 @@ public enum DebugLevel: Comparable, CustomStringConvertible, CaseIterable {
     case SILENT
     /// Change this value in production to DebugLevvel.ERROR to minimize logging.
     // set default debugging level to .DEBUG (use manual controls to turn OFF if not debug during app tracking since previews do not have app tracking set up nor does it have compiler flags or app init.
+    @MainActor
     public static var currentLevel: DebugLevel = DebugLevel.DEBUG
     /// Allow monitoring by subscribing to `.currentDebugLevelChanged` notification.
     {
@@ -79,6 +83,7 @@ public enum DebugLevel: Comparable, CustomStringConvertible, CaseIterable {
         }
     }
     
+    /// Set to change the level of debug statments without a level parameter.
     public static var defaultLevel = DebugLevel.ERROR
     
     /// Set this to a set of levels where we should include the context info.  Defaults to `.important` so that Notices and Debug messages are less noisy and easier to see.
@@ -158,7 +163,8 @@ public enum DebugLevel: Comparable, CustomStringConvertible, CaseIterable {
     public func isAtLeast(_ level: DebugLevel) -> Bool {
         return level <= self  
     }
-    /// use to detect if the current level is at least the level.  So if the current level is .NOTICE, .isAtLeast(.ERROR) = true but .isAtLeast(.DEBUG) = false.  Will typically be used like: if DebugLevel.isAtLeast(.DEBUG) to check for whether debugging output is on. 
+    /// use to detect if the current level is at least the level.  So if the current level is .NOTICE, .isAtLeast(.ERROR) = true but .isAtLeast(.DEBUG) = false.  Will typically be used like: if DebugLevel.isAtLeast(.DEBUG) to check for whether debugging output is on.
+    @MainActor
     public static func isAtLeast(_ level: DebugLevel) -> Bool {
         return Self.currentLevel.isAtLeast(level)
     }
@@ -190,17 +196,19 @@ public func debug(_ message: Any, level: DebugLevel = DebugLevel.defaultLevel, f
     case .SILENT:
         break // for breakpoint
     }
-    guard DebugLevel.isAtLeast(level) else {
-        return
-    }
-    let simplerFile = URL(fileURLWithPath: file).lastPathComponent
-    let simplerFunction = function.replacingOccurrences(of: "__preview__", with: "_p_")
-    let threadInfo = Thread.isMainThread ? "" : "^"
-    if DebugLevel.includeContext {
-        // TODO: Add timestamps to debug calls so we can see how long things take?  Have a debug format static string so we can propertly interleave?
-        let context = "\(simplerFile)(\(line)) : \(simplerFunction)\(threadInfo)\n"
-        print("\(DebugLevel.levelsToIncludeContext.contains(level) ? context : "")\(level.emoji) \(message)")
-    } else {
-        print(message)
+    let threadInfo = Thread.isMainThread ? "" : "^" // capture before we switch to main thread for printing
+    main { // to ensure that the current debug level (which must be called on the main actor with new concurrency) is thread-safe.  Should be okay since print is effectively UI anyways...
+        guard DebugLevel.isAtLeast(level) else {
+            return
+        }
+        let simplerFile = URL(fileURLWithPath: file).lastPathComponent
+        let simplerFunction = function.replacingOccurrences(of: "__preview__", with: "_p_")
+        if DebugLevel.includeContext {
+            // TODO: Add timestamps to debug calls so we can see how long things take?  Have a debug format static string so we can propertly interleave?
+            let context = "\(simplerFile)(\(line)) : \(simplerFunction)\(threadInfo)\n"
+            print("\(DebugLevel.levelsToIncludeContext.contains(level) ? context : "")\(level.emoji) \(message)")
+        } else {
+            print(message)
+        }
     }
 }

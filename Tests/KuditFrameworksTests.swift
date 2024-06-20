@@ -1,43 +1,43 @@
-#if canImport(XCTest) && canImport(KuditFrameworks)
+#if canImport(Testing) && canImport(KuditFrameworks)
 @testable import KuditFrameworks
-import XCTest
+import Testing
 
 extension Testable {
+    @MainActor
     static func runTests() async throws {
         for test in Self.tests {
             let (result, debugString) = try await test.task()
-            XCTAssert(result, debugString) // TODO: Include line number of original test call!
+            #expect(result, .init(stringLiteral: debugString)) // TODO: Include line number of original test call!
             print(test)
         }
     }
 }
 
-final class KuditFrameworksTests: XCTestCase {
+@Suite
+struct KuditFrameworksTests {
+    @Test
     func testCharacterSet() async throws {
         try await CharacterSet.runTests()
     }
 
+    @Test
     func testString() async throws {
         try await String.runTests()
     }
 
+    @Test
     func testDate() async throws {
         try await Date.runTests()
     }
 
+    @Test
     func testVersion() async throws {
         try await Version.runTests()
     }
 
+    @Test
     func testPHP() async throws {
         try await PHP.runTests()
-    }
-    
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        XCTAssertEqual(KuditFrameworks().text, "Hello, World!")
     }
 }
 #endif

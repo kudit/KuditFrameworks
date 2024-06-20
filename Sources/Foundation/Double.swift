@@ -83,6 +83,7 @@ extension Double {
         return (multiply == 100, "\(multiply) != 100")
     }
     
+    @MainActor
     public static var tests = [
         Test("Operations with Floats & Doubles", testOperations),
         Test("Averaging", testAverageing),

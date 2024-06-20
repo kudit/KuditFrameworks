@@ -60,6 +60,7 @@ public extension Date {
         return (pretty == "Jan 2, 2023 at 5:12 PM", String(describing:pretty))
     }
     
+    @MainActor
     static var tests = [
         Test("MySQL DateTime format string", testMysql),
         Test("init with format", testInit),

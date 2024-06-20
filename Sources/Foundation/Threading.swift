@@ -35,38 +35,42 @@ internal let testSleep2: TestClosure = {
 }
 
 
-// TODO: make sure all this is replace with new async-await code.
-/// Support locking to make sure multiple threads aren't trying to operate simultaneously.
-/// Requires a reference-type object.
-public func synchronized(_ lock: AnyObject, closure: () -> Void) {
-    objc_sync_enter(lock)
-    defer { // make sure this gets released even if exit the loop prematurely
-        objc_sync_exit(lock)
-    }
-    closure()
-}
+//// TODO: make sure all this is replace with new async-await code.
+///// Support locking to make sure multiple threads aren't trying to operate simultaneously.
+///// Requires a reference-type object.
+//// TODO: Note: used in WebCache
+//public func synchronized(_ lock: AnyObject, closure: () -> Void) {
+//    objc_sync_enter(lock)
+//    defer { // make sure this gets released even if exit the loop prematurely
+//        objc_sync_exit(lock)
+//    }
+//    closure()
+//}
 
-/// run code on a background thread
-// Use Task { } instead to do background tasks.  Use await/async on a function that calls this.
-//@available(*, deprecated: 1.0, message: "Is this worth saving the code or not?")
-public func background(_ closure: @escaping () -> Void) {
-    // run this block code on a background thread - todo; remove when moving to swift 3?
-    DispatchQueue.global().async {
-        // background code here
-        closure()
-    }
-}
+///// run code on a background thread
+//// Use Task { } instead to do background tasks.  Use await/async on a function that calls this.
+////@available(*, deprecated: 1.0, message: "Is this worth saving the code or not?")
+//// TODO: Migrate all this code to use Task { instead of background {?  background is more clear...
+//public func background(_ closure: @escaping () -> Void) {
+//    // run this block code on a background thread - todo; remove when moving to swift 3?
+////    DispatchQueue.global().async {
+////        // background code here
+////        closure()
+////    }
+//    Task {
+//        // background code here
+//        closure()
+//    }
+//}
+// TODO: Restore background { for image processing or other large async task: Avoid heavy synchronous work within Task. Use custom DispatchQueue when heavy work like image processing is required.https://wojciechkulik.pl/ios/swift-concurrency-things-they-dont-tell-you
 
 /// run code on the main thread
-/* can use:
- await MainActor.run {
- // UI CODE HERE
- }
- */
-//@available(*, deprecated: 1.0, message: "Is this worth saving the code or not?")
-public func main(_ closure: @escaping () -> Void) {
-    // DispatchQueue.main.async {} - todo; remove when moving to swift 3?
-    DispatchQueue.main.async {
+public func main(_ closure: @MainActor @escaping () -> Void) {
+//    DispatchQueue.main.async {
+//        // finish up on main thread
+//        closure()
+//    }
+    Task { @MainActor in
         // finish up on main thread
         closure()
     }

@@ -31,6 +31,8 @@ Known Issues with KuditFrameworks Library.
 
 ## Usage
 
+Make sure to copy the App icon resource into the copy resources phase and the image should be named AppIcon so that it can be loaded by KuditFrameworks (this automatically happens for iOS and macOS and watchOS, but not visionOS or tvOS due to the parallax)
+
 ### Debug functions
 
 ```Swift

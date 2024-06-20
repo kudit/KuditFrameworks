@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "54638579-8EE8-49C1-BD53-6DA176DFB91F",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:KuditFrameworks.xcodeproj",
+        "identifier" : "B59CD03A2C23C44600741C8B",
+        "name" : "KuditFrameworksTests"
+      }
+    }
+  ],
+  "version" : 1
+}

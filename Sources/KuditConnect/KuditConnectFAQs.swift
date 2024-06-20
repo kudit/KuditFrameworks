@@ -1,11 +1,68 @@
 #if canImport(SwiftUI)
 import SwiftUI
 
+// https://swiftuirecipes.com/blog/send-mail-in-swiftui
+
+// MARK: - FAQs
+import Ink
+public struct KuditFAQ: Codable, Identifiable, Sendable {
+    public typealias MySQLDate = String // in the future, convert to actual date?  Support conversion to Date object?
+    public var question: String
+    public var answer: HTML
+    public var category: String
+    public var minversion: Version? // could be null
+    public var maxversion: Version? // could be null
+    public var updated: MySQLDate
+    public var key: String { // TODO: Is this still needed?
+        return "kuditConnectAlertShown:\(question)"
+    }
+    public var id: String {
+        question
+    }
+    public func visible(in version: Version) -> Bool {
+        if let minversion, minversion > version {
+            return false
+        }
+        if let maxversion, maxversion < version {
+            return false
+        }
+        return true
+    }
+    @MainActor
+    public func answerHTML(textColor: Color) -> HTML {
+        var debugHTML = """
+ <footer>(\(minversion?.rawValue ?? "n/a"),\(maxversion?.rawValue ?? "n/a")) \(updated) text: \(textColor.cssString)</footer>
+"""
+//        debug(debugHTML, level: .DEBUG)
+        if DebugLevel.currentLevel != .DEBUG {
+            debugHTML = ""
+        }
+        let parser = MarkdownParser()
+        let answerHTML = parser.html(from: answer)
+        // use web style so that we can update without updating code.  charset meta tag necessary for NSAttributedString conversion from HTML.
+        return """
+ <html><head><meta name="viewport" content="width=device-width" /><meta charset="utf-8" /><link rel="stylesheet" type="text/css" href="\(KuditConnect.kuditAPIURL)/styles.css?version=\(KuditFrameworks.version)&lastUpdate=\(updated)" /></head><body style="font-family: -apple-system;color: \(textColor.cssString);">\(answerHTML)\(debugHTML)</body></html>
+"""
+    }
+}
+public extension [KuditFAQ] {
+    var categories: [String] {
+        var categories = [String]()
+        for faq in self {
+            if !categories.contains(faq.category) {
+                categories.append(faq.category)
+            }
+        }
+        return categories.sorted()
+    }
+}
+
 struct KuditConnectFAQ: View {
     @Environment(\.colorScheme) var colorScheme
     var faq: KuditFAQ
     var body: some View {
         let html = faq.answerHTML(textColor: colorScheme == .dark ? .white : .black)
+//        let _ = { print("HTML: \(html)") }()
 #if canImport(WebKit) && canImport(UIKit) && !os(watchOS) && !os(tvOS)
         HTMLView(htmlString: html)
             .navigationTitle(faq.question)
@@ -34,44 +91,44 @@ struct KuditConnectFAQs: View {
     var selectedFAQ: String? // TODO: allow setting this to automatically navigate to the selected FAQ
     @ObservedObject var connect: KuditConnect
     var body: some View {
-        NavigationView {
-            List {
-                ApplicationInfoView()
-                    .listRowInsets(.zero)
-                let categories = connect.faqs.categories
-                ForEach(categories, id: \.self) { category in
-                    Section(category) {
-                        ForEach(connect.faqs.filter { $0.category == category }) { faq in
-                            NavigationLink {
-                                KuditConnectFAQ(faq: faq)
-                            } label: {
-                                Text(faq.question)
-                            }
+        List {
+            ApplicationInfoView()
+                .listRowInsets(.zero)
+            let categories = connect.faqs.categories
+            ForEach(categories, id: \.self) { category in
+                Section(category) {
+                    ForEach(connect.faqs.filter { $0.category == category }) { faq in
+                        NavigationLink {
+                            KuditConnectFAQ(faq: faq)
+                        } label: {
+                            Text(faq.question)
                         }
                     }
                 }
-                Section("Device Information") {
-                    CurrentDeviceInfoView(device: Device.current, debug: Application.DEBUG)
-                }
-                Section("Question not answered?") {
-                    Button("Contact Support") {
-                        KuditConnect.shared.contactSupport(openURL)
-                    }
-                }
-                // TODO: add in section to contact support
-                Text("\(Application.main.name) v\(Application.main.version) © \(String(Date().year)) Kudit LLC All Rights Reserved.\nRead our [Privacy Policy](https://kudit.com/privacy.php) or [Terms of Use](https://kudit.com/terms.php).\n\nOpen Source projects used include [Device](https://github.com/kudit/Device) v\(Device.version), [ParticleEffects](https://github.com/kudit/ParticleEffects) v\(ParticleEffects.version), and [Ink](https://github.com/JohnSundell/Ink).\(connect.additionalLegalInfo)")
-                    .font(.footnote)
             }
-            .refreshable {
-                await KuditConnect.shared.loadFromServer()
+            Section("Device Information") {
+                CurrentDeviceInfoView(device: Device.current, debug: Application.DEBUG)
             }
-            .navigationTitle("Help & FAQs")
-            .toolbar {
-                Button("Done") {
-                    dismiss()
+#if !os(tvOS) // tvOS doesn't support email TODO: Figure out way to do this
+            Section("Question not answered?") {
+                Button("Contact Support") {
+                    KuditConnect.shared.contactSupport(openURL)
                 }
+            }
+#endif
+            Text("\(Application.main.name) v\(Application.main.version) © \(String(Date().year)) Kudit LLC All Rights Reserved.\nRead our [Privacy Policy](https://kudit.com/privacy.php) or [Terms of Use](https://kudit.com/terms.php).\n\nOpen Source projects used include [Device](https://github.com/kudit/Device) v\(Device.version), [ParticleEffects](https://github.com/kudit/ParticleEffects) v\(ParticleEffects.version), and [Ink](https://github.com/JohnSundell/Ink).\(connect.additionalLegalInfo)")
+                .font(.footnote)
+        }
+        .refreshable {
+            await KuditConnect.shared.loadFromServer()
+        }
+        .navigationTitle("Help & FAQs")
+        .toolbar {
+            Button("Done") {
+                dismiss()
             }
         }
+        .navigationWrapper() // TODO: Set default size of sheet on macOS
     }
 }
 /*
